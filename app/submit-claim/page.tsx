@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Upload, CheckCircle2, AlertCircle, FileText, DollarSign } from "lucide-react"
+import { submitClaimToSupabase } from "@/lib/supabase-claims"
 
 export default function SubmitClaim() {
   const router = useRouter()
@@ -27,12 +28,15 @@ export default function SubmitClaim() {
   })
 
   useEffect(() => {
-    const email = sessionStorage.getItem("userEmail")
-    if (!email) {
-      router.push("/")
-      return
+    // Only access sessionStorage in the browser
+    if (typeof window !== 'undefined') {
+      const email = sessionStorage.getItem("userEmail")
+      if (!email) {
+        router.push("/")
+        return
+      }
+      setUserEmail(email)
     }
-    setUserEmail(email)
   }, [router])
 
   const categories = [
@@ -59,21 +63,28 @@ export default function SubmitClaim() {
     setSubmitError("")
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000))
+      if (!userEmail) {
+        throw new Error("Unable to determine user. Please sign in again.")
+      }
 
-      // In real implementation, use submitClaim from lib/api.ts
-      // const formDataToSend = new FormData()
-      // formDataToSend.append('user_email', userEmail)
-      // formDataToSend.append('category', formData.category)
-      // formDataToSend.append('amount', formData.amount)
-      // formDataToSend.append('date', formData.date)
-      // formDataToSend.append('description', formData.description)
-      // formDataToSend.append('provider', formData.provider)
-      // if (selectedFile) {
-      //   formDataToSend.append('receipt', selectedFile)
-      // }
-      // await submitClaim(formDataToSend)
+      const parsedAmount = parseFloat(formData.amount)
+      if (Number.isNaN(parsedAmount)) {
+        throw new Error("Please enter a valid claim amount.")
+      }
+
+      const result = await submitClaimToSupabase({
+        userEmail,
+        category: formData.category,
+        amount: parsedAmount,
+        date: formData.date,
+        description: formData.description,
+        provider: formData.provider,
+        receiptFile: selectedFile,
+      })
+
+      if (!result.success) {
+        throw new Error(result.error || "Failed to submit claim.")
+      }
 
       setSubmitSuccess(true)
       
@@ -90,7 +101,7 @@ export default function SubmitClaim() {
         setSubmitSuccess(false)
       }, 3000)
     } catch (error) {
-      setSubmitError("Failed to submit claim. Please try again.")
+      setSubmitError(error instanceof Error ? error.message : "Failed to submit claim. Please try again.")
     } finally {
       setIsSubmitting(false)
     }

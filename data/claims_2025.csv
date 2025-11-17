@@ -1,0 +1,639 @@
+Year,Employee_ID,email,Employee_Name,Company,Currency,Country,Max_Amount,Total_Transaction_Amount,Remaining_Balance
+2025,100263,aainaa@regentmarkets.com,Nur Aainaa Binti Rosli,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,729,1271
+2025,100206,aaron.lim@regentmarkets.com,Aaron Lim,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,1550,450
+2025,101102,abbas.rafeiee@regentmarkets.com,Abbas Rafeiee,4X Software Sdn Bhd,MYR,Malaysia,2000,400,1600
+2025,101022,abbas@regentmarkets.com,Mohammed Abbas Mirza,Deriv FZCO,AED,United Arab Emirates,2000,512.75,1487.25
+2025,101489,abby@regentmarkets.com,Abby Amphasuwant,4X Software Sdn Bhd,MYR,Malaysia,2000,966,1034
+2025,102183,abdullah@regentmarkets.com,Abdullah Mehtab Alam Shaikh,Deriv FZCO,AED,United Arab Emirates,2000,500,1500
+2025,101427,abed@regentmarkets.com,Abed Elaziz,4X Software Sdn Bhd,MYR,Malaysia,2000,1003,997
+2025,101825,aberamy@regentmarkets.com,Aberamy Sundar,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1283.25,716.75
+2025,102551,abheeshta@regentmarkets.com,Abheeshta Ongole Santoshini,Deriv FZCO,AED,United Arab Emirates,2000,125,1875
+2025,102304,abia@regentmarkets.com,Abia Samuel Ncha,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,2000,0
+2025,100301,abilashini@regentmarkets.com,Abilashini Ramasamy,4X Software Sdn Bhd,MYR,Malaysia,2000,30,1970
+2025,101288,abuhasan@regentmarkets.com,Abu Hasan Al Mobarak,4X Software Sdn Bhd,MYR,Malaysia,2000,548,1452
+2025,100329,addy@regentmarkets.com,Addy Izzul Islam Bin Shahidan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1294,706
+2025,100066,aditya@regentmarkets.com,Aditya Addanki,4X Software Sdn Bhd,MYR,Malaysia,2000,236,1764
+2025,101771,adriel@regentmarkets.com,Adriel Subramaniam,4X Software Sdn Bhd,MYR,Malaysia,2000,340,1660
+2025,100636,adrienne@regentmarkets.com,Adrienne Rio,4X Software Sdn Bhd,MYR,Malaysia,2000,1265.6,734.4
+2025,102274,afiq.muhauyidin@regentmarkets.com,Afiq Muhauyidin,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,2000,0
+2025,101103,afrina@regentmarkets.com,A'in Afrina Rosli,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,1050,950
+2025,100167,afshin.paydar@regentmarkets.com,Afshin Paydar,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,101880,agrim@regentmarkets.com,Agrim Jain,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,1972.24,27.76
+2025,101584,ahmad.aidil@regentmarkets.com,Ahmad Aidil,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,101589,ahmadreza@regentmarkets.com,Ahmadreza Soleymani,4X Software Sdn Bhd,MYR,Malaysia,2000,733.2,1266.8
+2025,101522,ahmed.ali@regentmarkets.com,Ahmed Ali,Deriv FZCO,AED,United Arab Emirates,2000,231.97,1768.03
+2025,101710,ahmed.khalil@regentmarkets.com,Ahmed Bahig Mohamed Farag Khalil,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,125,1875
+2025,101822,ahnaf@regentmarkets.com,Ahnaf Rasydan Abdul Rahman,4X Software Sdn Bhd,MYR,Malaysia,2000,1352.9,647.1
+2025,102393,aidill.fitri@regentmarkets.com,Aidill Fitri,4X Software Sdn Bhd,MYR,Malaysia,2000,1370,630
+2025,102508,aiman@regentmarkets.com,Aiman Daud,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,102432,ain.syuhada@regentmarkets.com,Ain Syuhada Mohd Rizal,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,829,1171
+2025,100196,ain@regentmarkets.com,Ain Nabilla Binti Shaharin,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1580,420
+2025,100841,ainaa@regentmarkets.com,Ainaa Shahirah Binti Shahrel,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2506,-506
+2025,102435,ainiena@regentmarkets.com,Ainiena Yusoff,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,285,1715
+2025,101017,aisha@regentmarkets.com,Aisha Siddiqui,Deriv FZCO,AED,United Arab Emirates,2000,1871.78,128.22
+2025,100565,aizat@regentmarkets.com,Aizat Zayyani Binti Amad Zahit,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,75,1925
+2025,100122,akie.yap@regentmarkets.com,Akie Yap,4X Software Sdn Bhd,MYR,Malaysia,2000,1883.65,116.35
+2025,100234,akram@regentmarkets.com,Muhammad Akram Bin Abd.Sukor,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1335,665
+2025,100656,alassane@regentmarkets.com,Alassane Kane,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,100771,aleli@regentmarkets.com,Aleli Debra Palban Te,Sinbad Software LLC,AED,United Arab Emirates,2000,1777.5,222.5
+2025,101324,alexandros.kampourakos@regentmarkets.com,Alexandros Kampourakos,Deriv Operations (Cyprus) Ltd,EUR,Cyprus,200,200,0
+2025,102509,alia.johaile@regentmarkets.com,Alia Johaile,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,680,1320
+2025,100831,alia.razak@regentmarkets.com,Nur Alia Abdul Razak,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,2000,0
+2025,100524,alif@regentmarkets.com,Muhammad Noralif Kharuddin,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,135,1865
+2025,101454,althia.lewis@regentmarkets.com,Althia Jean Lewis,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,2000,0
+2025,100115,alvia@regentmarkets.com,Alvia Marcellinus,Deriv (FX) Ltd,MYR,Malaysia,2000,1834,166
+2025,100582,alvin@regentmarkets.com,Alvin Emmanuel Mariadass,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,170,1830
+2025,100079,alwin@regentmarkets.com,Alwin Chui,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,101451,alya@regentmarkets.com,Nur Syazana Alya Mohamad Zaidy,4X Software Sdn Bhd,MYR,Malaysia,2000,1700,300
+2025,101575,amalia@regentmarkets.com,Amalia Aznan,4X Software Sdn Bhd,MYR,Malaysia,2000,870,1130
+2025,102242,amanda.loh@regentmarkets.com,Amanda Loh,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,679,1321
+2025,100072,amanda@regentmarkets.com,Amanda Chan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100392,amanina@regentmarkets.com,Nor Amanina Binti Awang,4X Software Sdn Bhd,MYR,Malaysia,2000,1859,141
+2025,100664,ameerul@regentmarkets.com,Muhammad Ameerul Hady,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,100238,amelia@regentmarkets.com,Amelia Ashwini George Nesarajah,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,100804,amila@regentmarkets.com,Amila Shafinaz Daut,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1808,192
+2025,101823,amilia@regentmarkets.com,Amilia Omar,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1858.5,141.5
+2025,100980,amin.mazli@regentmarkets.com,Amin Mazli,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,884,1116
+2025,101136,amir.naser@regentmarkets.com,Amir Ahmad Jamalun Naser,4X Software Sdn Bhd,MYR,Malaysia,2000,1699,301
+2025,101560,amirah.azeze@regentmarkets.com,Amirah Azeze,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,1935.5,64.5
+2025,100869,amirah@regentmarkets.com,Siti Nor Amirah Binti Md. Noh,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,2000,0
+2025,102588,amitha@regentmarkets.com,Amitha Sequeira,Deriv FZCO,AED,United Arab Emirates,2000,125,1875
+2025,102453,amrit@regentmarkets.com,Amrit Kaur,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1300,700
+2025,101480,anam@regentmarkets.com,Anam Aslam Khan,Deriv FZCO,AED,United Arab Emirates,2000,125,1875
+2025,100667,andy@regentmarkets.com,Andy Vikram,4X Software Sdn Bhd,MYR,Malaysia,2000,800,1200
+2025,100469,aneesa@regentmarkets.com,Nur Aneesa Nabila Ismail,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,2000,0
+2025,101483,anis.aqilah@regentmarkets.com,Anis Aqilah Hairuddin,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1834.4,165.6
+2025,100304,anita@regentmarkets.com,Anita Rajendran,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100923,anitha.rengaraj@regentmarkets.com,Anitha Rani Rengaraj,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,125,1875
+2025,100720,ankitha@regentmarkets.com,Ankitha Aluvelil Thankachan,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,1875,125
+2025,100104,ann.sibi@regentmarkets.com,Ann Sibi,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,810,1190
+2025,101078,apoorv@regentmarkets.com,Apoorv Joshi,4X Software Sdn Bhd,MYR,Malaysia,2000,370,1630
+2025,102281,aqib@regentmarkets.com,Aqib Maqbool,4X Software Sdn Bhd,MYR,Malaysia,2000,590,1410
+2025,102462,aqil@regentmarkets.com,Aqil Ibrahim,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,250,1750
+2025,101705,aqila.salim@regentmarkets.com,Aqila Salim,4X Software Sdn Bhd,MYR,Malaysia,2000,550,1450
+2025,100534,aqillah@regentmarkets.com,Nur Syafiqatul Aqillah Binti Ahmad Rasdi,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,1400,600
+2025,102244,archana.nair@regentmarkets.com,Archana Asok Nair,Deriv FZCO,AED,United Arab Emirates,2000,367.5,1632.5
+2025,102193,arika@regentmarkets.com,Arika Efendi,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1996,4
+2025,100105,armin.saffari@regentmarkets.com,Armin Saffari,4X Software Sdn Bhd,MYR,Malaysia,2000,215,1785
+2025,102316,arshad.hossain@regentmarkets.com,Md Arshad Hossain,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,300,1700
+2025,100131,arshad@regentmarkets.com,Arshad Munir,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,385.3,1614.7
+2025,101085,ashwinii@regentmarkets.com,Ashwinii Vasu,4X Software Sdn Bhd,MYR,Malaysia,2000,800,1200
+2025,101491,asiya@regentmarkets.com,Asiya Tahir,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,1758,242
+2025,100279,atheera@regentmarkets.com,Noor Atheera Khirul Azmar,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,102386,athirah.anuar@regentmarkets.com,Athirah Anuar,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1653.1,346.9
+2025,100507,atiqah@regentmarkets.com,Atiqah Binti Mohd Ismail,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,600,1400
+2025,102272,atish@regentmarkets.com,Atish A Rhabar,4X Software Sdn Bhd,MYR,Malaysia,2000,370,1630
+2025,101274,aum@regentmarkets.com,Aum Ashokbhai Bhatt,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,125,1875
+2025,101300,ayu.najieha@regentmarkets.com,Ayu Najieha,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1125,875
+2025,100505,aziera@regentmarkets.com,Aziera Munirah Hamzah,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100078,azita@regentmarkets.com,Azita Rassi,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,101888,azlinah@regentmarkets.com,Siti Nur Azlinah,Deriv (Labuan) Ltd,MYR,Malaysia,2000,446,1554
+2025,101490,azlyana@regentmarkets.com,Azlyana Azhar,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,330,1670
+2025,101316,azreen@regentmarkets.com,Azreen Mohamad,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,540,1460
+2025,100954,azrul@regentmarkets.com,Azrul Azhaaruddin,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100662,balaganabathy@regentmarkets.com,Balaganabathy Krishnanmoorthy,4X Software Sdn Bhd,MYR,Malaysia,2000,198,1802
+2025,100539,balakumaran@regentmarkets.com,Balakumaran Nehrudevan,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,101331,balamayuran@regentmarkets.com,Balamayuran Yoganantha Sarma,Sinbad Software LLC,AED,United Arab Emirates,2000,1540,460
+2025,100674,barbara@regentmarkets.com,Barbara Anak Jilo,4X Software Sdn Bhd,MYR,Malaysia,2000,838,1162
+2025,100216,barno@regentmarkets.com,Barno Khaydarova,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,245,1755
+2025,101071,bavesh@regentmarkets.com,Bhaveshkumar Chandulal Patel,Deriv FZCO,AED,United Arab Emirates,2000,548.59,1451.41
+2025,100083,behnaz@regentmarkets.com,Behnaz Rahgozar,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,101815,bilal.majid@regentmarkets.com,Bilal Majid,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,100369,bilal@regentmarkets.com,Muhammad Bilal Tariq,4X Software Sdn Bhd,MYR,Malaysia,2000,1577.3,422.7
+2025,100573,boluwaji@regentmarkets.com,Boluwaji Ogunsanmi,4X Software Sdn Bhd,MYR,Malaysia,2000,200,1800
+2025,102303,carmen.mae@regentmarkets.com,Carmen Mae Dela Cruz Abalos,Deriv FZCO,AED,United Arab Emirates,2000,1224,776
+2025,101850,chaiwuey@regentmarkets.com,Chai Wuey Choo,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,101910,charles.onyango@regentmarkets.com,Charles Ochieng,Deriv FZCO,AED,United Arab Emirates,2000,1176,824
+2025,101616,ching@regentmarkets.com,Chong Ching,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1821,179
+2025,100093,chiyung@regentmarkets.com,Chi Yung Chin,4X Software Sdn Bhd,MYR,Malaysia,2000,1690,310
+2025,102294,christy@regentmarkets.com,Christy Hannah Delim Dela Cruz,Deriv FZCO,AED,United Arab Emirates,2000,1008,992
+2025,101530,chunkiat@regentmarkets.com,Chun Kiat Ong,Deriv (SG) Pte Ltd,SGD,Singapore,600,803.35,-203.35
+2025,102179,cindy.tan@regentmarkets.com,Phei Cheng (Cindy) Tan,Deriv (FX) Ltd,MYR,Malaysia,2000,750,1250
+2025,101164,collin.chan@regentmarkets.com,Collin Chan,Deriv (SG) Pte Ltd,SGD,Singapore,600,600,0
+2025,100867,crystal@regentmarkets.com,Crystal Jayne,Deriv (Labuan) Ltd,MYR,Malaysia,2000,779,1221
+2025,100367,cyrus@regentmarkets.com,Cyrus Bau Yeng Chang,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,102434,dan.walker@regentmarkets.com,Dan Walker,Deriv Technologies Limited,GBP,United Kingdom,500,243,257
+2025,100787,danesh@regentmarkets.com,Danesh Arjunan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1639,361
+2025,100555,danial@regentmarkets.com,Danial Shaari,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100567,daniel.abot@regentmarkets.com,Daniel Ian Abot,Deriv (FX) Ltd,MYR,Malaysia,2000,1825,175
+2025,100429,daniel.lim@regentmarkets.com,Daniel Lim,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,1798,202
+2025,100092,danielle@regentmarkets.com,Danielle Williams,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1289,711
+2025,100452,david.perumal@regentmarkets.com,David Perumal,4X Software Sdn Bhd,MYR,Malaysia,2000,1335,665
+2025,101072,david.usher@regentmarkets.com,David Usher,Deriv Technologies Limited,GBP,United Kingdom,500,409,91
+2025,100151,david@regentmarkets.com,David Hoi,4X Software Sdn Bhd,MYR,Malaysia,2000,1850,150
+2025,100349,dayana@regentmarkets.com,Dayana Binti Mohd Ramli,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,1959,41
+2025,100408,deborah@regentmarkets.com,Deborah Jean Peris,Deriv FZCO,AED,United Arab Emirates,2000,1205,795
+2025,100323,deep@regentmarkets.com,Deep Paresh Vyas,Deriv FZCO,AED,United Arab Emirates,2000,797,1203
+2025,101583,deevesh@regentmarkets.com,Deevesh Nair,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,101292,denis.safiullin@regentmarkets.com,Denis Safiullin,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100417,devasuthan@regentmarkets.com,Devasuthan Paneerchelvam,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,102366,deviyani@regentmarkets.com,Deviyani Letchumanan,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,1875,125
+2025,100113,dex@regentmarkets.com,Dex Varilla Javier,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,125,1875
+2025,100299,dhanalakshmi@regentmarkets.com,Dhana Ramachandran,4X Software Sdn Bhd,MYR,Malaysia,2000,895,1105
+2025,100172,dhanraj@regentmarkets.com,Dhanraj Rameshbhai Dhanak,Deriv FZCO,AED,United Arab Emirates,2000,2000,0
+2025,101140,dharisini@regentmarkets.com,Dharisini Kanesamoorthy,4X Software Sdn Bhd,MYR,Malaysia,2000,600,1400
+2025,100328,dillys@regentmarkets.com,Dillys Anusha Devadason,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,101287,dinidu@regentmarkets.com,Dinidu Seneviratne,4X Software Sdn Bhd,MYR,Malaysia,2000,1371,629
+2025,100551,divya@regentmarkets.com,Divya Rajan,Deriv FZCO,AED,United Arab Emirates,2000,125,1875
+2025,102384,dorothy@regentmarkets.com,Dorothy Ann Pang,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,102489,dorsa@regentmarkets.com,Dorsa Kiani,4X Software Sdn Bhd,MYR,Malaysia,2000,106,1894
+2025,100212,durgainy@regentmarkets.com,Durgainy Thavy Ragubathi,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,483,1517
+2025,100924,dviana@regentmarkets.com,Dviana Metesh Mavani,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1882,118
+2025,100587,edwin@regentmarkets.com,Edwin Raspe,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,101839,elhanis@regentmarkets.com,Hanis Amirah,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,130,1870
+2025,102482,elizabeth.wangari@regentmarkets.com,Elizabeth Wangari,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,125,1875
+2025,100604,ellena@regentmarkets.com,Ellena James,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,80,1920
+2025,101126,elnaz.ghasemi@regentmarkets.com,Elnaz Ghasemi,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,300,1700
+2025,101141,esther.mor@regentmarkets.com,Esther Mor,4X Software Sdn Bhd,MYR,Malaysia,2000,840,1160
+2025,100119,esther@regentmarkets.com,Esther Jane Tan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1970,30
+2025,100041,eunice@regentmarkets.com,Eunice Koh,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100028,evelyn@regentmarkets.com,Evelyn Ang,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,898,1102
+2025,101013,ezzaty@regentmarkets.com,Nur Ezzaty Salim,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,70,1930
+2025,102371,fadily@regentmarkets.com,Fadily Zakaria,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,220,1780
+2025,101001,faezeh@regentmarkets.com,Faezeh Saeedinejad,4X Software Sdn Bhd,MYR,Malaysia,2000,1630,370
+2025,100061,fahad@regentmarkets.com,Mohammad Fahad Islam,4X Software Sdn Bhd,MYR,Malaysia,2000,1462,538
+2025,100354,fairuza@regentmarkets.com,Fairuza Mohd Nadzeri,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,1684.9,315.1
+2025,101418,faqeera@regentmarkets.com,Raja Nur Faqeera Raja Reza,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2280,-280
+2025,100344,farah@regentmarkets.com,Farah Diyana Shamsul Anuar,4X Software Sdn Bhd,MYR,Malaysia,2000,1800,200
+2025,102433,farha.bukhari@regentmarkets.com,Farha Bukhari,4X Software Sdn Bhd,MYR,Malaysia,2000,1074,926
+2025,100468,farid@regentmarkets.com,Mohammad Farid Abdullah,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1998.1,1.9
+2025,100351,farrah@regentmarkets.com,Farrah Mae Clacio Ochoa,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,2000,0
+2025,101573,farzad@regentmarkets.com,Farzad Feizabadi,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1900,100
+2025,101604,fatimah@regentmarkets.com,Siti Fatimah Azaman,4X Software Sdn Bhd,MYR,Malaysia,2000,1687,313
+2025,101073,fatma.said@regentmarkets.com,Fatma Saleh Said Jumaan,Deriv FZCO,AED,United Arab Emirates,2000,2000,0
+2025,102182,fauzan@regentmarkets.com,Fauzan Ragitya Anggaraksa,4X Software Sdn Bhd,MYR,Malaysia,2000,1118,882
+2025,102267,felicia@regentmarkets.com,Felicia Tanwijaya,4X Software Sdn Bhd,MYR,Malaysia,2000,1265.85,734.15
+2025,102249,fiyonn@regentmarkets.com,Fiyonn Ching,Deriv (FX) Ltd,MYR,Malaysia,2000,2000,0
+2025,102325,francis.chitambira@regentmarkets.com,Francis Bothwell Chitambira,Deriv FZCO,AED,United Arab Emirates,2000,1120,880
+2025,100602,franklien@regentmarkets.com,Franklien Montheiro,Sinbad Software LLC,AED,United Arab Emirates,2000,1290,710
+2025,100024,gary@regentmarkets.com,Gary Ross,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1449,551
+2025,102464,gayathiri@regentmarkets.com,Gayathiri Thiagaraj,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,400,1600
+2025,101044,geanna@regentmarkets.com,Geanna Afera Tseu,Deriv (FX) Ltd,MYR,Malaysia,2000,1458,542
+2025,100560,geo.nicolaidis@regentmarkets.com,Geo Nicolaidis,Deriv Operations (Cyprus) Ltd,EUR,Cyprus,200,120,80
+2025,100214,george.yana@regentmarkets.com,George Paddayuman Yana,Deriv FZCO,AED,United Arab Emirates,2000,1993.03,6.97
+2025,102323,geraldine@regentmarkets.com,Geraldine Lo,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1778,222
+2025,100974,girish@regentmarkets.com,Girish Menon,Champion Global Business Services Sdn Bhd,MYR,Malaysia,2000,1900,100
+2025,100547,glophet@regentmarkets.com,Glophet Aballe Pag-ong,Deriv FZCO,AED,United Arab Emirates,2000,1880,120
+2025,102241,gobinath@regentmarkets.com,Gobinath Ganasan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1800,200
+2025,102585,gokul@regentmarkets.com,Gokul Subramanian,Deriv FZCO,AED,United Arab Emirates,2000,125,1875
+2025,100315,habib@regentmarkets.com,Md Habib-Al-Islam Miah,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100952,hafiez@regentmarkets.com,Muhammad Hafiez Bin Mohd Zan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,170,1830
+2025,101556,hafiz@regentmarkets.com,Mohd Hafiz Zabba,4X Software Sdn Bhd,MYR,Malaysia,2000,1108,892
+2025,101476,hafizah@regentmarkets.com,Hafizah Mawi,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1845,155
+2025,101750,hamza.akram@regentmarkets.com,Muhammad Hamza Akram,4X Software Sdn Bhd,MYR,Malaysia,2000,1289,711
+2025,101356,hanafiah@regentmarkets.com,Hanafiah Awang @ Malik,Deriv (FX) Ltd,MYR,Malaysia,2000,1090,910
+2025,101555,hanasrullah@regentmarkets.com,Hanasrullah Halim,4X Software Sdn Bhd,MYR,Malaysia,2000,1988,12
+2025,100809,hani@regentmarkets.com,Hani Al Khatib,4X Software Sdn Bhd,MYR,Malaysia,2000,900,1100
+2025,100424,hanis@regentmarkets.com,Nurul Hanis Binti Imar,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1998,2
+2025,100760,hari.vilasini@regentmarkets.com,Hari Vilasini Madigubba,Deriv FZCO,AED,United Arab Emirates,2000,2000,0
+2025,102423,harris.amin@regentmarkets.com,Harris Amin,4X Software Sdn Bhd,MYR,Malaysia,2000,930,1070
+2025,100649,harris@regentmarkets.com,Harris Sham,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,388,1612
+2025,100422,harsh@regentmarkets.com,Harsh Devkishan Karamchandani,Deriv Capital Contracts & Currencies LLC,AED,United Arab Emirates,2000,900,1100
+2025,100685,harvinraj@regentmarkets.com,Harvinraj Subramaniam,4X Software Sdn Bhd,MYR,Malaysia,2000,1750,250
+2025,102324,hasnain@regentmarkets.com,Hasnain Qaiyumi,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,900,1100
+2025,101639,hayatun@regentmarkets.com,Hayatun Nufus,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,1079,921
+2025,102236,helen@regentmarkets.com,Helen Wong,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,845,1155
+2025,100487,hemashanthira@regentmarkets.com,Hemashanthira Subramaniam,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,1987,13
+2025,101526,hematharshini.sankar@regentmarkets.com,Hema Tharshini,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,315.5,1684.5
+2025,100842,hemmalina@regentmarkets.com,Hemmalina Pnosamy,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,101068,henry@regentmarkets.com,Henry Hein,4X Software Sdn Bhd,MYR,Malaysia,2000,1918.3,81.7
+2025,101718,hery@regentmarkets.com,Hery Sikawa,Deriv FZCO,AED,United Arab Emirates,2000,1120,880
+2025,100826,heshan@regentmarkets.com,Heshan Sandeepa Abeykoon Mudiyanselage,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,125,1875
+2025,102190,heshveetha@regentmarkets.com,Heshveetha Tamil Maran,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,3649,-1649
+2025,100556,heydev@regentmarkets.com,Heydev Sood,Deriv FZCO,AED,United Arab Emirates,2000,1125,875
+2025,101096,hidayah.salim@regentmarkets.com,Nor Hidayah Salim,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,1260,740
+2025,100569,hidayah@regentmarkets.com,Nur Hidayah Suhada Binti Ab Karim,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,1155,845
+2025,101046,hira@regentmarkets.com,Hira Akthar,Deriv FZCO,AED,United Arab Emirates,2000,2000,0
+2025,100477,hirad@regentmarkets.com,Hirad Lashkarian,4X Software Sdn Bhd,MYR,Malaysia,2000,200,1800
+2025,102542,hongjian@regentmarkets.com,Hong Jian Wong,4X Software Sdn Bhd,MYR,Malaysia,2000,1685,315
+2025,101592,hossein.mahjob@regentmarkets.com,Hossein Mahjob,4X Software Sdn Bhd,MYR,Malaysia,2000,222.6,1777.4
+2025,100334,howsoon@regentmarkets.com,How Soon Ngu,Champion Global Business Services Sdn Bhd,MYR,Malaysia,2000,1557,443
+2025,102230,hsu.ann@regentmarkets.com,Hsu Ann Khor,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,101717,humna@regentmarkets.com,Humna Shakil,Deriv FZCO,AED,United Arab Emirates,2000,125,1875
+2025,102212,ibrahim@regentmarkets.com,Ibrahim Abdulla Kutty,Deriv FZCO,AED,United Arab Emirates,2000,125,1875
+2025,102497,idzaudin@regentmarkets.com,Idzaudin Razak,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1729.2,270.8
+2025,100595,ikechukwu@regentmarkets.com,Ikechukwu Uwah,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1974,26
+2025,101614,ilhem@regentmarkets.com,Ilhem Yahyaoui,Deriv Capital Contracts & Currencies LLC,AED,United Arab Emirates,2000,2000,0
+2025,101419,imtiaz.hasan@regentmarkets.com,Imtiaz Hasan,4X Software Sdn Bhd,MYR,Malaysia,2000,850,1150
+2025,101773,inani@regentmarkets.com,Inani Najihah Mohd Rohim,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,630,1370
+2025,100252,indulekha@regentmarkets.com,Indulekha Pottakkatt,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,1283.75,716.25
+2025,100722,infanta@regentmarkets.com,Infanta Jerald Rivitha,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,1595,405
+2025,102226,irdiena@regentmarkets.com,Irdiena Batrisyia Ahmad Rajiun,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,918,1082
+2025,101129,irene@regentmarkets.com,Irene Sabu,Deriv FZCO,AED,United Arab Emirates,2000,1933.34,66.66
+2025,102449,ishank@regentmarkets.com,Ishank Naik,Deriv FZCO,AED,United Arab Emirates,2000,1813.09,186.91
+2025,100829,ishjot@regentmarkets.com,Ishjot Singh,Deriv FZCO,AED,United Arab Emirates,2000,2000,0
+2025,102351,iskandar.zulkornain@regentmarkets.com,Iskandar Zulkornain,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1313,687
+2025,100382,ivan.saw@regentmarkets.com,Ivan Saw,4X Software Sdn Bhd,MYR,Malaysia,2000,799.5,1200.5
+2025,101055,iza.cantiller@regentmarkets.com,Iza Mae Bantigue Cantiller,Deriv FZCO,AED,United Arab Emirates,2000,920,1080
+2025,102445,izzati.soanan@regentmarkets.com,Nur Izzati Soanan,4X Software Sdn Bhd,MYR,Malaysia,2000,1480,520
+2025,101155,izzati@regentmarkets.com,Nurul Izzati Suhardi,4X Software Sdn Bhd,MYR,Malaysia,2000,1780,220
+2025,100904,jabbar@regentmarkets.com,Muhammad Jabbar Bin Jalaludin,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1444,556
+2025,100938,jacintha@regentmarkets.com,Jacintha Plantenberg,Deriv (SG) Pte Ltd,SGD,Singapore,600,600,0
+2025,100456,jacynthia@regentmarkets.com,Jacynthia Teo,Deriv (FX) Ltd,MYR,Malaysia,2000,1800,200
+2025,100142,jahanvi@regentmarkets.com,Jahanvi Saini,Deriv FZCO,AED,United Arab Emirates,2000,672,1328
+2025,102466,jaki@regentmarkets.com,Jaki Townsend,Deriv Technologies Limited,GBP,United Kingdom,500,500,0
+2025,100827,janan@regentmarkets.com,Janan Jayakumar,Deriv FZCO,AED,United Arab Emirates,2000,125,1875
+2025,100745,janhvi@regentmarkets.com,Janhvi Sherul Soni,Deriv FZCO,AED,United Arab Emirates,2000,2000,0
+2025,101558,jason.david@regentmarkets.com,Jason Donovan David,4X Software Sdn Bhd,MYR,Malaysia,2000,1590,410
+2025,101813,jatin@regentmarkets.com,Jatin Chauhan,Finserv Solutions LLC FZ,MYR,United Arab Emirates,2000,2000,0
+2025,102331,jecvis@regentmarkets.com,Jecvis Wang,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100011,jennice@regentmarkets.com,Jennice Lourdsamy,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,170,1830
+2025,101357,jeremiah@regentmarkets.com,Jeremiah Wong,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1850,150
+2025,100073,jessica.anthony@regentmarkets.com,Jessica Anthony,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1070,930
+2025,100707,jessicasheela@regentmarkets.com,Jessicasheela Pathinathan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,101704,jezrah@regentmarkets.com,Jezrah Joy Castillo Ohagan,Deriv FZCO,AED,United Arab Emirates,2000,1635.28,364.72
+2025,101152,jia.jun@regentmarkets.com,Jia Jun Ngeo,4X Software Sdn Bhd,MYR,Malaysia,2000,755,1245
+2025,101553,jiawei@regentmarkets.com,Jia Wei Leong,4X Software Sdn Bhd,MYR,Malaysia,2000,898,1102
+2025,100702,jim@regentmarkets.com,Jim Daniels Wasswa,4X Software Sdn Bhd,MYR,Malaysia,2000,1100,900
+2025,100610,jishi@regentmarkets.com,Jishi Jitheesh,Deriv FZCO,AED,United Arab Emirates,2000,1114,886
+2025,100090,joanne@regentmarkets.com,Joanne Regina Nesamalar,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,928,1072
+2025,100060,joechang@regentmarkets.com,Joe Chang,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1450,550
+2025,100566,joey@regentmarkets.com,Joey Lou,4X Software Sdn Bhd,MYR,Malaysia,2000,1238.5,761.5
+2025,102216,jolie@regentmarkets.com,Huynh Thi Tuyet Hong (Jolie),Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,977,1023
+2025,100272,jonalyn@regentmarkets.com,Jonalyn Saplala Salandanan,Sinbad Software LLC,AED,United Arab Emirates,2000,1056,944
+2025,100284,jonathan@regentmarkets.com,Jonathan Joseph,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100324,jordache@regentmarkets.com,Jordache Shurwin Gounder,Deriv FZCO,AED,United Arab Emirates,2000,380,1620
+2025,100198,joshua@regentmarkets.com,Joshua Teh,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,101123,jothimani@regentmarkets.com,Jothimani Radhakrishnan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1413,587
+2025,100010,junbon@regentmarkets.com,Jun Bon Kok,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,101144,kai.ling@regentmarkets.com,Kai Ling Lim,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,100830,kaijie@regentmarkets.com,Kai Jie Tang,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,102511,kailing.looi@regentmarkets.com,Kai Ling Looi,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,120,1880
+2025,100886,kaiyin@regentmarkets.com,Kai Yin Chan,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,555,1445
+2025,100046,kala@regentmarkets.com,Kala Ramachandran,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,500,1500
+2025,100161,kalaiselvan@regentmarkets.com,Kalaiselvan Subbaian,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1500,500
+2025,102287,kaleem.khan@regentmarkets.com,Kaleem Khan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,102273,kamran@regentmarkets.com,Kamran Bashir Malik,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100247,kanchana@regentmarkets.com,Kanchana Ramachandran,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,450,1550
+2025,101760,karla@regentmarkets.com,Karla Alexis San Jose Miranda,Deriv FZCO,AED,United Arab Emirates,2000,1581,419
+2025,101610,karthika.kurup@regentmarkets.com,Karthika Muralidhara Kurup,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,1950,50
+2025,100616,kartini@regentmarkets.com,Kartini Kohilan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,470,1530
+2025,100003,kavitha@regentmarkets.com,Kavitha Thangavelu,Deriv (SG) Pte Ltd,SGD,Singapore,600,184.06,415.94
+2025,102372,kayalvili@regentmarkets.com,Kayalvili Eraivan,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,1952.5,47.5
+2025,100175,keanfei@regentmarkets.com,Kean Fei Leong,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1160,840
+2025,100732,keertana@regentmarkets.com,Keertana Passu Davan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,409,1591
+2025,101345,kenneth@regentmarkets.com,Kenneth Jian Wei Hiew,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1700,300
+2025,100220,kesya@regentmarkets.com,Kesyalinee Thivya,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,1130.5,869.5
+2025,101735,kevin.galvez@regentmarkets.com,Kevin Cularte Galvez,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,125,1875
+2025,100307,khalid@regentmarkets.com,Khalid Ibrahim Adem Hamed,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,100979,khallish.munesinghe@regentmarkets.com,Khallish Munesinghe,Deriv (FX) Ltd,MYR,Malaysia,2000,1640,360
+2025,102217,khanittha@regentmarkets.com,Khanittha Promdontri,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,102608,kishen@regentmarkets.com,Kishen Kumar Sivalingam,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,580,1420
+2025,100056,kogila@regentmarkets.com,Kogila Sellappan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1175,825
+2025,100837,krishna.kumar@regentmarkets.com,Krishna Prasad Vijaya Kumar,Deriv FZCO,AED,United Arab Emirates,2000,500,1500
+2025,100361,krishna@regentmarkets.com,Krishna Nukala,4X Software Sdn Bhd,MYR,Malaysia,2000,1234.95,765.05
+2025,100481,kuanlim@regentmarkets.com,Kuan Lim Phang,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,101481,kumaran.subramani@regentmarkets.com,Kumaran Subramani,Sinbad Software LLC,AED,United Arab Emirates,2000,1100,900
+2025,101733,kumaresan@regentmarkets.com,Kumaresan Suppiah,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1199,801
+2025,100102,laiyee@regentmarkets.com,Lai Yee Chang,4X Software Sdn Bhd,MYR,Malaysia,2000,1230,770
+2025,101913,lallitha@regentmarkets.com,Lallitha Nganeswaran,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,270,1730
+2025,101440,leekean@regentmarkets.com,Lee Kean Ooi,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,101114,leonid@regentmarkets.com,Leonid Sokolovskiy,Deriv Technologies Limited,GBP,United Kingdom,500,130,370
+2025,100574,likhith@regentmarkets.com,Likhith Prakash Kolayari,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,125,1875
+2025,101514,lilian@regentmarkets.com,Lilian Lee,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,101840,lilly@regentmarkets.com,Lilly Muthoni Munyua,Deriv FZCO,AED,United Arab Emirates,2000,2000,0
+2025,100186,lipika@regentmarkets.com,Lipika Sethi,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,632.8,1367.2
+2025,100696,liyana@regentmarkets.com,Nur Liyana Mohd Yazid,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,101563,logaaiswariya@regentmarkets.com,Logaaiswariya Maraipan,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,100431,logapriya@regentmarkets.com,Logapriya Nagappan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100052,logeetha@regentmarkets.com,Logeetha Perumal,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1895,105
+2025,102276,loshini@regentmarkets.com,Meena Loshini Selvaraj,4X Software Sdn Bhd,MYR,Malaysia,2000,65,1935
+2025,100911,louisa@regentmarkets.com,Louisa Lim,Deriv (Labuan) Ltd,MYR,Malaysia,2000,1520,480
+2025,101552,lubega@regentmarkets.com,Muhammad Lubega Siraje,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,100047,lucas@regentmarkets.com,Lucas Toh,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,100686,luqman@regentmarkets.com,Luqman Nurhakim Aizuddin,4X Software Sdn Bhd,MYR,Malaysia,2000,1810,190
+2025,100275,luther@regentmarkets.com,Luther Allison Miseh,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,102257,maconnell.fernandes@regentmarkets.com,Maconnell Joseph Fernandes,Deriv FZCO,AED,United Arab Emirates,2000,240,1760
+2025,101358,maegen@regentmarkets.com,Maegen Seah,4X Software Sdn Bhd,MYR,Malaysia,2000,1650,350
+2025,100290,magdalen@regentmarkets.com,Magdalen Rubin,Deriv (FX) Ltd,MYR,Malaysia,2000,1253,747
+2025,100532,mahirah@regentmarkets.com,Mahirah Binti Sukadis,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100401,mahrous@regentmarkets.com,Mahrous Amer,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,101456,mahroze.jabeen@regentmarkets.com,Mahroze Jabeen,Deriv FZCO,AED,United Arab Emirates,2000,250,1750
+2025,100255,maisara@regentmarkets.com,Maisara Sallehuddin,4X Software Sdn Bhd,MYR,Malaysia,2000,1543,457
+2025,100784,maisarah@regentmarkets.com,Maisarah Mohd Zain,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,75,1925
+2025,100387,maizura@regentmarkets.com,Maizura Osman,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,101461,malathi.ravi@regentmarkets.com,Malathi Shri Chiramel Ravi,Deriv FZCO,AED,United Arab Emirates,2000,2000,0
+2025,101778,manilyn@regentmarkets.com,Manilyn Maggay Bagne,Deriv FZCO,AED,United Arab Emirates,2000,1964,36
+2025,102283,mansi.dixit@regentmarkets.com,Mansi Dixit,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,724.75,1275.25
+2025,100120,margaret@regentmarkets.com,Margaret Ram,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100443,mariana.alvarez@regentmarkets.com,Mariana Rueda Alvarez,Deriv FZCO,AED,United Arab Emirates,2000,1470,530
+2025,100377,mariana@regentmarkets.com,Dayang Siti Mariana Abdol Sumar,Deriv (FX) Ltd,MYR,Malaysia,2000,1584.18,415.82
+2025,101146,marianne@regentmarkets.com,Marianne Wong,4X Software Sdn Bhd,MYR,Malaysia,2000,1019,981
+2025,100922,mario.vanwesten@regentmarkets.com,Mario R. Van Westen,4X Software Sdn Bhd,MYR,Malaysia,2000,550,1450
+2025,100205,mario@regentmarkets.com,Mario Bryan Tan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1970,30
+2025,100488,marissa@regentmarkets.com,Marissa Adreena Binti Manshah,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1764,236
+2025,101567,mark.odonnell@regentmarkets.com,Mark O'Donnell,Deriv Technologies Limited,GBP,United Kingdom,500,349,151
+2025,102275,marknicholas@regentmarkets.com,Mark Nicholas Akyapogu,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,100535,marliza@regentmarkets.com,Siti Marliza Binti Maharam,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,1905,95
+2025,102436,marsya@regentmarkets.com,Marsya Irdina Shahrul Noor,4X Software Sdn Bhd,MYR,Malaysia,2000,1610,390
+2025,100517,maryam.forouzande@regentmarkets.com,Maryam Forouzande,4X Software Sdn Bhd,MYR,Malaysia,2000,363.6,1636.4
+2025,100223,maryam@regentmarkets.com,Maryam Nafisi,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,580,1420
+2025,102310,maryrose.fernando@regentmarkets.com,Mary Rose Fernando Relente,Deriv FZCO,AED,United Arab Emirates,2000,125,1875
+2025,101636,maslina@regentmarkets.com,Maslina Mokthar,4X Software Sdn Bhd,MYR,Malaysia,2000,1960,40
+2025,102225,masz@regentmarkets.com,Masz Syafiqah Ezzati Mat Seri,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1828,172
+2025,100724,mathana@regentmarkets.com,Mathana Kalliana Sundaram,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,382,1618
+2025,100218,matin@regentmarkets.com,Matin Shafiei,4X Software Sdn Bhd,MYR,Malaysia,2000,380,1620
+2025,101118,matthew.chan@regentmarkets.com,Matthew Chan,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,100067,maykuan@regentmarkets.com,May Kuan Yong,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,102315,mdhussain@regentmarkets.com,Hussain Taj,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,100659,meenakshi@regentmarkets.com,Meenakshi Kulaparambil Viswanathan,Deriv FZCO,AED,United Arab Emirates,2000,690,1310
+2025,100059,meeyun@regentmarkets.com,Mee Yun Choong,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100689,megalakshimi@regentmarkets.com,Megalakshimi Shah Jahan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1848,152
+2025,100466,mehdi.orangpour@regentmarkets.com,Mehdi Orangpour,4X Software Sdn Bhd,MYR,Malaysia,2000,862,1138
+2025,100009,meiling@regentmarkets.com,Mei Ling Tan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,120,1880
+2025,100062,meisum@regentmarkets.com,Mei Sum Leong,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,180,1820
+2025,100017,meitheng@regentmarkets.com,Mei Theng Wong,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1220.7,779.3
+2025,100197,melissa.mundi@regentmarkets.com,Melissa Mundi,4X Software Sdn Bhd,MYR,Malaysia,2000,1899.5,100.5
+2025,100045,melissa@regentmarkets.com,Melissa Steele,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,1988,12
+2025,100495,melita@regentmarkets.com,Melita Dsouza,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,125,1875
+2025,101048,melvinder@regentmarkets.com,Melvinder Kaur,4X Software Sdn Bhd,MYR,Malaysia,2000,1400,600
+2025,101009,melvinjit@regentmarkets.com,Melvinjit Singh Gill,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,400,1600
+2025,100663,mengben@regentmarkets.com,Meng Ben Cheong,4X Software Sdn Bhd,MYR,Malaysia,2000,168,1832
+2025,100691,mengkit@regentmarkets.com,Victor Lye,4X Software Sdn Bhd,MYR,Malaysia,2000,1800,200
+2025,100749,menzi@regentmarkets.com,Menzi Percival Ngcobo,Deriv FZCO,AED,United Arab Emirates,2000,125,1875
+2025,102237,mia.nguyen@regentmarkets.com,Nguyen Doan To Uyen (Mia),Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1270,730
+2025,100509,michelle.mangeya@regentmarkets.com,Michelle Tapiwa Mangeya,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,2000,0
+2025,101039,ming.fei@regentmarkets.com,Ming Fei Ng,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,2000,0
+2025,100441,mingway@regentmarkets.com,Ming Way Chai,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,1949,51
+2025,101801,mirasol@regentmarkets.com,Mirasol Sudla Quinto,Deriv FZCO,AED,United Arab Emirates,2000,285.18,1714.82
+2025,102311,mohamed.abdelshafy@regentmarkets.com,Mohamed Hassan Abdelshafy Ibrahim Elserafy,Deriv FZCO,AED,United Arab Emirates,2000,220,1780
+2025,100553,mohamed.faazil@regentmarkets.com,Mohamed Firdous Faazil Mohamed Thasim,Deriv FZCO,AED,United Arab Emirates,2000,1480,520
+2025,101716,mohammad.sabih@regentmarkets.com,Mohammad Taabish Sabih,Deriv FZCO,AED,United Arab Emirates,2000,2000,0
+2025,100023,mohammad@regentmarkets.com,Mohammad Reza Hamedanchi,Deriv Technologies Limited,GBP,United Kingdom,500,200.74,299.26
+2025,101827,mohan.sunil@regentmarkets.com,Mohan Singh Sunil,Deriv FZCO,AED,United Arab Emirates,2000,2000,0
+2025,100106,mohanad@regentmarkets.com,Mohanad Zarzour,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,163,1837
+2025,101385,mohd.shafi@regentmarkets.com,Mohd Shafi Trumboo,Deriv FZCO,AED,United Arab Emirates,2000,2063.75,-63.75
+2025,101596,mojtaba@regentmarkets.com,Mojtaba Kamyabi,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,300,1700
+2025,101837,mubashir@regentmarkets.com,Mubashir Ahmed,Deriv FZCO,AED,United Arab Emirates,2000,285.31,1714.69
+2025,100251,mugilan@regentmarkets.com,Mugilan Kanaras,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,1310,690
+2025,100832,muhamad.faizal@regentmarkets.com,Muhammad Faizal Bin Miskam,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1994,6
+2025,102308,muhammad.ahmed@regentmarkets.com,Muhammad Ahmed,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1903.8,96.2
+2025,101111,muhammad.fasih@regentmarkets.com,Muhammad Fasih Ali Naqvi,4X Software Sdn Bhd,MYR,Malaysia,2000,939,1061
+2025,102314,muhammad.saad@regentmarkets.com,Muhammad Saad,4X Software Sdn Bhd,MYR,Malaysia,2000,1959,41
+2025,100394,mukesh@regentmarkets.com,Mukesh Vijayagopalan,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,101533,munnfaye@regentmarkets.com,Munn Faye Tang,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,937,1063
+2025,100053,munsei@regentmarkets.com,Mun Sei Loke,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,102307,mustofa@regentmarkets.com,Mustofa Ghaleb Amami,4X Software Sdn Bhd,MYR,Malaysia,2000,910,1090
+2025,100678,nadiah@regentmarkets.com,Nadiah Ahmad Zairee,4X Software Sdn Bhd,MYR,Malaysia,2000,1521,479
+2025,100256,nagendra@regentmarkets.com,Nagendra Rao,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,2000,0
+2025,101635,nahshon@regentmarkets.com,Nahshon Arvin,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,130,1870
+2025,102364,nahum@regentmarkets.com,Nahum Quay,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,101038,nalaprasad@regentmarkets.com,Nalaprasad Dhandapani,Deriv FZCO,AED,United Arab Emirates,2000,265,1735
+2025,100789,naqibah@regentmarkets.com,Siti Naqibah Binti Azman,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,1928,72
+2025,100033,nara@regentmarkets.com,Narayanan Gunasegaran,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,316,1684
+2025,101597,narges@regentmarkets.com,Narges Valadbeigi,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1120.59,879.41
+2025,100944,nasiha@regentmarkets.com,Nur Nasiha Shadan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100671,natasha@regentmarkets.com,Adlinnur Natasha Noor Azmee,4X Software Sdn Bhd,MYR,Malaysia,2000,1540,460
+2025,100597,naven@regentmarkets.com,Navendraraj Rajaram,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,308,1692
+2025,102238,nazirah@regentmarkets.com,Nur Nazirah Muhammad Shahrol,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,1994.4,5.6
+2025,102270,nazmi.iskandar@regentmarkets.com,Nazmi Iskandar Mohd Safian,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1038,962
+2025,101315,nazmi@regentmarkets.com,Mohamed Nazmi Mohamed,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,101415,neenu.joseph@regentmarkets.com,Neenu Joseph,Deriv Capital Contracts & Currencies LLC,AED,United Arab Emirates,2000,1725,275
+2025,100589,negin.jafari@regentmarkets.com,Negin Jafari,4X Software Sdn Bhd,MYR,Malaysia,2000,1398,602
+2025,101739,neha@regentmarkets.com,Neha Goyal,Deriv FZCO,AED,United Arab Emirates,2000,2000,0
+2025,102349,nicole.ng@regentmarkets.com,Nicole Ng,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1641,359
+2025,102561,nigin@regentmarkets.com,Nigin Binish,Deriv FZCO,AED,United Arab Emirates,2000,125,1875
+2025,100747,nihal@regentmarkets.com,Nihal Usman Faisal,4X Software Sdn Bhd,MYR,Malaysia,2000,1819,181
+2025,100966,nikolas@regentmarkets.com,Nikolas Perikleous,Deriv Operations (Cyprus) Ltd,EUR,Cyprus,200,195,5
+2025,101598,niloofar.sadeghi@regentmarkets.com,Niloofar Sadeghi,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,102487,niraj@regentmarkets.com,Niraj Handunge,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,125,1875
+2025,102474,nirosha.naomi@regentmarkets.com,Nirosha Naomi Doraraj,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,2000,0
+2025,101915,nitya@regentmarkets.com,Nitya Batra,Deriv FZCO,AED,United Arab Emirates,2000,125,1875
+2025,100215,noorsakina@regentmarkets.com,Noor Sakina Hidayu Misron,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1565,435
+2025,100563,nor.huda@regentmarkets.com,Nor Huda Daud,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,2000,0
+2025,101184,norain@regentmarkets.com,Norain Abdul Razak,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,2000,0
+2025,100981,nur.fitryanie@regentmarkets.com,Nur Fitryanie Sapari,Deriv (FX) Ltd,MYR,Malaysia,2000,2000,0
+2025,101314,nur.sakinah@regentmarkets.com,Nur Sakinah Mohd Saidi,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,325,1675
+2025,100695,nurhaziqah@regentmarkets.com,Nur Haziqah Alias,4X Software Sdn Bhd,MYR,Malaysia,2000,488,1512
+2025,102219,nurin.azhar@regentmarkets.com,Nurin Farhanah Azhar,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,101347,nurin@regentmarkets.com,Nurin Batrisyia Binti Suhaimi,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1858,142
+2025,100843,nurul.adlin@regentmarkets.com,Adlin Mahadzir,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1860,140
+2025,100687,nurul.adlina@regentmarkets.com,Nurul Safra Adlina Safrye Sam,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,100956,nurul.adzrin@regentmarkets.com,Nurul Adzrin Binti Abdullah Sani,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1786,214
+2025,100754,nurul.ain@regentmarkets.com,Nurul Ain Binti Ali Mokhtar,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,101041,nurul.amira@regentmarkets.com,Nurul Amira Muzamri,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,1292,708
+2025,101060,nurul.amirah@regentmarkets.com,Nurul Amirah Ahmad Shah,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,430,1570
+2025,100976,nurul.hasya@regentmarkets.com,Nurul Hasya Rojehan,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,1550,450
+2025,101024,nurul.nadia@regentmarkets.com,Nurul Nadia Abdullah Fansury,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,2000,0
+2025,101205,olga.saliba@regentmarkets.com,Olga Saliba,Deriv Operations (Cyprus) Ltd,EUR,Cyprus,200,100,100
+2025,100091,omar.sabek@regentmarkets.com,Omar Al Sabek,4X Software Sdn Bhd,MYR,Malaysia,2000,636.6,1363.4
+2025,100564,onik@regentmarkets.com,Onik Azad,4X Software Sdn Bhd,MYR,Malaysia,2000,1148,852
+2025,100262,osala@regentmarkets.com,Osala Nair,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,1172,828
+2025,101195,osama@regentmarkets.com,Osama Ghazal,4X Software Sdn Bhd,MYR,Malaysia,2000,1073,927
+2025,102536,pallavi@regentmarkets.com,Pallavi Chandran,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,498,1502
+2025,100414,parrish@regentmarkets.com,Parrish Lim,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,1880,120
+2025,100415,parveeinthiranraj@regentmarkets.com,Parveeinthiranraj Thana Segaran,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1568,432
+2025,101156,paul.paglinawan@regentmarkets.com,Paul Gemar Rito Paglinawan,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,687,1313
+2025,100298,paveetra@regentmarkets.com,Paveetra Bhadrika,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1150,850
+2025,100459,pavithra@regentmarkets.com,Pavithra Rajanderan,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,370,1630
+2025,101157,pavitra.yoganathan@regentmarkets.com,Pavitra Yoganathan,4X Software Sdn Bhd,MYR,Malaysia,2000,828,1172
+2025,100269,pavitra@regentmarkets.com,Pavitra Jayasangkar,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,2000,0
+2025,102203,peckhan@regentmarkets.com,Peck Han Lee,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1940,60
+2025,101696,phoebe@regentmarkets.com,Phoebe Lee,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1100,900
+2025,100031,poornima@regentmarkets.com,Poornima Karthik,Deriv FZCO,AED,United Arab Emirates,2000,300,1700
+2025,101603,pradeep@regentmarkets.com,Pradeep Bhargav,4X Software Sdn Bhd,MYR,Malaysia,2000,450,1550
+2025,101579,prakashsivan@regentmarkets.com,Prakashsivan Mahalingam,Deriv FZCO,AED,United Arab Emirates,2000,375,1625
+2025,102390,prateek@regentmarkets.com,Prateek Basu,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1790,210
+2025,101699,praveena.sajiv@regentmarkets.com,Praveena Sajiv,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,679.07,1320.93
+2025,101050,premyuda@regentmarkets.com,Premyuda Boonroj,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,650,1350
+2025,100504,priscilla@regentmarkets.com,Priscilla Deva Priya Tamilarsan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1608,392
+2025,100430,prisyaradha@regentmarkets.com,Prisya Nair,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,499,1501
+2025,102319,priyanka.shrivastava@regentmarkets.com,Priyanka Shrivastava,Deriv FZCO,AED,United Arab Emirates,2000,3230,-1230
+2025,101099,prom@regentmarkets.com,Prom Phearun,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1160,840
+2025,100007,pua@regentmarkets.com,Geok Kheng Pua,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1650,350
+2025,101277,puspanathan@regentmarkets.com,Puspanathan Moorthy,4X Software Sdn Bhd,MYR,Malaysia,2000,150,1850
+2025,100005,putri@regentmarkets.com,Putri Kumala,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,720,1280
+2025,102405,qarish@regentmarkets.com,Qarish Ismail Muhammad Isa,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,1250,750
+2025,101611,qayanat@regentmarkets.com,Qayanat Haque,Deriv FZCO,AED,United Arab Emirates,2000,1980,20
+2025,100482,qinfeng@regentmarkets.com,Qin Feng Chia,4X Software Sdn Bhd,MYR,Malaysia,2000,930,1070
+2025,101546,rachel.chiam@regentmarkets.com,Rachel Chiam,4X Software Sdn Bhd,MYR,Malaysia,2000,1550,450
+2025,101365,rafail@regentmarkets.com,Rafail Pachitis,Deriv Operations (Cyprus) Ltd,EUR,Cyprus,200,42,158
+2025,100321,rafika@regentmarkets.com,Rafika Oktaviani,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,280,1720
+2025,100734,rafiq@regentmarkets.com,Muhammad Rafiq Redza,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,1440,560
+2025,100464,ragheb.dargham@regentmarkets.com,Ragheb Bou Dargham,Sinbad Software LLC,AED,United Arab Emirates,2000,330.53,1669.47
+2025,101042,raies@regentmarkets.com,Raies Imam Kazmi,Deriv FZCO,AED,United Arab Emirates,2000,2000,0
+2025,101544,raihan.yusof@regentmarkets.com,Raihan Syazwani Mohd Yusof,4X Software Sdn Bhd,MYR,Malaysia,2000,1127,873
+2025,100343,raihan@regentmarkets.com,Nur Raihan Syazwani Abdul Halim,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,101373,rajesh.viswanathan@regentmarkets.com,Rajesh Viswanathan,4X Software Sdn Bhd,MYR,Malaysia,2000,684.45,1315.55
+2025,100203,ramanand@regentmarkets.com,Ramanand Muraleedharan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100130,ramin.vakili@regentmarkets.com,Ramin Vakili,4X Software Sdn Bhd,MYR,Malaysia,2000,1584,416
+2025,101627,randeep@regentmarkets.com,Randeep Kaur,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,1930,70
+2025,100811,ranjeet@regentmarkets.com,Ranjeet Singh,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,102184,ranjini@regentmarkets.com,Ranjini Jayaraj Kothottil,Deriv FZCO,AED,United Arab Emirates,2000,2000,0
+2025,100100,ranyrita@regentmarkets.com,Ranyrita Yanaprakasan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1510,490
+2025,100014,raunak@regentmarkets.com,Raunak Kathuria,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,632.8,1367.2
+2025,100311,raveena@regentmarkets.com,Raveena Devi Mangaladhas,4X Software Sdn Bhd,MYR,Malaysia,2000,410,1590
+2025,101439,raymond@regentmarkets.com,Zheng Hao Lian,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,738,1262
+2025,100195,razeef@regentmarkets.com,Mohamed Razeef Mohamed Rafeek,Deriv FZCO,AED,United Arab Emirates,2000,1315.65,684.35
+2025,100043,rebecca@regentmarkets.com,Rebecca Yew,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1500,500
+2025,102475,rehan@regentmarkets.com,Rehan Adil,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1418,582
+2025,100054,reichong@regentmarkets.com,Rei Chong,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1724,276
+2025,100423,remya@regentmarkets.com,Remya Krishnan,Deriv FZCO,AED,United Arab Emirates,2000,1125,875
+2025,100614,reshma.ravi@regentmarkets.com,Reshma Ravi Palakkal,Sinbad Software LLC,AED,United Arab Emirates,2000,870,1130
+2025,100224,revin@regentmarkets.com,Revin Raja,4X Software Sdn Bhd,MYR,Malaysia,2000,1700,300
+2025,100942,reza.felekari@regentmarkets.com,Reza Felekari,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,101434,rhiannon@regentmarkets.com,Rhiannon Cramer,Deriv Group SEZC,USD,Cayman Islands,1000,319.03,680.97
+2025,100680,ricky.thain@regentmarkets.com,Ricky Espineli Thain,4X Software Sdn Bhd,MYR,Malaysia,2000,800,1200
+2025,101625,riddhi@regentmarkets.com,Riddhi Deven Ojha,Deriv FZCO,AED,United Arab Emirates,2000,400,1600
+2025,100996,ridzuan@regentmarkets.com,Muhammad Ridzuan Zamri,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,2000,0
+2025,101166,riordan.lee@regentmarkets.com,Riordan Lee,Deriv (SG) Pte Ltd,SGD,Singapore,600,80,520
+2025,101809,rithesh@regentmarkets.com,Rithesh Gopinath Gatty,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,2000,0
+2025,100390,robin@regentmarkets.com,Robin Saha,4X Software Sdn Bhd,MYR,Malaysia,2000,3500,-1500
+2025,102518,rose@regentmarkets.com,Rose Tanya,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,800,1200
+2025,100193,roxana@regentmarkets.com,Roxana Shabbou,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1670,330
+2025,100971,rubanar@regentmarkets.com,Rubanar Ravindaran,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,358,1642
+2025,102354,ryka@regentmarkets.com,Ryka Thomas,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1619.5,380.5
+2025,101624,sagar@regentmarkets.com,Sagar Karki,Sinbad Software LLC,AED,United Arab Emirates,2000,757.36,1242.64
+2025,101290,sahani@regentmarkets.com,Sahani Shakya,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,101720,sahil@regentmarkets.com,Sahil Kumar,Deriv FZCO,AED,United Arab Emirates,2000,125,1875
+2025,100983,samiullah@regentmarkets.com,Samiullah Naseem,Deriv FZCO,AED,United Arab Emirates,2000,507,1493
+2025,101336,sanjana@regentmarkets.com,Sanjana Mariam Silvester,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,150,1850
+2025,100160,sara.elmira@regentmarkets.com,Sara Elmira Azraley,Deriv (FX) Ltd,MYR,Malaysia,2000,2000,0
+2025,100314,sarah.aziziyan@regentmarkets.com,Sarah Aziziyan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,480,1520
+2025,101628,sarah.baldonanza@regentmarkets.com,Sarah Jane Soriano Baldonanza,Deriv FZCO,AED,United Arab Emirates,2000,1941.13,58.87
+2025,100600,saranya@regentmarkets.com,Saranya Kaliappen,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,2000,0
+2025,100777,saraswathy@regentmarkets.com,Saraswathy Kanniah,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,215,1785
+2025,100084,saravanan@regentmarkets.com,Saravanan Mogan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,101577,sartchiinarth@regentmarkets.com,Sartchiinarth Ramachandran,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1268,732
+2025,101537,satean@regentmarkets.com,Satean Magandran,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,180,1820
+2025,101242,sathiesh@regentmarkets.com,Sathiesh Kumar Aravindakshan,Deriv FZCO,AED,United Arab Emirates,2000,625,1375
+2025,101642,sathish.badrinarayanan@regentmarkets.com,Sathish Badrinarayanan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1785.9,214.1
+2025,101470,sathiya@regentmarkets.com,Sathiya Seelan Selvarajah,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1630,370
+2025,100786,satvinder@regentmarkets.com,Satvinder Kaur,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1078,922
+2025,101007,saurabh@regentmarkets.com,Saurabh Kumar Suman,Deriv FZCO,AED,United Arab Emirates,2000,1215,785
+2025,100051,seeling@regentmarkets.com,See Ling Tey,4X Software Sdn Bhd,MYR,Malaysia,2000,230,1770
+2025,100537,seeyan@regentmarkets.com,Seeyan Padinjaraveettil Abdul Gafoor,Deriv FZCO,AED,United Arab Emirates,2000,3930,-1930
+2025,101031,sepideh@regentmarkets.com,Sepideh Tavakoli Manesh,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,100246,shaarmini@regentmarkets.com,Shaarmini Rajaram,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,100,1900
+2025,100876,shafiq.hakimi@regentmarkets.com,Mohamed Shafiq Hakimi,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,1530,470
+2025,100260,shafiq@regentmarkets.com,Shafiq Ikmal Nor Shahrim,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,110,1890
+2025,102515,shahood@regentmarkets.com,Shahood MM,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,1417.5,582.5
+2025,101354,shahzaib@regentmarkets.com,Shahzaib Akram,4X Software Sdn Bhd,MYR,Malaysia,2000,1879,121
+2025,100248,shangari@regentmarkets.com,Shangari Nair Murugesan,4X Software Sdn Bhd,MYR,Malaysia,2000,1394.75,605.25
+2025,100201,sharan@regentmarkets.com,Sharan Raj Muniaundi,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,1800,200
+2025,101338,shareen@regentmarkets.com,Shareen Vijayendran,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100309,sharein@regentmarkets.com,Sharein Ho,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,102260,sharina@regentmarkets.com,Noor Sharina Shamsudin,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1909,91
+2025,100049,sharmay@regentmarkets.com,Sharmay Buenaventura,Champion Global Business Services Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,100145,sharmein@regentmarkets.com,Sharmein Gill Khan,Champion Global Business Services Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,101027,sharvin@regentmarkets.com,Sharvin Rao,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1100,900
+2025,101702,sharvina@regentmarkets.com,Sharvina Marypushpam,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,961,1039
+2025,101159,sharvini@regentmarkets.com,Sharvini Manimaran,4X Software Sdn Bhd,MYR,Malaysia,2000,1510,490
+2025,102552,shashank.bhandari@regentmarkets.com,Shashank Bhandari,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,325,1675
+2025,102235,shefali@regentmarkets.com,Shefali Arora,Champion Global Business Services Sdn Bhd,MYR,Malaysia,2000,805.39,1194.61
+2025,101392,shemasaunthari@regentmarkets.com,Shemasaunthari Ramanaidoo,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,101521,shirin.sahana@regentmarkets.com,Shirin Sahana,Deriv FZCO,AED,United Arab Emirates,2000,1025,975
+2025,100467,shirod@regentmarkets.com,Shirod Nambiar,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1934,66
+2025,102524,shobah.segaran@regentmarkets.com,Shobah Segaran,4X Software Sdn Bhd,MYR,Malaysia,2000,680,1320
+2025,101165,shon.tzu@regentmarkets.com,Shon Tzu Keoy,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,102426,shu.lyn@regentmarkets.com,Shu Lyn Yap,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,101883,shuhail@regentmarkets.com,Shuhail Azri Hanif,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100004,shyamala@regentmarkets.com,Shyamala Siva,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,101143,si.yu@regentmarkets.com,Si Yu Goh,4X Software Sdn Bhd,MYR,Malaysia,2000,315,1685
+2025,100627,sithy@regentmarkets.com,Sithy Nur Misrah Binti Ibrahim,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1422,578
+2025,101134,siti.naimatul@regentmarkets.com,Siti Naimatul Salwa,Champion Global Business Services Sdn Bhd,MYR,Malaysia,2000,240,1760
+2025,100096,siti@regentmarkets.com,Siti Sakinah Munirah Ishak,4X Software Sdn Bhd,MYR,Malaysia,2000,1351,649
+2025,101525,sofiya@regentmarkets.com,Amila Sofiya,4X Software Sdn Bhd,MYR,Malaysia,2000,705,1295
+2025,101121,sojinee@regentmarkets.com,Sojinee Munisamy,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,102480,someshwar@regentmarkets.com,Someshwar Perera,4X Software Sdn Bhd,MYR,Malaysia,2000,1800,200
+2025,101028,souparnika@regentmarkets.com,Souparnika Sudhakar,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,1803.64,196.36
+2025,100103,spencer@regentmarkets.com,Spencer Jason Magno Ongkingco,Deriv FZCO,AED,United Arab Emirates,2000,125,1875
+2025,100442,sreeraj@regentmarkets.com,Sreeraj Sreekantan Nair,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,125,1875
+2025,100030,stanly@regentmarkets.com,Stanly Koon Tan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1928,72
+2025,100668,suhaila@regentmarkets.com,Nur Suhaila Anang Japar,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,100730,suhana@regentmarkets.com,Suhana Jamain,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,1532,468
+2025,100736,sulaimi@regentmarkets.com,Sulaimi Ajit Sabri,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,600,1400
+2025,101443,sumaiyah@regentmarkets.com,Sumaiyah Mohamed Abdul Kader,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1853,147
+2025,102261,suphamin@regentmarkets.com,Faisol Suphamin Cheloh,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100245,suriya@regentmarkets.com,Suriya Gunasakaran,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,680,1320
+2025,101734,sushrut@regentmarkets.com,Sushrut Shukla,Deriv FZCO,AED,United Arab Emirates,2000,125,1875
+2025,101557,suyash@regentmarkets.com,Suyash Mohan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1638,362
+2025,102194,swan@regentmarkets.com,Gaik Xuang (Swan) Che,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,110,1890
+2025,100681,syafiqah.adam@regentmarkets.com,Syafiqah Izzan Mohd Adam,4X Software Sdn Bhd,MYR,Malaysia,2000,1190,810
+2025,101469,syafiqah.razab@regentmarkets.com,Syafiqah Razab,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100548,syafiqah.samsul@regentmarkets.com,Nur Syafiqah Binti Samsul,Deriv (FX) Ltd,MYR,Malaysia,2000,1755,245
+2025,100451,syafiqah@regentmarkets.com,Nurul Syafiqah Binti Ab Latip,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,999,1001
+2025,100489,syafiza@regentmarkets.com,Norsyafiza Fazna Binti Abd Mutalip,Deriv (FX) Ltd,MYR,Malaysia,2000,2000,0
+2025,101602,syafizee@regentmarkets.com,Syafizee Safiee,4X Software Sdn Bhd,MYR,Malaysia,2000,799,1201
+2025,102355,syahirah@regentmarkets.com,Nurul Syahirah Norazmi,4X Software Sdn Bhd,MYR,Malaysia,2000,173,1827
+2025,101902,syahiza@regentmarkets.com,Syahiza Kahar,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1520,480
+2025,100461,syahmi@regentmarkets.com,Noorsyahmi Syahiran Syazali,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,100,1900
+2025,102350,syaiful.rosly@regentmarkets.com,Syaiful Azam Rosly,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,100752,syakir@regentmarkets.com,Ahmad Syakir,4X Software Sdn Bhd,MYR,Malaysia,2000,1235,765
+2025,100406,syed@regentmarkets.com,Syed Ahmad Bin S Omar,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100989,syifa.mohd@regentmarkets.com,Nur Syifa Binti Mohamad,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100335,tahir@regentmarkets.com,Tahir Ali Khan,Deriv FZCO,AED,United Arab Emirates,2000,125,1875
+2025,100862,tanujaah@regentmarkets.com,Tanujaah Goh,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,417,1583
+2025,101297,tanvir@regentmarkets.com,Tanvir Faisal,4X Software Sdn Bhd,MYR,Malaysia,2000,740,1260
+2025,100682,tatiana@regentmarkets.com,Tatiana Joanne Cheah,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,299,1701
+2025,102280,teshvinder@regentmarkets.com,Teshvinder Kaur Jagdish Singh,4X Software Sdn Bhd,MYR,Malaysia,2000,217,1783
+2025,101884,thanesh@regentmarkets.com,Thanesh Rao,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1600,400
+2025,100117,tharmen@regentmarkets.com,Tharmendra Kumar,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1500,500
+2025,100822,thasaratharaj@regentmarkets.com,Thasaratharaj Anamalay,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1253.15,746.85
+2025,100910,thenmoli@regentmarkets.com,Thenmoli Shanmugam,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,300,1700
+2025,100188,thevathaasan@regentmarkets.com,Thevathaasan Thirukumaran,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,102367,thines@regentmarkets.com,Thines Narayansamy,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,638,1362
+2025,100967,thirumal@regentmarkets.com,Thirumal Sritharan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1498.5,501.5
+2025,100683,thisyahlen@regentmarkets.com,Thisyahlen Nair,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,100222,thiviyah@regentmarkets.com,Thiviyah Rajah,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,1883,117
+2025,100352,thivyarupini@regentmarkets.com,Thivyarupini Selvasegran,4X Software Sdn Bhd,MYR,Malaysia,2000,1600,400
+2025,100208,thiyagesvanan@regentmarkets.com,Thiyagesvanan Saravanan,4X Software Sdn Bhd,MYR,Malaysia,2000,1650,350
+2025,100098,tzechien@regentmarkets.com,Tze Chien Low,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1359,641
+2025,101814,tzewei@regentmarkets.com,Tze Wei Chua,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1050,950
+2025,100333,umer@regentmarkets.com,Umer Saleem,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,100170,umithra@regentmarkets.com,Umithra Ravendran,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,758,1242
+2025,100370,unnikrishnan@regentmarkets.com,Unnikrishnan SN,4X Software Sdn Bhd,MYR,Malaysia,2000,200,1800
+2025,102429,usman.ghani@regentmarkets.com,Usman Ghani,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,300,1700
+2025,101776,usman@regentmarkets.com,Usman Zubair,4X Software Sdn Bhd,MYR,Malaysia,2000,1834,166
+2025,100191,uzma@regentmarkets.com,Uzma Liyana,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,180,1820
+2025,101572,valentina.rolvita@regentmarkets.com,Valentina Rolvita Dsouza,Deriv FZCO,AED,United Arab Emirates,2000,675,1325
+2025,100136,vannesa@regentmarkets.com,Vannesa Onnievia Binti Anthony,Deriv (FX) Ltd,MYR,Malaysia,2000,1750,250
+2025,102187,vasanthi@regentmarkets.com,Vasanthi Sekar,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,1901.1,98.9
+2025,100645,venezela@regentmarkets.com,Venezela Mohd Tahir,Deriv (FX) Ltd,MYR,Malaysia,2000,1750,250
+2025,100861,venugopal@regentmarkets.com,Venugopal Kalyanasundaram,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,125,1875
+2025,100418,vickness@regentmarkets.com,Vickness Dhanabalu,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,591,1409
+2025,101113,vijaya@regentmarkets.com,Vijaya Davinyashini Ramesh,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100268,vikneskumar@regentmarkets.com,Vikneskumar Shanmugam,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100669,vimalan.rajakumar@regentmarkets.com,Vimalan Rajakumar,4X Software Sdn Bhd,MYR,Malaysia,2000,390,1610
+2025,100405,vinodh@regentmarkets.com,Vinodh Ravindran,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1678,322
+2025,100601,vinu@regentmarkets.com,Vinu Vinayan Variyatil,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,232.44,1767.56
+2025,102484,vipula@regentmarkets.com,Vipula Joshi,Deriv FZCO,AED,United Arab Emirates,2000,125,1875
+2025,100873,vishal.menon@regentmarkets.com,Vishal Menon,4X Software Sdn Bhd,MYR,Malaysia,2000,1742,258
+2025,100613,vishal@regentmarkets.com,Vishal Panchani,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,175,1825
+2025,101877,vivek.pokale@regentmarkets.com,Vivek Vinay Pokale,Finserv Solutions LLC FZ,AED,United Arab Emirates,2000,1979.5,20.5
+2025,101478,vivek@regentmarkets.com,Vivek Fernandis,Deriv FZCO,AED,United Arab Emirates,2000,2000,0
+2025,100035,vivian@regentmarkets.com,Vivian Pei Yi Lee,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100407,wali@regentmarkets.com,Syed Ahmad Wali,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1398,602
+2025,101459,walter.masaka@regentmarkets.com,Walter Tafadzwa Masaka,Deriv FZCO,AED,United Arab Emirates,2000,650.6,1349.4
+2025,101067,wan@regentmarkets.com,Wan Muhammad Nizar Shahrolnisham,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,2000,0
+2025,100082,waqas@regentmarkets.com,Waqas Awan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,4000,-2000
+2025,102240,wayne@regentmarkets.com,Wayne Ho,4X Software Sdn Bhd,MYR,Malaysia,2000,499,1501
+2025,101761,wen.sheng@regentmarkets.com,Wen Sheng Chua,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1980,20
+2025,101161,weng.onn@regentmarkets.com,Weng Onn Tan,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,100679,wenglok@regentmarkets.com,Weng Lok Ng,4X Software Sdn Bhd,MYR,Malaysia,2000,1960,40
+2025,101008,winnie@regentmarkets.com,Winnie Chua,4X Software Sdn Bhd,MYR,Malaysia,2000,4000,-2000
+2025,100913,xeselda@regentmarkets.com,Xeselda Hilson,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,1135,865
+2025,101162,xing.wei@regentmarkets.com,Xing Wei Tan,4X Software Sdn Bhd,MYR,Malaysia,2000,1835,165
+2025,100257,yashim@regentmarkets.com,Mohd Yashim Wong Paul Tze,4X Software Sdn Bhd,MYR,Malaysia,2000,1564,436
+2025,101082,yasmeen@regentmarkets.com,Noor Yasmeen Binti Rosli,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1777.3,222.7
+2025,100081,yasmien@regentmarkets.com,Yasmien Binti Mat Yunus,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,494,1506
+2025,101311,yasmirayanti@regentmarkets.com,Yasmirayanti Baharudin,4X Software Sdn Bhd,MYR,Malaysia,2000,2000,0
+2025,101249,yeechan@regentmarkets.com,Yee Chan Foo,4X Software Sdn Bhd,MYR,Malaysia,2000,200,1800
+2025,101753,yenli@regentmarkets.com,Yen Li See,4X Software Sdn Bhd,MYR,Malaysia,2000,510,1490
+2025,101312,yilei@regentmarkets.com,Yi Lei Chua,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1586,414
+2025,100006,yngshan@regentmarkets.com,Yng Shan Tan,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100586,youssef@regentmarkets.com,Youssef Morad,4X Software Sdn Bhd,MYR,Malaysia,2000,1980,20
+2025,100413,yunni@regentmarkets.com,Yun Ni Phang,Champion Global Business Services Sdn Bhd,MYR,Malaysia,2000,629.3,1370.7
+2025,101532,yuvaraj@regentmarkets.com,Yuvaraj Elamko,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1097,903
+2025,101791,yvonne.chong@regentmarkets.com,Yvonne Chong,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1950,50
+2025,100348,zafirah@regentmarkets.com,Zafirah Mohd Noh,Deriv (FX) Ltd,MYR,Malaysia,2000,1730,270
+2025,100486,zafri@regentmarkets.com,Mohd Arif Zafri Bin Mohd Mokhtar,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1910,90
+2025,101163,zahiah@regentmarkets.com,Zahiah Akhma Mohd Zabidi,Deriv Services Sdn Bhd (Melaka),MYR,Malaysia,2000,1440,560
+2025,102365,zahirah.anuar@regentmarkets.com,Zahirah Zainul Anuar,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,101752,zahirah.zakaria@regentmarkets.com,Zahirah Syahirah,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,1438,562
+2025,101890,zaza@regentmarkets.com,Zaza Ainaz Mohamed Aznam,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,100798,zohreh@regentmarkets.com,Zohreh Jamali,4X Software Sdn Bhd,MYR,Malaysia,2000,1050,950
+2025,102196,zubair@regentmarkets.com,Zubair Shahid,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,1639,361
+2025,100254,zulhanis@regentmarkets.com,Zulhanis Zull Azmi,Deriv Services Sdn Bhd (Ipoh),MYR,Malaysia,2000,1846,154
+2025,101034,zulharriz@regentmarkets.com,Muhammad Zulharriz Bin Safri,Deriv Services Sdn Bhd (Cyberjaya),MYR,Malaysia,2000,2000,0
+2025,101097,zurainiza@regentmarkets.com,Nur Zur'Ainiza Nasha Binti Md Zaidi,Deriv (FX) Ltd,MYR,Malaysia,2000,1826,174

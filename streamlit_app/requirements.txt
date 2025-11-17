@@ -1,0 +1,27 @@
+# ClaimEase Web Portal - Dependencies
+
+# Streamlit
+streamlit>=1.28.0
+
+# AI/ML
+openai>=1.0.0
+langchain>=0.1.0
+langchain-openai>=0.0.2
+langchain-community>=0.0.10
+
+# Vector Database
+chromadb>=0.4.18
+
+# Data Processing
+pandas>=2.0.0
+numpy>=1.24.0
+
+# PDF Processing
+pypdf>=3.17.0
+pdfplumber>=0.10.0
+
+# Environment Variables
+python-dotenv>=1.0.0
+
+# Utilities
+python-dateutil>=2.8.2

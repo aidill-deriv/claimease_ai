@@ -1,0 +1,13 @@
+# AI/LLM Dependencies
+langchain==0.3.13
+langchain-openai==0.2.14
+langchain-community==0.3.13
+openai>=1.58.1
+
+# Core dependencies (if not already installed)
+python-dotenv==1.0.0
+pandas>=2.0.3
+pydantic>=2.7.4
+
+# Optional: for better output formatting
+rich==13.9.4

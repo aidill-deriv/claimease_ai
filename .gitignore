@@ -1,36 +1,235 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# ============================================
+# ClaimEase AI Agent - Git Ignore Rules
+# ============================================
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
-
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
+# ============================================
+# CRITICAL: Environment & Secrets
+# ============================================
+# Never commit API keys, tokens, or secrets!
+config/.env
+.env
+.env.local
+.env.*.local
+*.key
 *.pem
+secrets/
+credentials/
 
-# debug
+# ============================================
+# Python
+# ============================================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.hypothesis/
+.pytest_cache/
+
+# ============================================
+# Databases
+# ============================================
+# SQLite databases
+*.db
+*.sqlite
+*.sqlite3
+
+# ChromaDB vector databases
+chroma_db/
+*/chroma_db/
+knowledge_base/chroma_db/
+cli/chroma_db/
+
+# Database backups
+*.db.backup
+*.sql.backup
+
+# ============================================
+# Logs
+# ============================================
+logs/
+*.log
+log/
+*.log.*
+
+# ============================================
+# IDEs & Editors
+# ============================================
+# PyCharm
+.idea/
+*.iml
+*.iws
+.idea_modules/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+.*.swp
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# ============================================
+# Operating System
+# ============================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+
+# ============================================
+# Virtual Environments
+# ============================================
+venv/
+env/
+ENV/
+.venv/
+.env/
+virtualenv/
+pipenv/
+
+# ============================================
+# Node.js (if used)
+# ============================================
+node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+package-lock.json
+yarn.lock
 
-# local env files
-.env*.local
-.env
+# ============================================
+# Temporary Files
+# ============================================
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+.cache/
+tmp/
+temp/
 
-# vercel
-.vercel
+# ============================================
+# Project Specific
+# ============================================
+# Deprecated files (optional - uncomment if you want to ignore)
+# deprecated/
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# User data outputs
+mnt/user-data/outputs/
+
+# Test outputs
+test-output/
+test_results/
+
+# Ngrok
+ngrok
+ngrok.exe
+
+# Cloudflare Tunnel
+.cloudflare_tunnel_info
+cloudflare_tunnel_config.yml
+
+# ============================================
+# Documentation Build
+# ============================================
+docs/_build/
+site/
+.mkdocs/
+
+# ============================================
+# Jupyter Notebooks
+# ============================================
+.ipynb_checkpoints/
+*.ipynb
+
+# ============================================
+# Keep These Files
+# ============================================
+# Keep example environment file
+!config/.env.example
+
+# Keep empty directories with .gitkeep
+!.gitkeep
+
+# Keep PDF files in knowledge base
+!knowledge_base/pdf_files/*.pdf
+
+# Keep CSV data files
+!data/*.csv
+
+# ============================================
+# Notes
+# ============================================
+# This .gitignore protects:
+# - API keys and secrets (config/.env)
+# - Python cache files
+# - Databases (SQLite, ChromaDB)
+# - Log files
+# - IDE settings
+# - Virtual environments
+# - System files (.DS_Store)
+# - Temporary files
+#
+# Last Updated: November 2, 2025

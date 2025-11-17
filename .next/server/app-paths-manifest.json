@@ -1,0 +1,6 @@
+{
+  "/submit-claim/page": "app/submit-claim/page.js",
+  "/page": "app/page.js",
+  "/chat/page": "app/chat/page.js",
+  "/dashboard/page": "app/dashboard/page.js"
+}

@@ -1,313 +1,480 @@
-# ClaimEase Frontend
+# ClaimEase AI Agent - Employee Benefits Chatbot
 
-A modern, responsive web application for managing employee health insurance claims, built with Next.js 14, TypeScript, and Tailwind CSS.
+> AI-powered Slack bot for employee claims and benefits management with privacy protection
 
-![Next.js](https://img.shields.io/badge/Next.js-14-black)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-38bdf8)
-![License](https://img.shields.io/badge/License-MIT-green)
+[![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o--mini-412991.svg)](https://openai.com/)
+[![Slack](https://img.shields.io/badge/Slack-Integration-4A154B.svg)](https://slack.com/)
+[![Python](https://img.shields.io/badge/Python-3.8+-3776AB.svg)](https://www.python.org/)
 
-## 🌟 Features
-
-- **💬 AI-Powered Chat** - Interactive chatbot for claim inquiries and support
-- **📊 Dashboard** - Overview of claims, balances, and recent activity
-- **📋 Submit Claims** - Easy-to-use form for submitting new claims
-- **🎨 Modern UI** - Built with shadcn/ui components and Tailwind CSS
-- **🌓 Dark Mode** - Full dark mode support with theme toggle
-- **📱 Responsive** - Works seamlessly on desktop, tablet, and mobile
-- **⚡ Fast** - Optimized with Next.js 14 App Router and React Server Components
-- **🔒 Secure** - Type-safe with TypeScript and secure API communication
+---
 
 ## 🚀 Quick Start
 
+### Option 1: Slack Bot (Recommended for Production)
+
+```bash
+# 1. Start the server
+./start_server.sh
+
+# 2. In another terminal, start ngrok
+./setup_ngrok.sh
+
+# 3. Configure Slack webhook URL with ngrok URL
+# See SLACK_SETUP_GUIDE.md for details
+```
+
+**Then in Slack:**
+```
+@ClaimEase what's my remaining balance?
+```
+
+### Option 2: CLI Interface (For Testing)
+
+```bash
+python3 cli/cli_ai.py
+```
+
+### Option 3: API Server (For Development)
+
+```bash
+python3 src/api.py
+```
+
+---
+
+## ✨ Features
+
+### 🤖 AI-Powered Chatbot
+- **Natural Language Understanding** - GPT-4o-mini with LangChain
+- **Multi-turn Conversations** - Thread-aware memory for context
+- **9 Specialized Tools** - 6 data tools + 3 knowledge base tools
+- **Email-scoped Security** - Each user sees only their own data
+
+### 🔒 Privacy Protection
+- **Automatic PII Detection** - Identifies personal financial queries
+- **Private DM Responses** - Sensitive data sent to user's DM automatically
+- **Channel Acknowledgments** - Public confirmation without exposing data
+- **Access Control** - Users cannot query other employees' data
+
+### 💬 Slack Integration
+- **Real-time Responses** - Instant answers in Slack
+- **Thread Support** - Maintains conversation context in threads
+- **Event Deduplication** - Prevents duplicate responses
+- **Markdown Formatting** - Proper Slack mrkdwn with clickable links
+- **Bot Message Filtering** - Prevents infinite loops
+
+### 📚 Knowledge Base
+- **3 PDF Documents** - Procedures, benefits, claim forms
+- **32 Document Chunks** - Semantic search capability
+- **Vector Database** - ChromaDB with local embeddings
+- **Smart Search** - Finds relevant policy information
+
+### 💾 Database System
+- **SQLite Database** - Fast, reliable local storage
+- **Email-scoped Queries** - Secure data access
+- **3 Test Users** - Pre-loaded sample data
+- **Claim Tracking** - Complete claim history
+
+---
+
+## 📖 Documentation
+
+### Getting Started
+- **[Quick Start Guide](docs/QUICKSTART.md)** - Basic setup and usage
+- **[AI Setup Guide](docs/AI_QUICKSTART.md)** - AI agent configuration
+- **[Easy Setup](EASY_SETUP.md)** - Simplified setup instructions
+
+### Slack Deployment
+- **[Slack Setup Guide](SLACK_SETUP_GUIDE.md)** - Complete Slack integration
+- **[Slack Deployment](docs/SLACK_DEPLOYMENT.md)** - Deployment details
+- **[Thread Memory](docs/SLACK_THREAD_MEMORY.md)** - Thread-aware conversations
+
+### User Guides
+- **[Sample Questions](docs/SAMPLE_QUESTIONS.md)** - 100+ example questions
+- **[Quick Reference Card](docs/QUICK_REFERENCE_CARD.md)** - One-page guide
+- **[Quick Commands](QUICKSTART_COMMANDS.md)** - Common commands
+
+### Technical Documentation
+- **[Architecture](docs/ARCHITECTURE.md)** - System design
+- **[Database Migration](docs/DATABASE_MIGRATION_SUMMARY.md)** - Database setup
+- **[Logging Guide](docs/LOGGING_GUIDE.md)** - Logging system
+- **[AI Boundaries](docs/AI_AGENT_BOUNDARIES.md)** - Scope and limitations
+
+---
+
+## 📁 Project Structure
+
+```
+claim-ai-agent/
+├── src/                      # Core application code
+│   ├── ai_agent.py          # AI agent (GPT-4o-mini + LangChain)
+│   ├── api.py               # FastAPI server for Slack
+│   ├── tools.py             # 9 LangChain tools
+│   ├── db_retriever.py      # Database access layer
+│   ├── db_setup.py          # Database initialization
+│   ├── logger.py            # Logging system
+│   └── auth_stub.py         # Authentication stub
+│
+├── knowledge_base/           # PDF knowledge system
+│   ├── pdf_files/           # Source PDFs (3 documents)
+│   ├── md_files/            # Converted markdown files
+│   ├── chroma_db/           # Vector database (32 chunks)
+│   ├── vector_store.py      # Vector store manager
+│   ├── knowledge_tools.py   # Knowledge base tools
+│   └── *.py                 # Processing scripts
+│
+├── cli/                      # Command-line interfaces
+│   ├── cli_ai.py            # AI chatbot CLI
+│   └── cli_db.py            # Database CLI
+│
+├── data/                     # CSV data files
+│   ├── claims_2025.csv      # Claim records
+│   └── policy_reference.csv # Policy data
+│
+├── database/                 # SQLite database
+│   └── claims.db            # Main database
+│
+├── config/                   # Configuration
+│   ├── .env                 # Environment variables
+│   ├── .env.example         # Example configuration
+│   └── requirements*.txt    # Dependencies
+│
+├── docs/                     # Documentation
+│   ├── SAMPLE_QUESTIONS.md  # 100+ example questions
+│   ├── QUICK_REFERENCE_CARD.md  # Quick reference
+│   ├── SLACK_DEPLOYMENT.md  # Slack setup
+│   └── *.md                 # Other documentation
+│
+├── tests/                    # Test files
+│   ├── test_all_users.py    # User data tests
+│   ├── test_database.py     # Database tests
+│   ├── test_thread_memory.py # Thread memory tests
+│   └── benchmark.py         # Performance tests
+│
+├── logs/                     # Log files
+│   ├── api.log              # API server logs
+│   ├── conversations.log    # Chat logs
+│   └── system.log           # System logs
+│
+├── start_server.sh          # Start API server
+├── setup_ngrok.sh           # Setup ngrok tunnel
+└── deprecated/              # Old files (safe to delete)
+```
+
+---
+
+## 🔧 Setup & Configuration
+
 ### Prerequisites
 
-- Node.js 18+ ([Installation Guide](./INSTALL_NODEJS.md))
-- Backend API running (see [Backend Setup](#backend-setup))
+- Python 3.8+
+- OpenAI API key
+- Slack workspace (for Slack integration)
+- ngrok account (for Slack webhook)
 
 ### Installation
 
 ```bash
-# Clone the repository
-git clone https://github.com/your-username/claimease-frontend.git
-cd claimease-frontend
+# 1. Clone repository
+git clone <repository-url>
+cd claim-ai-agent
 
-# Install dependencies
-npm install
+# 2. Install dependencies
+pip3 install -r config/requirements.txt
+pip3 install -r config/requirements_ai.txt
+pip3 install -r config/requirements_kb.txt
 
-# Create environment file
-cp .env.example .env.local
+# 3. Configure environment
+cp config/.env.example config/.env
+# Edit config/.env with your API keys
 
-# Edit .env.local and set your API URL
-# NEXT_PUBLIC_API_URL=http://localhost:8000
-
-# Start development server
-npm run dev
+# 4. Initialize database
+python3 src/db_setup.py data database/claims.db
 ```
 
-Visit [http://localhost:3000](http://localhost:3000) to see the app!
+### Environment Variables
 
-## 📚 Documentation
-
-- **[Quick Start Guide](./QUICKSTART.md)** - Get up and running in 5 minutes
-- **[Setup Guide](./SETUP_GUIDE.md)** - Detailed installation and configuration
-- **[Deployment Guide](./DEPLOYMENT.md)** - Deploy to Vercel, Netlify, or your own server
-- **[Migration Guide](./MIGRATION_GUIDE.md)** - Moving from monorepo to standalone
-
-## 🏗️ Project Structure
-
-```
-claimease-frontend/
-├── app/                    # Next.js App Router pages
-│   ├── page.tsx           # Home/Login page
-│   ├── layout.tsx         # Root layout
-│   ├── globals.css        # Global styles
-│   ├── chat/              # Chat page
-│   ├── dashboard/         # Dashboard page
-│   └── submit-claim/      # Submit claim page
-├── components/            # React components
-│   ├── navigation.tsx     # Navigation bar
-│   ├── theme-provider.tsx # Dark mode provider
-│   └── ui/                # shadcn/ui components
-├── lib/                   # Utilities
-│   └── api.ts            # API client
-├── public/               # Static assets
-├── .env.example          # Environment variables template
-├── package.json          # Dependencies
-├── tsconfig.json         # TypeScript config
-├── tailwind.config.ts    # Tailwind CSS config
-└── next.config.js        # Next.js config
-```
-
-## 🛠️ Tech Stack
-
-### Core
-- **[Next.js 14](https://nextjs.org/)** - React framework with App Router
-- **[React 18](https://react.dev/)** - UI library
-- **[TypeScript](https://www.typescriptlang.org/)** - Type safety
-
-### Styling
-- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS
-- **[shadcn/ui](https://ui.shadcn.com/)** - Re-usable components
-- **[Lucide Icons](https://lucide.dev/)** - Beautiful icons
-
-### State & Data
-- **[React Hooks](https://react.dev/reference/react)** - State management
-- **Fetch API** - HTTP requests
-
-## 🔧 Available Scripts
+Edit `config/.env`:
 
 ```bash
-# Development
-npm run dev          # Start dev server (http://localhost:3000)
+# OpenAI API
+OPENAI_API_KEY=sk-your-actual-api-key-here
+MODEL_NAME=gpt-4o-mini
 
-# Production
-npm run build        # Build for production
-npm start            # Start production server
+# Slack Integration
+SLACK_BOT_TOKEN=xoxb-your-bot-token
+SLACK_SIGNING_SECRET=your-signing-secret
 
-# Code Quality
-npm run lint         # Run ESLint
-npm run type-check   # Run TypeScript compiler check
+# Server Configuration
+PORT=8000
+
+# Default User (for CLI testing)
+LOCAL_USER_EMAIL=aainaa@regentmarkets.com
 ```
 
-## 🌐 Backend Setup
+### Supabase Integration (Frontend)
 
-This frontend requires a backend API. The backend should provide:
-
-### Required Endpoints
-
-- `POST /query` - Chat queries
-  ```json
-  {
-    "user_email": "user@example.com",
-    "query_text": "What's my claim balance?",
-    "thread_id": "optional-thread-id"
-  }
-  ```
-
-- `GET /health` - Health check
-
-### CORS Configuration
-
-The backend must allow requests from your frontend domain:
-
-```python
-# Example for FastAPI
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "https://your-frontend-domain.com"
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-```
-
-### Backend Repository
-
-The backend is available at: [claim-ai-agent](https://github.com/your-username/claim-ai-agent)
-
-## 🚀 Deployment
-
-### Vercel (Recommended)
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
-
-1. Push code to GitHub
-2. Import project in Vercel
-3. Add environment variable: `NEXT_PUBLIC_API_URL`
-4. Deploy!
-
-### Netlify
-
-1. Push code to GitHub
-2. Import project in Netlify
-3. Build settings:
-   - Build command: `npm run build`
-   - Publish directory: `.next`
-4. Add environment variables
-5. Deploy!
-
-See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed instructions.
-
-## 🔐 Environment Variables
-
-Create a `.env.local` file:
+1. Copy `.env.example` to `.env.local`.
+2. Provide your Supabase project URL and anon key:
 
 ```bash
-# Required: Backend API URL
-NEXT_PUBLIC_API_URL=http://localhost:8000
-
-# Optional: Application info
-NEXT_PUBLIC_APP_NAME=ClaimEase
-NEXT_PUBLIC_APP_VERSION=1.0.0
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+NEXT_PUBLIC_SUPABASE_CLAIMS_TABLE=claims         # optional override
+NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET=claim_receipts  # optional bucket for receipts
 ```
 
-**Note:** Variables starting with `NEXT_PUBLIC_` are exposed to the browser.
+3. In Supabase, create a `claims` table (or match the value of `NEXT_PUBLIC_SUPABASE_CLAIMS_TABLE`) with columns such as `user_email`, `category`, `amount`, `date`, `description`, `provider`, `status`, and `receipt_path`. Enable Row Level Security so clients can only manage their own rows.
+4. (Optional) Create a Storage bucket (defaults to `claim_receipts`) for uploading supporting documents.
+5. Grant the anon role `insert` access to the claims table (and storage bucket) via policies tailored to your org's security rules.
 
-## 📱 Pages
+### Slack Setup
 
-### 1. Home / Login (`/`)
-- Welcome page with login form
-- Email-based authentication
-- Redirects to dashboard after login
+See **[SLACK_SETUP_GUIDE.md](SLACK_SETUP_GUIDE.md)** for complete instructions.
 
-### 2. Dashboard (`/dashboard`)
-- Claim balance overview
-- Recent claims list
-- Quick actions
-- Statistics cards
+**Quick steps:**
+1. Create Slack app at https://api.slack.com/apps
+2. Add bot scopes: `chat:write`, `im:write`, `users:read`, `users:read.email`, `app_mentions:read`, `im:history`
+3. Install app to workspace
+4. Copy bot token and signing secret to `.env`
+5. Start server and ngrok
+6. Configure Event Subscriptions with ngrok URL
 
-### 3. Chat (`/chat`)
-- AI-powered chatbot
-- Real-time responses
-- Thread-based conversations
-- Message history
-
-### 4. Submit Claim (`/submit-claim`)
-- Claim submission form
-- File upload support
-- Form validation
-- Success confirmation
-
-## 🎨 Customization
-
-### Theme Colors
-
-Edit `tailwind.config.ts`:
-
-```typescript
-theme: {
-  extend: {
-    colors: {
-      primary: {...},    // Your primary color
-      secondary: {...},  // Your secondary color
-    }
-  }
-}
-```
-
-### Components
-
-All UI components are in `components/ui/` and can be customized:
-
-- `button.tsx` - Button styles
-- `card.tsx` - Card layouts
-- `input.tsx` - Form inputs
-- And more...
+---
 
 ## 🧪 Testing
 
 ```bash
-# Run tests (when implemented)
-npm test
+# Test all users
+python3 tests/test_all_users.py
 
-# Run tests in watch mode
-npm run test:watch
+# Test database
+python3 tests/test_database.py
 
-# Generate coverage report
-npm run test:coverage
+# Test thread memory
+python3 tests/test_thread_memory.py
+
+# Benchmark performance
+python3 tests/benchmark.py
 ```
-
-## 📈 Performance
-
-- **Lighthouse Score:** 95+ (Performance, Accessibility, Best Practices, SEO)
-- **First Contentful Paint:** < 1.5s
-- **Time to Interactive:** < 3.5s
-- **Bundle Size:** Optimized with code splitting
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🆘 Support
-
-- **Documentation:** Check the guides in this repository
-- **Issues:** [GitHub Issues](https://github.com/your-username/claimease-frontend/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/your-username/claimease-frontend/discussions)
-
-## 🙏 Acknowledgments
-
-- [Next.js](https://nextjs.org/) - The React Framework
-- [shadcn/ui](https://ui.shadcn.com/) - Beautiful UI components
-- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS
-- [Vercel](https://vercel.com/) - Deployment platform
-
-## 📊 Project Status
-
-- ✅ Core functionality complete
-- ✅ All pages implemented
-- ✅ Responsive design
-- ✅ Dark mode support
-- ✅ API integration
-- ✅ Documentation complete
-- 🚧 Testing suite (in progress)
-- 🚧 Analytics integration (planned)
-
-## 🗺️ Roadmap
-
-- [ ] Add comprehensive test suite
-- [ ] Implement analytics tracking
-- [ ] Add file upload for claims
-- [ ] Multi-language support
-- [ ] Progressive Web App (PWA)
-- [ ] Offline support
-- [ ] Push notifications
 
 ---
 
-**Built with ❤️ using Next.js and TypeScript**
+## 📊 Current Status
 
-**Last Updated:** November 2025
+### ✅ Working Features
+
+**Core Functionality:**
+- ✅ AI chatbot with GPT-4o-mini
+- ✅ 9 specialized tools (6 data + 3 knowledge base)
+- ✅ Natural language understanding
+- ✅ Multi-turn conversations with memory
+
+**Slack Integration:**
+- ✅ Real-time Slack bot
+- ✅ Thread-aware conversations
+- ✅ Event deduplication
+- ✅ Markdown to Slack formatting
+- ✅ Bot message filtering
+
+**Privacy & Security:**
+- ✅ Automatic PII detection
+- ✅ Private DM for sensitive data
+- ✅ Email-scoped data access
+- ✅ Access control (users can't query others' data)
+
+**Knowledge Base:**
+- ✅ 3 PDF documents processed
+- ✅ 32 semantic chunks
+- ✅ Vector search with ChromaDB
+- ✅ Local embeddings (free)
+
+**Database:**
+- ✅ SQLite database
+- ✅ 3 test users with sample data
+- ✅ Secure email-scoped queries
+- ✅ Claim history tracking
+
+**Documentation:**
+- ✅ Comprehensive guides
+- ✅ 100+ sample questions
+- ✅ Quick reference card
+- ✅ Slack deployment guide
+
+### 🚧 Future Enhancements
+
+- [ ] Web interface
+- [ ] Multi-workspace support
+- [ ] Admin dashboard
+- [ ] Analytics and reporting
+- [ ] Claim approval workflow
+- [ ] Integration with HR systems
+
+---
+
+## 🎯 Usage Examples
+
+### In Slack
+
+**Personal Queries (sent to DM):**
+```
+@ClaimEase what's my remaining balance?
+@ClaimEase how much have I claimed this year?
+@ClaimEase show me my claim history
+```
+
+**General Questions (answered in channel):**
+```
+@ClaimEase how do I submit a dental claim?
+@ClaimEase what does AIA cover?
+@ClaimEase does AIA cover my dependents?
+@ClaimEase what's the AIA hotline?
+```
+
+**See [SAMPLE_QUESTIONS.md](docs/SAMPLE_QUESTIONS.md) for 100+ examples!**
+
+### In CLI
+
+```bash
+$ python3 cli/cli_ai.py
+
+ClaimBot: Hi! I'm your AI assistant for claims and benefits.
+You: what's my balance?
+ClaimBot: Based on your claims this year, here's your balance:
+- Total Limit: MYR 2,000
+- Total Claimed: MYR 450
+- Remaining Balance: MYR 1,550
+```
+
+---
+
+## 🔒 Privacy Features
+
+### Automatic PII Detection
+
+The bot automatically detects queries containing personal financial information:
+- Balance queries
+- Claim amounts
+- Claim history
+- Total spending
+
+### Private DM Responses
+
+When PII is detected:
+1. **In Channel:** Bot posts acknowledgment
+   ```
+   🔒 Your inquiry about "what's my balance" has been sent to your DM for privacy.
+   ```
+
+2. **In DM:** Bot sends detailed answer privately
+   ```
+   Based on your claims this year, here's your balance:
+   - Total Limit: MYR 2,000
+   - Total Claimed: MYR 450
+   - Remaining Balance: MYR 1,550
+   ```
+
+### Access Control
+
+Users cannot query other employees' data:
+```
+User: What's John's balance?
+Bot: I'm unable to help with that request. For privacy and security reasons, 
+I can only provide information about your own claims and benefits.
+```
+
+---
+
+## 📞 Support & Contact
+
+### For Users
+
+- **Sample Questions:** [SAMPLE_QUESTIONS.md](docs/SAMPLE_QUESTIONS.md)
+- **Quick Reference:** [QUICK_REFERENCE_CARD.md](docs/QUICK_REFERENCE_CARD.md)
+- **AIA Hotline:** 1300 8888 60/70 (24/7)
+- **HR Email:** my-hrops@deriv.com
+
+### For Developers
+
+- **Architecture:** [ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- **Slack Deployment:** [SLACK_DEPLOYMENT.md](docs/SLACK_DEPLOYMENT.md)
+- **Logging Guide:** [LOGGING_GUIDE.md](docs/LOGGING_GUIDE.md)
+- **AI Boundaries:** [AI_AGENT_BOUNDARIES.md](docs/AI_AGENT_BOUNDARIES.md)
+
+### Troubleshooting
+
+**Bot not responding in Slack?**
+- Check if server is running: `./start_server.sh`
+- Verify ngrok is active: `./setup_ngrok.sh`
+- Check logs: `tail -f logs/api.log`
+
+**Can't receive DMs?**
+- DM the bot first to open channel
+- Check Slack DM settings
+- Verify bot has `im:write` scope
+
+**Wrong answers?**
+- Check knowledge base: `python3 knowledge_base/inspect_chroma.py`
+- Review logs: `logs/conversations.log`
+- Test with CLI: `python3 cli/cli_ai.py`
+
+---
+
+## 🗑️ Deprecated Files
+
+Old/unused files are in `deprecated/` folder. Safe to delete after verification:
+- `agent.py` - Old agent implementation
+- `retriever.py` - Old retriever
+- `compute_tool.py` - Old tool
+- `csv_loader.py` - Old loader
+- `cli.py` - Old CLI
+- `api.py` - Old API (replaced by `src/api.py`)
+
+---
+
+## 📝 Changelog
+
+### Version 2.1 (Current)
+- ✅ Added Slack integration with privacy DM
+- ✅ Implemented thread-aware memory
+- ✅ Added event deduplication
+- ✅ Converted Markdown to Slack formatting
+- ✅ Added bot message filtering
+- ✅ Created comprehensive documentation
+- ✅ Added 100+ sample questions guide
+- ✅ Improved privacy protection
+
+### Version 2.0
+- ✅ Reorganized project structure
+- ✅ Added knowledge base system
+- ✅ Implemented AI agent with LangChain
+- ✅ Created 9 specialized tools
+- ✅ Added logging system
+
+### Version 1.0
+- ✅ Initial CLI implementation
+- ✅ Basic database setup
+- ✅ CSV data import
+
+---
+
+## 📄 License
+
+This project is proprietary software for Deriv internal use.
+
+---
+
+## 🤝 Contributing
+
+For internal contributors:
+1. Create feature branch
+2. Make changes
+3. Test thoroughly
+4. Submit pull request
+5. Update documentation
+
+---
+
+**Last Updated:** November 2, 2025  
+**Version:** 2.1 (Slack Integration + Privacy Features)  
+**Maintained by:** Deriv IT Team

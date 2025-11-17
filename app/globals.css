@@ -4,48 +4,96 @@
 
 @layer base {
   :root {
+    /* Deriv Brand Colors - Light Theme */
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 215 28% 17%;
+    
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 215 28% 17%;
+    
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    --popover-foreground: 215 28% 17%;
+    
+    /* Primary: Deriv Coral */
+    --primary: 357 100% 64%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* Secondary: Slate Light */
+    --secondary: 214 14% 93%;
+    --secondary-foreground: 215 28% 17%;
+    
+    --muted: 214 14% 93%;
+    --muted-foreground: 215 12% 56%;
+    
+    --accent: 214 14% 93%;
+    --accent-foreground: 215 28% 17%;
+    
+    /* Destructive: Deriv Danger Red */
+    --destructive: 4 100% 45%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Success: Deriv Green */
+    --success: 142 79% 44%;
+    --success-foreground: 0 0% 100%;
+    
+    /* Warning: Deriv Yellow */
+    --warning: 36 100% 54%;
+    --warning-foreground: 215 28% 17%;
+    
+    /* Info: Deriv Blue */
+    --info: 207 100% 57%;
+    --info-foreground: 0 0% 100%;
+    
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 357 100% 64%;
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    /* Deriv Brand Colors - Dark Theme */
+    --background: 215 28% 11%;
+    --foreground: 0 0% 100%;
+    
+    --card: 215 24% 13%;
+    --card-foreground: 0 0% 100%;
+    
+    --popover: 215 24% 13%;
+    --popover-foreground: 0 0% 100%;
+    
+    /* Primary: Deriv Coral (stays vibrant in dark) */
+    --primary: 357 100% 64%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* Secondary: Slate Dark */
+    --secondary: 215 24% 20%;
+    --secondary-foreground: 0 0% 100%;
+    
+    --muted: 215 24% 20%;
+    --muted-foreground: 215 20% 65%;
+    
+    --accent: 215 24% 20%;
+    --accent-foreground: 0 0% 100%;
+    
+    /* Destructive: Deriv Danger Red */
+    --destructive: 4 100% 45%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Success: Deriv Green */
+    --success: 142 79% 44%;
+    --success-foreground: 0 0% 100%;
+    
+    /* Warning: Deriv Yellow */
+    --warning: 36 100% 54%;
+    --warning-foreground: 215 28% 17%;
+    
+    /* Info: Deriv Blue */
+    --info: 207 100% 57%;
+    --info-foreground: 0 0% 100%;
+    
+    --border: 215 24% 20%;
+    --input: 215 24% 20%;
+    --ring: 357 100% 64%;
   }
 }
 
@@ -58,7 +106,7 @@
   }
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar with Deriv colors */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -69,11 +117,12 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-muted-foreground/30 rounded-full;
+  background: rgba(255, 68, 79, 0.3);
+  @apply rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-muted-foreground/50;
+  background: rgba(255, 68, 79, 0.5);
 }
 
 /* Smooth transitions */
@@ -81,25 +130,46 @@
   @apply transition-colors duration-200;
 }
 
-/* Gradient text */
+/* Deriv Coral gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #FF444F 0%, #E12E3A 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Glass effect */
+/* Deriv brand gradient backgrounds */
+.gradient-coral {
+  background: linear-gradient(135deg, #FF6671 0%, #FF444F 100%);
+}
+
+.gradient-coral-dark {
+  background: linear-gradient(135deg, #FF444F 0%, #E12E3A 100%);
+}
+
+.gradient-slate {
+  background: linear-gradient(135deg, #414652 0%, #181C25 100%);
+}
+
+.gradient-emerald {
+  background: linear-gradient(135deg, #26DAA7 0%, #00C390 100%);
+}
+
+.gradient-cherry {
+  background: linear-gradient(135deg, #F32656 0%, #DE0040 100%);
+}
+
+/* Glass effect with Deriv colors */
 .glass {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 68, 79, 0.18);
 }
 
 .dark .glass {
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(24, 28, 37, 0.3);
+  border: 1px solid rgba(255, 68, 79, 0.2);
 }
 
 /* Animations */
@@ -114,11 +184,177 @@
   }
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes coralPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 68, 79, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(255, 68, 79, 0);
+  }
+}
+
 .animate-fade-in {
   animation: fadeIn 0.3s ease-out;
 }
 
-/* Card hover effect */
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.4s ease-out;
+}
+
+.animate-coral-pulse {
+  animation: coralPulse 2s infinite;
+}
+
+/* Card hover effect with Deriv Coral glow */
 .card-hover {
   @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+}
+
+.card-glow {
+  @apply transition-all duration-300;
+}
+
+.card-glow:hover {
+  box-shadow: 0 10px 40px -10px rgba(255, 68, 79, 0.3);
+  transform: translateY(-2px);
+}
+
+.dark .card-glow:hover {
+  box-shadow: 0 10px 40px -10px rgba(255, 68, 79, 0.5);
+}
+
+/* Stat card gradients with Deriv colors */
+.stat-card-1 {
+  background: linear-gradient(135deg, rgba(255, 68, 79, 0.1) 0%, rgba(255, 102, 113, 0.1) 100%);
+  border: 1px solid rgba(255, 68, 79, 0.2);
+}
+
+.stat-card-2 {
+  background: linear-gradient(135deg, rgba(255, 156, 19, 0.1) 0%, rgba(225, 141, 0, 0.1) 100%);
+  border: 1px solid rgba(255, 156, 19, 0.2);
+}
+
+.stat-card-3 {
+  background: linear-gradient(135deg, rgba(51, 201, 81, 0.1) 0%, rgba(20, 173, 51, 0.1) 100%);
+  border: 1px solid rgba(51, 201, 81, 0.2);
+}
+
+.dark .stat-card-1,
+.dark .stat-card-2,
+.dark .stat-card-3 {
+  background: rgba(255, 68, 79, 0.05);
+}
+
+/* Chart animations */
+.chart-container {
+  @apply transition-all duration-300;
+}
+
+.chart-tooltip {
+  @apply rounded-lg shadow-xl backdrop-blur-md;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 68, 79, 0.2);
+  padding: 12px;
+}
+
+.dark .chart-tooltip {
+  background: rgba(24, 28, 37, 0.95);
+  border: 1px solid rgba(255, 68, 79, 0.3);
+}
+
+/* Deriv brand accent line */
+.coral-accent {
+  position: relative;
+}
+
+.coral-accent::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, #FF444F 0%, #E12E3A 100%);
+  border-radius: 0 4px 4px 0;
+}
+
+/* Coral shimmer effect */
+.coral-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 68, 79, 0) 0%,
+    rgba(255, 68, 79, 0.2) 50%,
+    rgba(255, 68, 79, 0) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Status badge colors using Deriv system colors */
+.status-approved {
+  @apply bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-400;
+  border: 1px solid rgba(51, 201, 81, 0.3);
+}
+
+.status-pending {
+  @apply bg-yellow-50 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-400;
+  border: 1px solid rgba(255, 156, 19, 0.3);
+}
+
+.status-rejected {
+  @apply bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-400;
+  border: 1px solid rgba(230, 25, 14, 0.3);
+}
+
+/* Deriv button variants */
+.btn-coral {
+  background: linear-gradient(135deg, #FF6671 0%, #FF444F 100%);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.btn-coral:hover {
+  background: linear-gradient(135deg, #FF444F 0%, #E12E3A 100%);
+  box-shadow: 0 4px 12px rgba(255, 68, 79, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-coral:active {
+  background: linear-gradient(135deg, #E12E3A 0%, #C41C28 100%);
+  transform: translateY(0);
 }

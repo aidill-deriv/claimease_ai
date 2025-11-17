@@ -1,0 +1,398 @@
+/* ClaimEase - Modern UI Styles (shadcn/React-inspired) */
+
+/* ============================================
+   ROOT VARIABLES - Light & Dark Mode Support
+   ============================================ */
+
+:root {
+    /* Light Mode Colors */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    
+    --radius: 0.5rem;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --gradient-card: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+}
+
+[data-theme="dark"] {
+    /* Dark Mode Colors */
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+    
+    --gradient-card: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+}
+
+/* ============================================
+   GLOBAL STYLES
+   ============================================ */
+
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.stApp {
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+}
+
+/* Hide Streamlit branding */
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header {visibility: hidden;}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+
+h1, h2, h3, h4, h5, h6 {
+    color: hsl(var(--foreground)) !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.02em;
+}
+
+h1 {
+    font-size: 2.5rem !important;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+p {
+    color: hsl(var(--muted-foreground));
+    line-height: 1.7;
+}
+
+/* ============================================
+   CARDS & CONTAINERS
+   ============================================ */
+
+.modern-card {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modern-card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+}
+
+.glass-card {
+    background: var(--gradient-card);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+.gradient-card {
+    background: var(--gradient-primary);
+    color: white;
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+.stButton > button {
+    background: hsl(var(--primary)) !important;
+    color: hsl(var(--primary-foreground)) !important;
+    border: none !important;
+    border-radius: var(--radius) !important;
+    padding: 0.75rem 1.5rem !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+    cursor: pointer !important;
+}
+
+.stButton > button:hover {
+    background: hsl(var(--primary) / 0.9) !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+    transform: translateY(-1px) !important;
+}
+
+.stButton > button:active {
+    transform: translateY(0) !important;
+}
+
+/* Primary Button */
+.primary-btn {
+    background: var(--gradient-primary) !important;
+    color: white !important;
+}
+
+/* Secondary Button */
+.secondary-btn {
+    background: hsl(var(--secondary)) !important;
+    color: hsl(var(--secondary-foreground)) !important;
+}
+
+/* ============================================
+   INPUTS & FORMS
+   ============================================ */
+
+.stTextInput > div > div > input,
+.stTextArea > div > div > textarea,
+.stSelectbox > div > div > select {
+    background: hsl(var(--background)) !important;
+    border: 1px solid hsl(var(--border)) !important;
+    border-radius: var(--radius) !important;
+    color: hsl(var(--foreground)) !important;
+    padding: 0.75rem !important;
+    font-size: 0.95rem !important;
+    transition: all 0.2s ease !important;
+}
+
+.stTextInput > div > div > input:focus,
+.stTextArea > div > div > textarea:focus,
+.stSelectbox > div > div > select:focus {
+    border-color: hsl(var(--ring)) !important;
+    box-shadow: 0 0 0 3px hsl(var(--ring) / 0.1) !important;
+    outline: none !important;
+}
+
+/* ============================================
+   SIDEBAR
+   ============================================ */
+
+[data-testid="stSidebar"] {
+    background: hsl(var(--card)) !important;
+    border-right: 1px solid hsl(var(--border)) !important;
+}
+
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] {
+    color: hsl(var(--foreground)) !important;
+}
+
+/* ============================================
+   METRICS & STATS
+   ============================================ */
+
+[data-testid="stMetricValue"] {
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+    color: hsl(var(--primary)) !important;
+}
+
+[data-testid="stMetricLabel"] {
+    color: hsl(var(--muted-foreground)) !important;
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ============================================
+   TABS
+   ============================================ */
+
+.stTabs [data-baseweb="tab-list"] {
+    gap: 0.5rem;
+    background: hsl(var(--muted)) !important;
+    border-radius: var(--radius);
+    padding: 0.25rem;
+}
+
+.stTabs [data-baseweb="tab"] {
+    background: transparent !important;
+    border-radius: calc(var(--radius) - 0.25rem) !important;
+    color: hsl(var(--muted-foreground)) !important;
+    font-weight: 500 !important;
+    padding: 0.5rem 1rem !important;
+    transition: all 0.2s ease !important;
+}
+
+.stTabs [aria-selected="true"] {
+    background: hsl(var(--background)) !important;
+    color: hsl(var(--foreground)) !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ============================================
+   CHAT MESSAGES
+   ============================================ */
+
+.stChatMessage {
+    background: hsl(var(--card)) !important;
+    border: 1px solid hsl(var(--border)) !important;
+    border-radius: var(--radius) !important;
+    padding: 1rem !important;
+    margin: 0.5rem 0 !important;
+}
+
+.stChatMessage[data-testid="user-message"] {
+    background: hsl(var(--primary) / 0.1) !important;
+    border-color: hsl(var(--primary) / 0.2) !important;
+}
+
+/* ============================================
+   DATAFRAMES & TABLES
+   ============================================ */
+
+.stDataFrame {
+    border: 1px solid hsl(var(--border)) !important;
+    border-radius: var(--radius) !important;
+    overflow: hidden !important;
+}
+
+.stDataFrame table {
+    color: hsl(var(--foreground)) !important;
+}
+
+.stDataFrame thead tr th {
+    background: hsl(var(--muted)) !important;
+    color: hsl(var(--foreground)) !important;
+    font-weight: 600 !important;
+    border-bottom: 2px solid hsl(var(--border)) !important;
+}
+
+.stDataFrame tbody tr:hover {
+    background: hsl(var(--muted) / 0.5) !important;
+}
+
+/* ============================================
+   ALERTS & NOTIFICATIONS
+   ============================================ */
+
+.stAlert {
+    border-radius: var(--radius) !important;
+    border: 1px solid hsl(var(--border)) !important;
+    padding: 1rem !important;
+}
+
+.stSuccess {
+    background: hsl(142.1 76.2% 36.3% / 0.1) !important;
+    border-color: hsl(142.1 76.2% 36.3% / 0.3) !important;
+    color: hsl(142.1 76.2% 36.3%) !important;
+}
+
+.stError {
+    background: hsl(var(--destructive) / 0.1) !important;
+    border-color: hsl(var(--destructive) / 0.3) !important;
+    color: hsl(var(--destructive)) !important;
+}
+
+.stInfo {
+    background: hsl(var(--primary) / 0.1) !important;
+    border-color: hsl(var(--primary) / 0.3) !important;
+    color: hsl(var(--primary)) !important;
+}
+
+.stWarning {
+    background: hsl(38 92% 50% / 0.1) !important;
+    border-color: hsl(38 92% 50% / 0.3) !important;
+    color: hsl(38 92% 50%) !important;
+}
+
+/* ============================================
+   PROGRESS & LOADING
+   ============================================ */
+
+.stProgress > div > div {
+    background: hsl(var(--primary)) !important;
+    border-radius: var(--radius) !important;
+}
+
+.stSpinner > div {
+    border-color: hsl(var(--primary)) !important;
+}
+
+/* ============================================
+   FILE UPLOADER
+   ============================================ */
+
+[data-testid="stFileUploader"] {
+    background: hsl(var(--muted)) !important;
+    border: 2px dashed hsl(var(--border)) !important;
+    border-radius: var(--radius) !important;
+    padding: 2rem !important;
+    transition: all 0.3s ease !important;
+}
+
+[data-testid="stFileUploader"]:hover {
+    border-color: hsl(var(--primary)) !important;
+    background: hsl(var(--primary) / 0.05) !important;
+}
+
+/* ============================================
+   CUSTOM UTILITY CLASSES
+   ============================================ */
+
+.text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.shadow-sm {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.shadow-md {
+    box-shadow: 0 4px 6px

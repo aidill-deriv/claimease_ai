@@ -50,7 +50,7 @@ In a **separate terminal**, start the FastAPI backend:
 
 ```bash
 cd ..  # Go back to project root
-python src/api.py
+python3 src/api.py
 ```
 
 The API will start at: **http://localhost:8000**

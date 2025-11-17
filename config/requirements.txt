@@ -1,0 +1,17 @@
+# Core dependencies
+python-dotenv
+fastapi
+uvicorn[standard]
+slack-sdk
+
+# AI/ML dependencies (compatible versions)
+langchain
+langchain-openai
+langchain-community
+openai
+
+# Database
+chromadb
+
+# Testing
+pytest
