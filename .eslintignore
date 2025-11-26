@@ -1,0 +1,5 @@
+.next
+node_modules
+dist
+coverage
+supabase_schema/database_schema_documentation.md
