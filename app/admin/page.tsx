@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Navigation } from "@/components/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -38,6 +38,7 @@ export default function AdminConsole() {
   const [errorMessage, setErrorMessage] = useState("")
   const [users, setUsers] = useState<AllowedUserListItem[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [searchTerm, setSearchTerm] = useState("")
   const [formData, setFormData] = useState({
     email: "",
     fullName: "",
@@ -139,6 +140,19 @@ export default function AdminConsole() {
       setErrorMessage(error instanceof Error ? error.message : "Unable to delete user.")
     }
   }
+
+  const totalMembers = users.length
+  const filteredUsers = useMemo(() => {
+    if (!searchTerm.trim()) {
+      return users
+    }
+    const query = searchTerm.trim().toLowerCase()
+    return users.filter((member) => {
+      const name = member.fullName?.toLowerCase() ?? ""
+      const email = member.email.toLowerCase()
+      return name.includes(query) || email.includes(query)
+    })
+  }, [searchTerm, users])
 
   if (state.status === "loading") {
     return (
@@ -242,10 +256,15 @@ export default function AdminConsole() {
 
           <Card className="border-slate-200 dark:border-slate-800 shadow-lg lg:col-span-2">
             <CardHeader className="space-y-4">
-              <CardTitle className="flex items-center gap-2 text-xl">
-                <Users className="h-5 w-5 text-slate-600 dark:text-slate-300" />
-                Current Members
-              </CardTitle>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <CardTitle className="flex items-center gap-2 text-xl">
+                  <Users className="h-5 w-5 text-slate-600 dark:text-slate-300" />
+                  Current Members
+                </CardTitle>
+                <Badge variant="outline" className="border-slate-200 text-slate-700 dark:border-slate-700 dark:text-slate-200">
+                  Total Members: {totalMembers}
+                </Badge>
+              </div>
               <div className="grid gap-3 sm:grid-cols-3">
                 {(["viewer", "admin", "superadmin"] as const).map((role) => {
                   const count = users.filter((member) => member.role === role).length
@@ -260,12 +279,31 @@ export default function AdminConsole() {
                   )
                 })}
               </div>
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                  Search or filter members
+                </p>
+                <div className="w-full sm:max-w-xs">
+                  <Label htmlFor="member-search" className="sr-only">
+                    Search members
+                  </Label>
+                  <Input
+                    id="member-search"
+                    value={searchTerm}
+                    onChange={(event) => setSearchTerm(event.target.value)}
+                    placeholder="Search by name or email"
+                    className="bg-white dark:bg-slate-1000"
+                  />
+                </div>
+              </div>
             </CardHeader>
             <CardContent className="space-y-4">
               {isLoading ? (
                 <p className="text-sm text-slate-500 dark:text-slate-400">Loading members…</p>
-              ) : users.length === 0 ? (
-                <p className="text-sm text-slate-500 dark:text-slate-400">No members found.</p>
+              ) : filteredUsers.length === 0 ? (
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  {searchTerm ? `No members match "${searchTerm}".` : "No members found."}
+                </p>
               ) : (
                 <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
                   <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-sm">
@@ -278,7 +316,7 @@ export default function AdminConsole() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-1100">
-                      {users.map((member) => {
+                      {filteredUsers.map((member) => {
                       const badge = roleBadges[member.role]
                       const canDelete =
                         member.id !== user?.id &&

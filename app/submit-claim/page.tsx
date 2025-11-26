@@ -999,12 +999,9 @@ export default function SubmitClaim() {
 
   const hasBalanceData = Boolean(balanceData)
   const claimExceedsBalance = hasBalanceData && calculatedTotal > balanceSnapshot.remaining
-  const claimOverageAmount = claimExceedsBalance
-    ? Math.max(calculatedTotal - balanceSnapshot.remaining, 0)
-    : 0
-  const predictedRemainingBalance =
-    hasBalanceData && !claimExceedsBalance ? Math.max(balanceSnapshot.remaining - calculatedTotal, 0) : 0
-  const canShowPredictedBalance = hasBalanceData && !claimExceedsBalance && calculatedTotal > 0
+  const claimOverageAmount = hasBalanceData ? Math.max(calculatedTotal - balanceSnapshot.remaining, 0) : 0
+  const projectedRemainingBalance = hasBalanceData ? Math.max(balanceSnapshot.remaining - calculatedTotal, 0) : 0
+  const canShowProjectedBalance = hasBalanceData && !claimExceedsBalance && calculatedTotal > 0
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-coral-50 dark:from-slate-1100 dark:via-slate-1000 dark:to-slate-900 lg:pl-72">
@@ -1616,10 +1613,10 @@ export default function SubmitClaim() {
               <CardDescription>Confirm totals and supporting information</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="rounded-2xl border border-amber-200 bg-amber-50/80 p-4 dark:border-amber-800 dark:bg-amber-950/20 space-y-3">
+              <div className="rounded-2xl border border-amber-300 bg-amber-50/90 p-4 dark:border-amber-900 dark:bg-amber-950/25 space-y-2 shadow-sm">
                 <div className="flex items-center justify-between gap-2">
                   <div>
-                    <p className="text-sm font-semibold text-amber-900 dark:text-amber-100">Remaining Balance</p>
+                    <p className="text-sm font-semibold text-amber-900 dark:text-amber-50">Remaining Balance</p>
                     <p className="text-xs text-amber-800/80 dark:text-amber-200/80">
                       Mirrors your Employee Benefit dashboard
                     </p>
@@ -1633,13 +1630,13 @@ export default function SubmitClaim() {
                   ) : (
                     <Badge
                       variant="outline"
-                      className="border-amber-200 text-amber-800 dark:border-amber-800 dark:text-amber-200"
+                      className="border-amber-300 text-amber-700 dark:border-amber-800 dark:text-amber-200"
                     >
                       Synced
                     </Badge>
                   )}
                 </div>
-                <div className="text-2xl font-bold text-amber-800 dark:text-amber-100">
+                <div className="text-2xl font-bold text-amber-900 dark:text-amber-100">
                   {hasBalanceData && !balanceError
                     ? formatCurrency(balanceSnapshot.remaining, balanceSnapshot.currency)
                     : "—"}
@@ -1648,36 +1645,35 @@ export default function SubmitClaim() {
                   <p className="text-xs text-red-600 dark:text-red-300">{balanceError}</p>
                 ) : (
                   <p className="text-xs text-amber-900/80 dark:text-amber-100/70">
-                    You are entitled to claim up to{" "}
-                    <span className="font-semibold">
-                      {formatCurrency(balanceSnapshot.remaining, balanceSnapshot.currency)}
-                    </span>{" "}
-                    right now. Anything above this amount will not be reimbursed.
+                    You are entitled to this balance for the current plan year. Based on the receipts you submit, you can
+                    only claim up to this number.
                   </p>
                 )}
                 {claimExceedsBalance && (
-                  <>
-                    <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-medium text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300">
-                      Your total of {formatCurrency(calculatedTotal, balanceSnapshot.currency)} exceeds the balance by{" "}
-                      {formatCurrency(claimOverageAmount, balanceSnapshot.currency)}.
-                    </div>
-                    <div className="rounded-lg border border-amber-200 bg-white/60 px-3 py-2 text-xs font-medium text-amber-900 dark:border-amber-900 dark:bg-transparent dark:text-amber-100">
-                      You can only claim {formatCurrency(balanceSnapshot.remaining, balanceSnapshot.currency)} based on your
-                      remaining balance.
-                    </div>
-                  </>
+                  <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-3 text-sm font-medium text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300">
+                    <p>Your claim total exceeds your remaining balance by {formatCurrency(claimOverageAmount, balanceSnapshot.currency)}.</p>
+                    <p className="text-xs mt-1 text-red-600 dark:text-red-300">
+                      You will only receive {formatCurrency(balanceSnapshot.remaining, balanceSnapshot.currency)} after submission.
+                    </p>
+                  </div>
                 )}
-                {canShowPredictedBalance && (
-                  <div className="rounded-lg border border-emerald-200 bg-white px-3 py-2 text-sm text-emerald-900 dark:border-emerald-900 dark:bg-emerald-950/20 dark:text-emerald-200">
-                    <div className="flex items-center justify-between gap-3">
-                      <div>
-                        <p className="font-semibold">Projected Balance After Submission</p>
-                        <p className="text-xs text-emerald-800/80 dark:text-emerald-200/80">
-                          We’ll reflect this amount on your dashboard once the claim is approved.
-                        </p>
+                {canShowProjectedBalance && (
+                  <div className="rounded-lg border border-slate-300 bg-white px-3 py-3 text-sm font-medium text-slate-900 shadow-sm dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-xs uppercase tracking-wide text-slate-600 dark:text-slate-400">
+                        Balance after this claim
+                      </span>
+                      <div className="flex items-center justify-between gap-4">
+                        <div className="text-xs text-slate-500 dark:text-slate-400">
+                          {formatCurrency(balanceSnapshot.remaining, balanceSnapshot.currency)} −{" "}
+                          {formatCurrency(calculatedTotal, balanceSnapshot.currency)}
+                        </div>
+                        <div className="text-lg font-bold">
+                          {formatCurrency(projectedRemainingBalance, balanceSnapshot.currency)}
+                        </div>
                       </div>
-                      <p className="text-base font-bold">
-                        {formatCurrency(predictedRemainingBalance, balanceSnapshot.currency)}
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                        We’ll update your dashboard with this figure once Finance approves the claim.
                       </p>
                     </div>
                   </div>
