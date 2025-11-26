@@ -20,7 +20,7 @@ pip install -r config/requirements_ai.txt
 pip install -r config/requirements_kb.txt
 
 # Development
-python src/api.py                    # Start FastAPI server (localhost:8000)
+python src/api.py                    # Start FastAPI server (localhost:8001)
 python cli/cli_ai.py                # Interactive CLI interface
 python src/db_setup.py              # Initialize database
 
@@ -47,7 +47,7 @@ This is a **dual-architecture project** combining:
 ### API Integration
 The Next.js frontend proxies API calls to the Python backend via `next.config.js`:
 ```javascript
-// API calls to /api/* are forwarded to http://localhost:8000/*
+// API calls to /api/* are forwarded to http://localhost:8001/*
 ```
 
 ### Database Architecture
@@ -175,7 +175,7 @@ python src/db_setup.py data database/claims.db
 
 ### 1. Web Interface (Development)
 - Frontend: `npm run dev` (localhost:3000)
-- Backend: `python src/api.py` (localhost:8000)
+- Backend: `python src/api.py` (localhost:8001)
 
 ### 2. Slack Bot (Production)
 - Start server: `./start_server.sh`

@@ -39,7 +39,7 @@ npm install
 cp .env.example .env.local
 
 # Edit .env.local and set your API URL
-# NEXT_PUBLIC_API_URL=http://localhost:8000
+# NEXT_PUBLIC_API_URL=http://localhost:8001
 
 # Start development server
 npm run dev
@@ -178,7 +178,7 @@ Create a `.env.local` file:
 
 ```bash
 # Required: Backend API URL
-NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXT_PUBLIC_API_URL=http://localhost:8001
 
 # Optional: Application info
 NEXT_PUBLIC_APP_NAME=ClaimEase

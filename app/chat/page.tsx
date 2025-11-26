@@ -7,47 +7,103 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Send, Bot, User, Sparkles, Lightbulb, Zap } from "lucide-react"
-import { queryAI } from "@/lib/api"
+import { Send, Bot, User, Sparkles, Lightbulb, Zap, ThumbsUp, ThumbsDown } from "lucide-react"
+import { API_BASE_URL, queryAI, submitFeedback } from "@/lib/api"
 import { MarkdownMessage } from "@/components/markdown-message"
+import { useSession } from "@/hooks/useSession"
 
 interface Message {
   id: string
   role: "user" | "assistant"
   content: string
   timestamp: Date
+  model?: string
+  feedback?: "up" | "down"
+  feedbackId?: string
+}
+
+const MAX_CONTEXT_MESSAGES = 15
+
+const generateMessageId = () => {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID()
+  }
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}`
 }
 
 export default function Chat() {
   const router = useRouter()
-  const [userEmail, setUserEmail] = useState("")
+  const { state, user } = useSession({
+    redirectIfUnauthorized: () => router.push("/no-access"),
+  })
+  const userEmail = user?.email ?? ""
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [threadId, setThreadId] = useState<string>("")
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const [isHydrated, setIsHydrated] = useState(false)
+  const [feedbackSubmittingId, setFeedbackSubmittingId] = useState<string | null>(null)
 
   useEffect(() => {
-    // Only access sessionStorage in the browser
-    if (typeof window !== 'undefined') {
-      const email = sessionStorage.getItem("userEmail")
-      if (!email) {
-        router.push("/")
-        return
-      }
-      setUserEmail(email)
+    if (!userEmail || state.status !== "authenticated") {
+      return
     }
-    
-    // Add welcome message
-    setMessages([
-      {
-        id: "welcome",
-        role: "assistant",
-        content: "Hello! I'm your AI assistant for claims and benefits. How can I help you today?",
-        timestamp: new Date(),
-      },
-    ])
-  }, [router])
+
+    const messagesKey = `chatMessages:${userEmail}`
+    const threadKey = `chatThread:${userEmail}`
+    const storedMessages = sessionStorage.getItem(messagesKey)
+    const storedThread = sessionStorage.getItem(threadKey)
+
+    if (storedMessages) {
+      try {
+        const parsed = JSON.parse(storedMessages) as Array<Omit<Message, "timestamp"> & { timestamp: string }>
+        setMessages(
+          parsed.map((msg) => ({
+            ...msg,
+            timestamp: new Date(msg.timestamp),
+          })),
+        )
+      } catch (error) {
+        console.warn("Failed to parse stored chat messages:", error)
+      }
+    } else {
+      setMessages([
+        {
+          id: "welcome",
+          role: "assistant",
+          content: "Hello! I'm your AI assistant for claims and benefits. How can I help you today?",
+          timestamp: new Date(),
+        },
+      ])
+    }
+
+    if (storedThread) {
+      setThreadId(storedThread)
+    }
+
+    setIsHydrated(true)
+  }, [userEmail, state.status])
+
+  useEffect(() => {
+    if (!userEmail || !isHydrated) {
+      return
+    }
+
+    const messagesKey = `chatMessages:${userEmail}`
+    const threadKey = `chatThread:${userEmail}`
+
+    try {
+      const serialized = messages.map((msg) => ({
+        ...msg,
+        timestamp: msg.timestamp.toISOString(),
+      }))
+      sessionStorage.setItem(messagesKey, JSON.stringify(serialized))
+      sessionStorage.setItem(threadKey, threadId)
+    } catch (error) {
+      console.warn("Failed to persist chat session:", error)
+    }
+  }, [messages, threadId, userEmail, isHydrated])
 
   useEffect(() => {
     scrollToBottom()
@@ -64,37 +120,104 @@ export default function Chat() {
     { text: "Show my recent claims", icon: Sparkles },
   ]
 
+  if (state.status === "loading") {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-coral-50 dark:from-slate-1100 dark:via-slate-1000 dark:to-slate-900">
+        <div className="text-center space-y-4">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-coral shadow-lg">
+            <div className="w-10 h-10 border-4 border-white/70 border-t-transparent rounded-full animate-spin" />
+          </div>
+          <div>
+            <p className="text-lg font-semibold text-slate-900 dark:text-white">Preparing your AI assistant</p>
+            <p className="text-sm text-slate-600 dark:text-slate-400">Please wait a moment.</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (state.status === "unauthorized") {
+    return null
+  }
+
   const handleQuickQuestion = (question: string) => {
     setInput(question)
   }
 
+  const handleFeedback = async (message: Message, rating: "up" | "down") => {
+    if (!userEmail || feedbackSubmittingId === message.id || message.feedback === rating) {
+      return
+    }
+
+    setFeedbackSubmittingId(message.id)
+
+    try {
+      const feedbackResponse = await submitFeedback({
+        user_email: userEmail,
+        message_id: message.id,
+        rating,
+        response_text: message.content,
+        thread_id: threadId || undefined,
+        model: message.model,
+        metadata: {
+          source: "web_chat",
+          message_timestamp: message.timestamp.toISOString(),
+        },
+      })
+
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === message.id
+            ? {
+                ...msg,
+                feedback: rating,
+                feedbackId: feedbackResponse.feedback_id ?? msg.feedbackId,
+              }
+            : msg,
+        ),
+      )
+    } catch (error) {
+      console.error("Failed to submit feedback", error)
+    } finally {
+      setFeedbackSubmittingId(null)
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!input.trim() || isLoading) return
+    if (!input.trim() || isLoading || !userEmail) return
 
     const userMessage: Message = {
-      id: Date.now().toString(),
+      id: generateMessageId(),
       role: "user",
       content: input,
       timestamp: new Date(),
     }
 
-    setMessages((prev) => [...prev, userMessage])
+    const updatedMessages = [...messages, userMessage]
+    setMessages(updatedMessages)
     setInput("")
     setIsLoading(true)
 
     try {
+      const contextMessages = updatedMessages.slice(-MAX_CONTEXT_MESSAGES).map((message) => ({
+        role: message.role,
+        content: message.content,
+      }))
+
       const response = await queryAI({
         user_email: userEmail,
         query_text: input,
         thread_id: threadId,
+        context_messages: contextMessages,
       })
 
       const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
+        id: generateMessageId(),
         role: "assistant",
         content: response.response,
         timestamp: new Date(),
+        model: response.model,
       }
 
       setMessages((prev) => [...prev, assistantMessage])
@@ -102,11 +225,10 @@ export default function Chat() {
         setThreadId(response.thread_id)
       }
     } catch (error) {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: `I apologize, but I'm having trouble connecting to the server. Please make sure the backend API is running at ${apiUrl} and try again.`,
+        content: `I apologize, but I'm having trouble connecting to the server. Please make sure the backend API is reachable at ${API_BASE_URL} and try again.`,
         timestamp: new Date(),
       }
       setMessages((prev) => [...prev, errorMessage])
@@ -116,7 +238,7 @@ export default function Chat() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-coral-50 dark:from-slate-1100 dark:via-slate-1000 dark:to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-coral-50 dark:from-slate-1100 dark:via-slate-1000 dark:to-slate-900 lg:pl-72">
       <Navigation />
       
       <div className="container mx-auto px-4 py-8 max-w-5xl">
@@ -171,6 +293,45 @@ export default function Chat() {
                       minute: "2-digit",
                     })}
                   </p>
+                  {message.role === "assistant" && message.id !== "welcome" && (
+                    <div className="mt-3 flex flex-wrap items-center gap-3">
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => handleFeedback(message, "up")}
+                          disabled={feedbackSubmittingId === message.id}
+                          aria-label="Mark response as helpful"
+                          className={`flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-medium transition-colors focus:outline-none focus:ring-1 focus:ring-emerald-500 disabled:cursor-not-allowed disabled:opacity-50 ${
+                            message.feedback === "up"
+                              ? "border-emerald-300 bg-emerald-50 text-emerald-700 dark:border-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-200"
+                              : "border-slate-200 text-slate-500 hover:border-emerald-200 hover:text-emerald-600 dark:border-slate-700 dark:text-slate-400 dark:hover:border-emerald-600"
+                          }`}
+                        >
+                          <ThumbsUp className="h-3.5 w-3.5" />
+                          Helpful
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleFeedback(message, "down")}
+                          disabled={feedbackSubmittingId === message.id}
+                          aria-label="Mark response as unhelpful"
+                          className={`flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-medium transition-colors focus:outline-none focus:ring-1 focus:ring-rose-500 disabled:cursor-not-allowed disabled:opacity-50 ${
+                            message.feedback === "down"
+                              ? "border-rose-300 bg-rose-50 text-rose-700 dark:border-rose-600 dark:bg-rose-900/30 dark:text-rose-200"
+                              : "border-slate-200 text-slate-500 hover:border-rose-200 hover:text-rose-600 dark:border-slate-700 dark:text-slate-400 dark:hover:border-rose-500"
+                          }`}
+                        >
+                          <ThumbsDown className="h-3.5 w-3.5" />
+                          Not Helpful
+                        </button>
+                      </div>
+                      {message.feedback && (
+                        <span className="text-xs text-slate-500 dark:text-slate-400">
+                          Thanks for the feedback!
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {message.role === "user" && (

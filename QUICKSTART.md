@@ -53,7 +53,7 @@ cd ..  # Go back to project root
 python3 src/api.py
 ```
 
-The API will start at: **http://localhost:8000**
+The API will start at: **http://localhost:8001**
 
 ## ✅ Step 4: Test the App
 
@@ -116,7 +116,7 @@ npm run dev -- -p 3001
 ### Backend not connecting?
 
 Make sure:
-1. FastAPI is running on port 8000
+1. FastAPI is running on port 8001
 2. Check `next.config.js` has correct API proxy settings
 3. No CORS errors in browser console
 
@@ -185,7 +185,7 @@ npm start
 Create `.env.local`:
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXT_PUBLIC_API_URL=http://localhost:8001
 ```
 
 ## 🎉 You're All Set!

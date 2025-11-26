@@ -92,7 +92,7 @@ cd src
 python -m api
 
 # In another terminal:
-curl -X POST http://localhost:8000/query \
+curl -X POST http://localhost:8001/query \
   -H "Content-Type: application/json" \
   -d '{"query": "What is my balance?", "user_email": "aainaa@regentmarkets.com"}'
 ```

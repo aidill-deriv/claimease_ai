@@ -106,7 +106,7 @@ cp .env.example .env.local
 Edit `.env.local`:
 ```bash
 # For local development
-NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXT_PUBLIC_API_URL=http://localhost:8001
 
 # For production (update when deploying)
 # NEXT_PUBLIC_API_URL=https://your-backend-api.com
@@ -146,7 +146,7 @@ npm run dev
 **Verify:**
 - ✅ App runs on http://localhost:3000
 - ✅ No build errors
-- ✅ Can connect to backend (make sure backend is running on port 8000)
+- ✅ Can connect to backend (make sure backend is running on port 8001)
 - ✅ Chat functionality works
 - ✅ All pages load correctly
 
@@ -300,7 +300,7 @@ npm install
 ### Issue: Can't connect to backend
 
 **Check:**
-1. Backend is running on port 8000
+1. Backend is running on port 8001
 2. `.env.local` has correct `NEXT_PUBLIC_API_URL`
 3. CORS is configured on backend
 4. No firewall blocking the connection

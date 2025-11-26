@@ -67,7 +67,7 @@
 - Emergency treatment
 - Dependent coverage
 
-### 🦷 Deriv Health Benefits
+### 🦷 Deriv Employee Benefits
 - Dental claims
 - Optical claims
 - Health screening

@@ -1,65 +1,99 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Navigation } from "@/components/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { DollarSign, TrendingUp, TrendingDown, Clock, MessageSquare, FileText, ArrowUpRight, ArrowDownRight } from "lucide-react"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts"
+import { DollarSign, MessageSquare, FileText, ArrowUpRight, TrendingUp, TrendingDown } from "lucide-react"
+import { useSession } from "@/hooks/useSession"
+import { fetchDashboardData, type BalanceData, type RecentClaim } from "@/lib/supabase-dashboard"
 
 export default function Dashboard() {
   const router = useRouter()
-  const [userEmail, setUserEmail] = useState("")
+  const { state, user } = useSession({
+    redirectIfUnauthorized: () => router.push("/"),
+  })
   const [isLoading, setIsLoading] = useState(true)
+  const [isDataSyncing, setIsDataSyncing] = useState(false)
+  const [dataError, setDataError] = useState<string | null>(null)
+  const [balanceData, setBalanceData] = useState<BalanceData | null>(null)
+  const [recentClaims, setRecentClaims] = useState<RecentClaim[]>([])
+  const [hasLoadedData, setHasLoadedData] = useState(false)
+  const [showAllClaims, setShowAllClaims] = useState(false)
 
   useEffect(() => {
-    // Only access sessionStorage in the browser
-    if (typeof window !== 'undefined') {
-      const email = sessionStorage.getItem("userEmail")
-      if (!email) {
-        router.push("/")
-        return
-      }
-      setUserEmail(email)
+    if (state.status !== "loading") {
+      setIsLoading(false)
     }
-    setIsLoading(false)
-  }, [router])
+  }, [state.status])
 
-  // Mock data - replace with API calls
-  const balanceData = {
-    total: 2000,
-    used: 1426,
-    remaining: 574,
+  const userEmail = user?.email ?? ""
+
+  useEffect(() => {
+    if (!userEmail || state.status !== "authenticated") {
+      return
+    }
+
+    let isActive = true
+
+    const syncDashboard = async () => {
+      setIsDataSyncing(true)
+      setDataError(null)
+      try {
+        const data = await fetchDashboardData(userEmail)
+        if (!isActive) {
+          return
+        }
+        setBalanceData(data.balance)
+        setRecentClaims(data.recentClaims)
+        setHasLoadedData(true)
+      } catch (error) {
+        if (!isActive) {
+          return
+        }
+        console.error("Failed to load dashboard data:", error)
+        setDataError(
+          error instanceof Error
+            ? error.message
+            : "We couldn’t sync your latest ClaimEase data.",
+        )
+        setBalanceData(null)
+        setRecentClaims([])
+        setHasLoadedData(true)
+      } finally {
+        if (isActive) {
+          setIsDataSyncing(false)
+        }
+      }
+    }
+
+    void syncDashboard()
+
+    return () => {
+      isActive = false
+    }
+  }, [state.status, userEmail])
+
+  const formatCurrency = (amount: number, currencyCode?: string) => {
+    const currency = currencyCode?.trim() || "USD"
+    try {
+      return new Intl.NumberFormat(undefined, {
+        style: "currency",
+        currency,
+        maximumFractionDigits: 2,
+      }).format(amount)
+    } catch {
+      return `${currency} ${amount.toFixed(2)}`
+    }
   }
-
-  const monthlySpending = [
-    { month: "Jan", amount: 450 },
-    { month: "Feb", amount: 380 },
-    { month: "Mar", amount: 520 },
-    { month: "Apr", amount: 410 },
-    { month: "May", amount: 590 },
-  ]
-
-  // Deriv brand colors for categories
-  const categorySpending = [
-    { name: "Medical", value: 1200, color: "#FF9C13" },      // Deriv Warning Yellow
-    { name: "Dental", value: 450, color: "#2C9AFF" },        // Deriv Info Blue
-    { name: "Optical", value: 350, color: "#00C390" },       // Deriv Emerald
-    { name: "Wellness", value: 350, color: "#FF444F" },      // Deriv Coral
-  ]
-
-  const recentClaims = [
-    { id: "CLM-2025-001", date: "2025-05-15", category: "Medical", amount: 250, status: "Approved" },
-    { id: "CLM-2025-002", date: "2025-05-10", category: "Dental", amount: 180, status: "Approved" },
-    { id: "CLM-2025-003", date: "2025-05-05", category: "Optical", amount: 120, status: "Pending" },
-    { id: "CLM-2025-004", date: "2025-04-28", category: "Wellness", amount: 90, status: "Approved" },
-  ]
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Approved":
         return "status-approved"
+      case "Paid":
+        return "status-paid"
       case "Pending":
         return "status-pending"
       case "Rejected":
@@ -69,21 +103,44 @@ export default function Dashboard() {
     }
   }
 
-  const usagePercentage = (balanceData.used / balanceData.total) * 100
+  const usagePercentage = useMemo(() => {
+    const total = balanceData?.total ?? 0
+    const used = balanceData?.used ?? 0
+    if (total <= 0) {
+      return 0
+    }
+    return Math.min(100, (used / total) * 100)
+  }, [balanceData?.total, balanceData?.used])
 
-  if (isLoading) {
+  if (state.status === "loading" || isLoading || (!hasLoadedData && !dataError)) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-coral-700 border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p className="mt-4 text-slate-600 dark:text-slate-400">Loading your dashboard...</p>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-coral-50 dark:from-slate-1100 dark:via-slate-1000 dark:to-slate-900">
+        <div className="text-center space-y-4">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-coral shadow-lg">
+            <div className="w-10 h-10 border-4 border-white/70 border-t-transparent rounded-full animate-spin" />
+          </div>
+          <div>
+            <p className="text-lg font-semibold text-slate-900 dark:text-white">Loading your dashboard…</p>
+            <p className="text-sm text-slate-600 dark:text-slate-400">Preparing your ClaimEase experience.</p>
+          </div>
         </div>
       </div>
     )
   }
 
+  if (state.status === "unauthorized") {
+    return null
+  }
+
+  const balanceSnapshot: BalanceData = balanceData ?? {
+    total: 0,
+    used: 0,
+    remaining: 0,
+    currency: "USD",
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-coral-50 dark:from-slate-1100 dark:via-slate-1000 dark:to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-coral-50 dark:from-slate-1100 dark:via-slate-1000 dark:to-slate-900 lg:pl-72">
       <Navigation />
       
       <div className="container mx-auto px-4 py-8">
@@ -94,8 +151,18 @@ export default function Dashboard() {
             <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Employee Benefits</h1>
           </div>
           <p className="text-slate-600 dark:text-slate-400 ml-7">
-            Welcome back! Here's an overview of your claims and benefits.
+            Welcome back! Here’s an overview of your claims and benefits.
           </p>
+          {dataError && (
+            <div className="mt-4 ml-7 rounded-md border border-red-200 bg-red-50 dark:border-red-900 dark:bg-red-950 px-4 py-3 text-sm text-red-700 dark:text-red-300">
+              {dataError}
+            </div>
+          )}
+          {!dataError && isDataSyncing && (
+            <p className="mt-3 ml-7 text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+              Syncing latest Supabase data…
+            </p>
+          )}
         </div>
 
         {/* Balance Cards */}
@@ -109,7 +176,9 @@ export default function Dashboard() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-slate-900 dark:text-white">${balanceData.total.toLocaleString()}</div>
+              <div className="text-3xl font-bold text-slate-900 dark:text-white">
+                {formatCurrency(balanceSnapshot.total, balanceSnapshot.currency)}
+              </div>
               <p className="text-xs text-slate-500 dark:text-slate-500 mt-1 flex items-center gap-1">
                 <span className="w-2 h-2 bg-coral-700 rounded-full"></span>
                 Annual allocation
@@ -126,7 +195,9 @@ export default function Dashboard() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-yellow-700 dark:text-yellow-500">${balanceData.used.toLocaleString()}</div>
+              <div className="text-3xl font-bold text-yellow-700 dark:text-yellow-500">
+                {formatCurrency(balanceSnapshot.used, balanceSnapshot.currency)}
+              </div>
               <div className="flex items-center gap-2 mt-1">
                 <div className="flex-1 h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                   <div 
@@ -150,145 +221,13 @@ export default function Dashboard() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-emerald-700 dark:text-emerald-500">${balanceData.remaining.toLocaleString()}</div>
+              <div className="text-3xl font-bold text-emerald-700 dark:text-emerald-500">
+                {formatCurrency(balanceSnapshot.remaining, balanceSnapshot.currency)}
+              </div>
               <p className="text-xs text-slate-500 dark:text-slate-500 mt-1 flex items-center gap-1">
                 <span className="w-2 h-2 bg-emerald-700 rounded-full"></span>
                 Available to claim
               </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Charts */}
-        <div className="grid gap-6 md:grid-cols-2 mb-8">
-          {/* Monthly Spending Chart */}
-          <Card className="card-glow border-slate-200 dark:border-slate-800">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle className="text-slate-900 dark:text-white">Monthly Spending Trend</CardTitle>
-                  <CardDescription className="text-slate-600 dark:text-slate-400">Your claim spending over the last 5 months</CardDescription>
-                </div>
-                <div className="w-10 h-10 rounded-xl bg-coral-50 dark:bg-coral-950 flex items-center justify-center">
-                  <TrendingUp className="h-5 w-5 text-coral-700" />
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={monthlySpending} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
-                  <defs>
-                    <linearGradient id="coralGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#FF444F" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#FF444F" stopOpacity={0.05}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
-                  <XAxis 
-                    dataKey="month" 
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fill: '#6b7280', fontSize: 12, fontWeight: 500 }}
-                    dy={10}
-                  />
-                  <YAxis 
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fill: '#6b7280', fontSize: 12, fontWeight: 500 }}
-                    dx={-10}
-                  />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: '#ffffff',
-                      border: 'none',
-                      borderRadius: '12px',
-                      boxShadow: '0 10px 15px -3px rgba(255, 68, 79, 0.1), 0 4px 6px -2px rgba(255, 68, 79, 0.05)',
-                      padding: '12px 16px'
-                    }}
-                    labelStyle={{ color: '#111827', fontWeight: 600, marginBottom: '4px', fontSize: '14px' }}
-                    itemStyle={{ color: '#FF444F', fontWeight: 500 }}
-                    formatter={(value: any) => [`$${value}`, 'Spending']}
-                  />
-                  <Line 
-                    type="monotone" 
-                    dataKey="amount" 
-                    stroke="#FF444F" 
-                    strokeWidth={3}
-                    dot={{ fill: '#FF444F', strokeWidth: 0, r: 5 }}
-                    activeDot={{ r: 7, fill: '#FF444F', stroke: '#fff', strokeWidth: 3 }}
-                    fill="url(#coralGradient)"
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-
-          {/* Category Breakdown */}
-          <Card className="card-glow border-slate-200 dark:border-slate-800">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle className="text-slate-900 dark:text-white">Spending by Category</CardTitle>
-                  <CardDescription className="text-slate-600 dark:text-slate-400">Breakdown of your claims by type</CardDescription>
-                </div>
-                <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950 flex items-center justify-center">
-                  <FileText className="h-5 w-5 text-blue-700" />
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie
-                    data={categorySpending}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={70}
-                    outerRadius={100}
-                    fill="#8884d8"
-                    dataKey="value"
-                    paddingAngle={3}
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    labelLine={{
-                      stroke: '#9ca3af',
-                      strokeWidth: 1
-                    }}
-                  >
-                    {categorySpending.map((entry, index) => (
-                      <Cell 
-                        key={`cell-${index}`} 
-                        fill={entry.color}
-                        stroke="#fff"
-                        strokeWidth={3}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: '#ffffff',
-                      border: 'none',
-                      borderRadius: '12px',
-                      boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-                      padding: '12px 16px'
-                    }}
-                    formatter={(value: any, name: string) => [`$${value}`, name]}
-                    labelStyle={{ fontWeight: 600, color: '#111827', fontSize: '14px' }}
-                    itemStyle={{ color: '#6b7280', fontWeight: 500 }}
-                  />
-                  <Legend 
-                    verticalAlign="bottom" 
-                    height={36}
-                    iconType="circle"
-                    iconSize={10}
-                    wrapperStyle={{
-                      paddingTop: '20px',
-                      fontSize: '13px',
-                      fontWeight: 500
-                    }}
-                    formatter={(value) => <span style={{ color: '#374151' }}>{value}</span>}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
             </CardContent>
           </Card>
         </div>
@@ -299,47 +238,122 @@ export default function Dashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle className="text-slate-900 dark:text-white">Recent Claims</CardTitle>
-                <CardDescription className="text-slate-600 dark:text-slate-400">Your latest claim submissions</CardDescription>
+                <CardDescription className="text-slate-600 dark:text-slate-400">
+                  {showAllClaims ? "Showing all available claims" : "Showing current year claims"}
+                </CardDescription>
               </div>
-              <Button variant="outline" size="sm" className="border-coral-200 text-coral-700 hover:bg-coral-50 dark:border-coral-800 dark:text-coral-400 dark:hover:bg-coral-950">
-                View All
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-coral-200 text-coral-700 hover:bg-coral-50 dark:border-coral-800 dark:text-coral-400 dark:hover:bg-coral-950"
+                onClick={() => setShowAllClaims((prev) => !prev)}
+              >
+                {showAllClaims ? "Show Current Year" : "View All"}
               </Button>
             </div>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {recentClaims.map((claim) => (
-                <div
-                  key={claim.id}
-                  className="flex items-center justify-between p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-coral-200 dark:hover:border-coral-800 hover:shadow-md transition-all duration-300 group"
-                >
-                  <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-coral-50 to-coral-100 dark:from-coral-950 dark:to-coral-900 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                      <FileText className="h-6 w-6 text-coral-700 dark:text-coral-400" />
+              {(() => {
+                const currentYear = new Date().getFullYear()
+                const currentYearClaims = recentClaims.filter((claim) => {
+                  const claimDate = new Date(claim.date)
+                  return !Number.isNaN(claimDate.getTime()) && claimDate.getFullYear() === currentYear
+                })
+
+                const visibleClaims =
+                  showAllClaims || currentYearClaims.length === 0 ? recentClaims : currentYearClaims
+
+                if (visibleClaims.length === 0) {
+                  const noDataMessage =
+                    !showAllClaims && currentYearClaims.length === 0
+                      ? "No Employee Benefit claims found for the current year."
+                      : "No Employee Benefit claims available yet."
+                  return (
+                    <div className="text-center text-sm text-slate-500 dark:text-slate-400 py-6">
+                      {noDataMessage}
                     </div>
-                    <div>
-                      <p className="font-semibold text-slate-900 dark:text-white">{claim.id}</p>
-                      <p className="text-sm text-slate-600 dark:text-slate-400">{claim.category}</p>
+                  )
+                }
+
+                const claimsByYear = visibleClaims.reduce<Record<string, typeof visibleClaims>>((acc, claim) => {
+                  const claimDate = new Date(claim.date)
+                  const yearLabel = Number.isNaN(claimDate.getTime()) ? "Unknown" : claimDate.getFullYear().toString()
+                  if (!acc[yearLabel]) {
+                    acc[yearLabel] = []
+                  }
+                  acc[yearLabel].push(claim)
+                  return acc
+                }, {})
+
+                const sortedYears = Object.keys(claimsByYear).sort((a, b) => {
+                  if (a === "Unknown") return 1
+                  if (b === "Unknown") return -1
+                  return Number(b) - Number(a)
+                })
+
+                return sortedYears.map((year) => (
+                  <div key={year} className="space-y-3">
+                    <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mt-2">
+                      {year}
                     </div>
+                    {claimsByYear[year].map((claim, index) => {
+                      const amountValue = typeof claim.amount === "number" ? claim.amount : Number(claim.amount || 0)
+                      const claimCurrency = claim.currency || balanceSnapshot.currency
+                      const claimTitle = claim.title || claim.category || claim.id || `Claim ${index + 1}`
+                      const claimCategoryLabel =
+                        claim.category && claim.category !== claimTitle ? claim.category : undefined
+                      const claimReference = claim.reference?.trim()
+                      const claimDescription = claim.description?.trim()
+                      return (
+                        <div
+                          key={`${year}-${claim.id || index}`}
+                          className="flex items-center justify-between p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-coral-200 dark:hover:border-coral-800 hover:shadow-md transition-all duration-300 group"
+                        >
+                          <div className="flex items-center space-x-4">
+                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-coral-50 to-coral-100 dark:from-coral-950 dark:to-coral-900 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                              <FileText className="h-6 w-6 text-coral-700 dark:text-coral-400" />
+                            </div>
+                            <div>
+                              <p className="font-semibold text-slate-900 dark:text-white">{claimTitle}</p>
+                              {claimCategoryLabel && (
+                                <p className="text-xs text-slate-600 dark:text-slate-400">{claimCategoryLabel}</p>
+                              )}
+                              {claimReference && (
+                                <p className="text-xs text-slate-500 dark:text-slate-400">Ref: {claimReference}</p>
+                              )}
+                              {claimDescription && (
+                                <p className="text-xs text-slate-500 dark:text-slate-400">{claimDescription}</p>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center space-x-4">
+                            <div className="text-right">
+                              <p className="font-bold text-slate-900 dark:text-white">
+                                {formatCurrency(amountValue, claimCurrency)}
+                              </p>
+                              <p className="text-sm text-slate-500 dark:text-slate-500">{claim.date || "Unknown"}</p>
+                            </div>
+                            <span className={`px-3 py-1.5 rounded-lg text-xs font-semibold ${getStatusColor(claim.status || "Pending")}`}>
+                              {claim.status || "Pending"}
+                            </span>
+                          </div>
+                        </div>
+                      )
+                    })}
                   </div>
-                  <div className="flex items-center space-x-4">
-                    <div className="text-right">
-                      <p className="font-bold text-slate-900 dark:text-white">${claim.amount}</p>
-                      <p className="text-sm text-slate-500 dark:text-slate-500">{claim.date}</p>
-                    </div>
-                    <span className={`px-3 py-1.5 rounded-lg text-xs font-semibold ${getStatusColor(claim.status)}`}>
-                      {claim.status}
-                    </span>
-                  </div>
-                </div>
-              ))}
+                ))
+              })()}
             </div>
           </CardContent>
         </Card>
 
         {/* Quick Actions */}
         <div className="grid gap-6 md:grid-cols-2">
-          <Card className="card-glow cursor-pointer group border-coral-100 dark:border-coral-900 hover:border-coral-300 dark:hover:border-coral-700 transition-all duration-300" onClick={() => router.push("/chat")}>
+          <Card
+            className="card-glow cursor-pointer group border-coral-100 dark:border-coral-900 hover:border-coral-300 dark:hover:border-coral-700 transition-all duration-300"
+            onClick={() => router.push("/chat")}
+          >
             <CardHeader className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="w-14 h-14 rounded-2xl bg-gradient-coral flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
@@ -356,7 +370,10 @@ export default function Dashboard() {
             </CardHeader>
           </Card>
 
-          <Card className="card-glow cursor-pointer group border-emerald-100 dark:border-emerald-900 hover:border-emerald-300 dark:hover:border-emerald-700 transition-all duration-300" onClick={() => router.push("/submit-claim")}>
+          <Card
+            className="card-glow cursor-pointer group border-emerald-100 dark:border-emerald-900 hover:border-emerald-300 dark:hover:border-emerald-700 transition-all duration-300"
+            onClick={() => router.push("/submit-claim")}
+          >
             <CardHeader className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="w-14 h-14 rounded-2xl bg-gradient-emerald flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
@@ -373,6 +390,7 @@ export default function Dashboard() {
             </CardHeader>
           </Card>
         </div>
+
       </div>
     </div>
   )

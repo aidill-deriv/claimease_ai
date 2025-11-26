@@ -4,7 +4,7 @@ AI-powered agent using OpenAI GPT-4o-mini with LangChain.
 All queries are email-scoped for security.
 """
 import os
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain.agents import AgentExecutor, create_tool_calling_agent
@@ -74,7 +74,7 @@ You are a SPECIALIZED assistant for Deriv employee claims and benefits ONLY.
 ✅ YOU MUST ONLY ANSWER questions about:
 - Employee claims (medical, dental, optical, health screening)
 - AIA Medical Insurance coverage and procedures
-- Deriv Health Benefits (MYR 2,000 limit)
+- Deriv Employee Benefits (MYR 2,000 limit)
 - Claim submission processes and requirements
 - Benefits coverage, limits, and exclusions
 - HR policies related to claims and benefits
@@ -148,7 +148,7 @@ If YES to any → Proceed to answer
 Your role:
 - Help employees understand their TWO separate benefit systems:
   1. AIA Medical Insurance (RM 150,000 annual limit)
-  2. Deriv Health Benefits (MYR 2,000 annual limit for dental/optical/health screening)
+  2. Deriv Employee Benefits (MYR 2,000 annual limit for dental/optical/health screening)
 - Guide employees through claim submission processes
 - Answer questions about coverage, exclusions, and procedures
 - Provide step-by-step instructions for using AIA+ app and Sage People
@@ -170,7 +170,7 @@ AIA Medical Insurance (RM 150,000 annual limit):
 - Requires: GP referral for specialists (valid 30 days)
 - Emergency hotline: 1300 8888 60/70
 
-Deriv Health Benefits (MYR 2,000):
+Deriv Employee Benefits (MYR 2,000):
 - Covers: Dental, Optical, Health Screening ONLY
 - Coverage: Employee ONLY (no dependents)
 - Method: Pay first, claim via Sage People
@@ -194,7 +194,7 @@ DEPENDENT COVERAGE:
 - AIA Medical Insurance: DOES cover dependents (if added to your policy)
   * Check your AIA+ app to see who's covered
   * Contact my-hrops@deriv.com to add/remove dependents
-- Deriv Health Benefits (MYR 2,000): Employee ONLY, no dependents
+- Deriv Employee Benefits (MYR 2,000): Employee ONLY, no dependents
 
 CLAIM SUBMISSION PROCESS:
 
@@ -525,7 +525,13 @@ Remember: You're here to help employees navigate both AIA insurance and Deriv be
         # Check if any own PII keyword is in the query
         return any(keyword in query_lower for keyword in own_pii_keywords)
     
-    def query(self, user_email: str, query_text: str, thread_id: str = None) -> Dict[str, Any]:
+    def query(
+        self,
+        user_email: str,
+        query_text: str,
+        thread_id: str = None,
+        context_messages: Optional[List[Dict[str, str]]] = None,
+    ) -> Dict[str, Any]:
         """
         Execute AI agent query with natural language understanding.
         
@@ -552,6 +558,19 @@ Remember: You're here to help employees navigate both AIA insurance and Deriv be
         
         # Get conversation history (thread-specific if thread_id provided)
         chat_history = self._get_user_memory(user_email, thread_id)
+        if context_messages:
+            external_history = []
+            for item in context_messages[-30:]:
+                role = (item.get("role") or "").strip().lower()
+                content = item.get("content", "")
+                if not content:
+                    continue
+                if role == "assistant":
+                    external_history.append(AIMessage(content=content))
+                else:
+                    external_history.append(HumanMessage(content=content))
+            if external_history:
+                chat_history = list(chat_history) + external_history
         
         # Prepare input with user_email injected into tools
         # We need to bind user_email to all tool calls

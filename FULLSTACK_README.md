@@ -76,7 +76,7 @@ cp config/.env.example config/.env
 
 # Run backend server
 python src/api.py
-# Backend runs on http://localhost:8000
+# Backend runs on http://localhost:8001
 ```
 
 ### 2. Setup Frontend
@@ -91,7 +91,7 @@ npm install
 # Configure environment
 cp .env.example .env.local
 # Edit .env.local:
-# NEXT_PUBLIC_API_URL=http://localhost:8000
+# NEXT_PUBLIC_API_URL=http://localhost:8001
 
 # Run frontend
 npm run dev
@@ -101,8 +101,8 @@ npm run dev
 ### 3. Access Application
 
 - **Frontend:** http://localhost:3000
-- **Backend API:** http://localhost:8000
-- **API Docs:** http://localhost:8000/docs
+- **Backend API:** http://localhost:8001
+- **API Docs:** http://localhost:8001/docs
 
 ---
 
@@ -133,7 +133,7 @@ Edit `react_app/.env.local`:
 
 ```bash
 # Backend API URL
-NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXT_PUBLIC_API_URL=http://localhost:8001
 
 # App Info
 NEXT_PUBLIC_APP_NAME=ClaimEase
@@ -205,7 +205,7 @@ npm run lint       # Lint code
 - **[Frontend Setup](./react_app/SETUP_GUIDE.md)** - Detailed frontend guide
 - **[Deployment Guide](./react_app/DEPLOYMENT.md)** - Deploy to production
 - **[Architecture](./docs/ARCHITECTURE.md)** - System architecture
-- **[API Documentation](http://localhost:8000/docs)** - Interactive API docs
+- **[API Documentation](http://localhost:8001/docs)** - Interactive API docs
 
 ---
 
@@ -294,7 +294,7 @@ cat react_app/.env.local
 ```
 
 ### Can't connect frontend to backend
-1. Ensure backend is running on port 8000
+1. Ensure backend is running on port 8001
 2. Check `NEXT_PUBLIC_API_URL` in `react_app/.env.local`
 3. Verify CORS settings in `src/api.py`
 4. Check browser console for errors

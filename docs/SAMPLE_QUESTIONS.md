@@ -85,13 +85,13 @@ To check who's covered:
 
 To add or remove dependents, contact my-hrops@deriv.com.
 
-Note: The Deriv Health Benefits (MYR 2,000 for dental/optical/health screening) 
+Note: The Deriv Employee Benefits (MYR 2,000 for dental/optical/health screening) 
 only covers employees, not dependents. 😊
 ```
 
 ---
 
-## 🦷 Deriv Health Benefits (Dental/Optical/Health Screening)
+## 🦷 Deriv Employee Benefits (Dental/Optical/Health Screening)
 
 ### Coverage
 - "What's covered under Deriv health benefits?"
@@ -115,7 +115,7 @@ only covers employees, not dependents. 😊
 ```
 You: @ClaimEase can I claim for glasses?
 
-ClaimEase: Yes! You can claim for glasses under Deriv Health Benefits.
+ClaimEase: Yes! You can claim for glasses under Deriv Employee Benefits.
 
 Coverage Details:
 - Annual Limit: MYR 2,000 (for dental, optical, and health screening combined)
@@ -271,7 +271,7 @@ ClaimEase: Great question! Here's the breakdown:
 - Method: Cashless at panel clinics
 - Limits: GP (no limit), Specialist (RM 1,000/visit)
 
-**Deriv Health Benefits (MYR 2,000 annual limit):**
+**Deriv Employee Benefits (MYR 2,000 annual limit):**
 - Covers: Dental, Optical, Health Screening ONLY
 - Coverage: Employee ONLY (no dependents)
 - Method: Pay first, claim via Sage People

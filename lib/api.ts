@@ -1,25 +1,48 @@
-import axios from 'axios'
+import axios from "axios"
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+const resolveApiBaseUrl = () => {
+  const envUrl = process.env.NEXT_PUBLIC_API_URL?.trim()
+
+  if (typeof window !== "undefined") {
+    // When the env points to localhost but the app is accessed remotely (e.g., via Cloudflare),
+    // use the relative proxy so requests follow the same origin as the shared frontend.
+    if (!envUrl || envUrl.startsWith("http://localhost") || envUrl.startsWith("https://localhost")) {
+      return "/api"
+    }
+  }
+
+  return envUrl && envUrl.length > 0 ? envUrl : "/api"
+}
+
+export const API_BASE_URL = resolveApiBaseUrl()
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 })
 
 // API Types
+export interface QueryHistoryEntry {
+  role: "user" | "assistant"
+  content: string
+}
+
 export interface QueryRequest {
   user_email: string
   query_text: string
   thread_id?: string
+  context_messages?: QueryHistoryEntry[]
 }
 
 export interface QueryResponse {
+  status?: string
   response: string
   thread_id: string
   timestamp: string
+  model?: string
+  user_email_hash?: string
 }
 
 export interface ClaimBalance {
@@ -73,5 +96,27 @@ export const submitClaim = async (formData: FormData) => {
 
 export const getClaimHistory = async (email: string): Promise<ClaimHistory[]> => {
   const response = await api.get(`/claims/${email}`)
+  return response.data
+}
+
+export interface FeedbackRequest {
+  user_email: string
+  message_id: string
+  rating: "up" | "down"
+  response_text: string
+  thread_id?: string
+  comment?: string
+  model?: string
+  metadata?: Record<string, unknown>
+}
+
+export interface FeedbackResponse {
+  status: string
+  feedback_id: string | null
+  data: Record<string, unknown>
+}
+
+export const submitFeedback = async (data: FeedbackRequest): Promise<FeedbackResponse> => {
+  const response = await api.post("/feedback", data)
   return response.data
 }

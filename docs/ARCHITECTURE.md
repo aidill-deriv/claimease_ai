@@ -165,6 +165,40 @@ print(f"Found {len(docs)} rows")  # All have email = aainaa@...
 
 ---
 
+## 3. AI Feedback Loop
+
+### Purpose
+Capture lightweight thumbs-up/-down signals for every AI response so we can measure quality, identify regressions, and surface conversation snippets to admins without exposing PII.
+
+### End-to-End Flow
+1. **UI controls** – Each assistant message renders “Helpful / Not Helpful” buttons once it has a real message id. Clicking one of them calls the new feedback API and locks the choice so users can’t double-submit (`app/chat/page.tsx:135` and `app/chat/page.tsx:248`).
+2. **Frontend API helper** – `submitFeedback()` wraps the POST call and keeps the TypeScript contract in sync with the backend (`lib/api.ts:102`).
+3. **FastAPI endpoint** – `/feedback` validates the payload, hashes the email via `mask_email`, and rejects invalid ratings before touching storage (`src/api.py:185`). Errors bubble up with meaningful status codes so the UI can show a toast in the future.
+4. **Supabase write** – `SupabaseService.insert_feedback()` performs a REST call against the `claim_ai_feedback` table and returns the stored row (`src/supabase_service.py:32`).
+
+### Storage Schema (Supabase `claim_ai_feedback`)
+| Column | Type | Notes |
+|--------|------|-------|
+| `id` | `uuid` | PK, default `gen_random_uuid()` |
+| `thread_id` | `text` | Optional conversation thread handle |
+| `message_id` | `text` | Matches the UUID the frontend assigns to every assistant response |
+| `user_email_hash` | `text` | `mask_email(email)` so raw addresses never leave the API |
+| `rating` | `feedback_rating` enum | `'up'` or `'down'` |
+| `comment` | `text` | Placeholder for future “tell us more” UI |
+| `response_text` | `text` | Snapshot of the model output for auditing |
+| `model` | `text` | Model identifier returned by `/query` |
+| `metadata` | `jsonb` | Stores structured extras (e.g., timestamp, client build) |
+| `created_at` / `updated_at` | `timestamptz` | Auto-managed via trigger |
+
+Unique `(message_id, user_email_hash)` guarantees a single vote per user per answer, while indexes on `thread_id`, `rating`, and `created_at` keep admin queries fast.
+
+### Admin Consumption
+- Short term: run Supabase SQL (or RPC) that aggregates `rating` counts per day, model, or policy topic and expose the result via a new dashboard tab.
+- Medium term: add `GET /feedback` with filter params so the frontend can render a moderation table alongside trend charts. This route can page through Supabase using the existing service helper to keep implementation consistent.
+- Long term: feed negatve votes into retraining/guardrail workflows (e.g., auto-tag responses with low confidence or escalate repeated “Not Helpful” votes about the same topic).
+
+The feedback circuit is intentionally thin—only the chat UI and `src/api.py` touch it—so deploying an admin view later won’t require changes to the conversation loop itself.
+
 ### `src/compute_tool.py`
 **Purpose**: Safe aggregations with email revalidation and guardrails.
 
@@ -259,13 +293,13 @@ print(result["answer"])
 
 **GET /health**
 ```bash
-curl http://localhost:8000/health
+curl http://localhost:8001/health
 # {"status": "healthy", "agent": "ready", "data_dir": "./data"}
 ```
 
 **POST /query**
 ```bash
-curl -X POST http://localhost:8000/query \
+curl -X POST http://localhost:8001/query \
   -H "Content-Type: application/json" \
   -d '{"query": "Show my claims", "user_email": "aainaa@regentmarkets.com"}'
 # {"answer": "Found 4 rows...", "tool_used": "retrieve_claim_data", ...}
@@ -301,7 +335,7 @@ cd src
 python -m api
 
 # Query from another terminal
-curl -X POST http://localhost:8000/query \
+curl -X POST http://localhost:8001/query \
   -H "Content-Type: application/json" \
   -d '{"query": "What is my balance?", "user_email": "aainaa@regentmarkets.com"}'
 ```
@@ -575,7 +609,7 @@ python src/cli.py
 python -m src.api
 
 # Test
-curl -X POST http://localhost:8000/query \
+curl -X POST http://localhost:8001/query \
   -H "Content-Type: application/json" \
   -d '{"query": "Show my claims", "user_email": "aainaa@regentmarkets.com"}'
 ```

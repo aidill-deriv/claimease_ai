@@ -23,7 +23,7 @@ The agent will ONLY answer questions about:
 - Panel clinics and hospitals
 
 ### 3. Benefits Information
-- Deriv Health Benefits (MYR 2,000 limit)
+- Deriv Employee Benefits (MYR 2,000 limit)
 - Eligibility requirements
 - Annual limits and resets
 - Claim deadlines
@@ -212,7 +212,7 @@ I'm specifically designed to help with employee claims and benefits at Deriv.
 I can assist you with:
 
 • AIA Medical Insurance coverage and claims
-• Deriv Health Benefits (dental, optical, health screening)
+• Deriv Employee Benefits (dental, optical, health screening)
 • Claim submission procedures and requirements
 • Coverage limits and exclusions
 • AIA+ app and Sage People guidance

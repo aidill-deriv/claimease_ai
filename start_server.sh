@@ -35,16 +35,35 @@ echo "✅ Environment variables loaded"
 echo ""
 
 # Start the server
-echo "Starting server on port 8000..."
+# Networking parameters
+HOST="127.0.0.1"
+PORT="8001"
+
+# Check for existing process bound to the port
+if command -v lsof >/dev/null 2>&1; then
+    if lsof -iTCP:${PORT} -sTCP:LISTEN >/dev/null 2>&1; then
+        echo "❌ Error: Port ${PORT} is already in use."
+        echo "Please stop the existing process (e.g., run: lsof -iTCP:${PORT} -sTCP:LISTEN) and try again."
+        exit 1
+    fi
+fi
+
+echo "Starting server on port ${PORT}..."
 echo "Press Ctrl+C to stop"
 echo ""
 echo "Endpoints:"
-echo "  - Health: http://localhost:8000/health"
-echo "  - Query: http://localhost:8000/query"
-echo "  - Slack: http://localhost:8000/slack/events"
+echo "  - Health: http://${HOST}:${PORT}/health"
+echo "  - Query: http://${HOST}:${PORT}/query"
+echo "  - Slack: http://${HOST}:${PORT}/slack/events"
 echo ""
 echo "======================================================================"
 echo ""
 
-# Run the server
-python3 -m uvicorn src.api:app --host 0.0.0.0 --port 8000
+# Run the server (bind to loopback to avoid sandbox permission issues)
+python3 -m uvicorn src.api:app --host "${HOST}" --port "${PORT}"
+exit_code=$?
+
+if [ $exit_code -ne 0 ]; then
+    echo "❌ FastAPI server exited with status $exit_code. Check the log above for details."
+    exit $exit_code
+fi

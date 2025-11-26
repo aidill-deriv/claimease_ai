@@ -26,9 +26,9 @@
 ```
 🚀 Starting ClaimBot API Server
 ✅ Environment variables loaded
-Starting server on port 8000...
+Starting server on port 8001...
 
-INFO:     Uvicorn running on http://0.0.0.0:8000
+INFO:     Uvicorn running on http://0.0.0.0:8001
 INFO:     Application startup complete.
 ```
 
@@ -41,13 +41,13 @@ INFO:     Application startup complete.
 Open a NEW terminal and run:
 
 ```bash
-~/ngrok http 8000
+~/ngrok http 8001
 ```
 
 **Expected output:**
 ```
 Session Status                online
-Forwarding                    https://abc123.ngrok.io -> http://localhost:8000
+Forwarding                    https://abc123.ngrok.io -> http://localhost:8001
 ```
 
 ✅ **Copy the HTTPS URL** (e.g., `https://abc123.ngrok.io`)
@@ -84,7 +84,7 @@ Go to any Slack channel and type:
 **That's it! Just 3 steps:**
 
 1. `./start_server.sh` (Terminal 1 - keep running)
-2. `~/ngrok http 8000` (Terminal 2 - keep running)
+2. `~/ngrok http 8001` (Terminal 2 - keep running)
 3. Configure Slack with ngrok URL
 
 **Total time: ~3 minutes**
@@ -95,7 +95,7 @@ Go to any Slack channel and type:
 
 ### Is the server running?
 ```bash
-curl http://localhost:8000/health
+curl http://localhost:8001/health
 ```
 
 Should return:
@@ -158,7 +158,7 @@ POST /slack/events    200 OK
 Just run the same 2 commands again:
 ```bash
 ./start_server.sh
-~/ngrok http 8000
+~/ngrok http 8001
 ```
 
 **Note:** ngrok URL changes each time, so update Slack with new URL!

@@ -1,31 +1,94 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Sparkles, Shield, Zap, TrendingUp, ArrowRight } from "lucide-react"
+import { AlertCircle, ArrowRight, Shield, Sparkles, TrendingUp, Zap } from "lucide-react"
+import { getStoredSession, storeSession } from "@/lib/session"
 
 export default function Home() {
   const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
   const router = useRouter()
+  const [hasSession, setHasSession] = useState(false)
+
+  useEffect(() => {
+    const session = getStoredSession()
+    if (session) {
+      setHasSession(true)
+      router.replace("/dashboard")
+    }
+  }, [router])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!email) return
-
-    setIsLoading(true)
-    // Store email in sessionStorage (only in browser)
-    if (typeof window !== 'undefined') {
-      sessionStorage.setItem("userEmail", email)
+    if (!email) {
+      return
     }
-    
-    // Simulate login delay
-    setTimeout(() => {
-      router.push("/dashboard")
-    }, 500)
+    setIsLoading(true)
+    setErrorMessage("")
+
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      })
+
+      const payload = (await response.json().catch(() => null)) as
+        | { error?: string }
+        | { sessionToken: string; user: { id: string; email: string; fullName?: string | null; role: string; status: string } }
+        | null
+
+      if (!response.ok || !payload || !("sessionToken" in payload)) {
+        const message = (payload as { error?: string } | null)?.error || "Unable to sign you in."
+        setErrorMessage(message)
+        setIsLoading(false)
+        return
+      }
+
+      storeSession({
+        token: payload.sessionToken,
+        user: {
+          id: payload.user.id,
+          email: payload.user.email,
+          fullName: payload.user.fullName ?? null,
+          role: payload.user.role as "viewer" | "admin" | "superadmin",
+          status: payload.user.status as "active" | "suspended",
+        },
+      })
+
+      setHasSession(true)
+      router.replace("/dashboard")
+      return
+    } catch (error) {
+      console.error("Failed to sign in:", error)
+      setErrorMessage("Unable to sign you in. Please try again.")
+      setIsLoading(false)
+      return
+    }
+
+    setIsLoading(false)
+  }
+
+  if (isLoading || hasSession) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-coral-50 via-white to-slate-75 dark:from-slate-1100 dark:via-slate-1000 dark:to-slate-900">
+        <div className="text-center space-y-4">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-coral shadow-lg">
+            <div className="w-10 h-10 border-4 border-white/70 border-t-transparent rounded-full animate-spin" />
+          </div>
+          <div>
+            <p className="text-lg font-semibold text-slate-900 dark:text-white">Signing you in…</p>
+            <p className="text-sm text-slate-600 dark:text-slate-400">Loading your ClaimEase dashboard.</p>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -65,12 +128,25 @@ export default function Home() {
                 <div className="space-y-2">
                   <Input
                     type="email"
-                    placeholder="your.email@company.com"
+                    placeholder="name@regentmarkets.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     className="w-full h-12 border-slate-200 dark:border-slate-800 focus:border-coral-700 focus:ring-coral-700"
                   />
+                  <Input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full h-12 border-slate-200 dark:border-slate-800 focus:border-coral-700 focus:ring-coral-700"
+                  />
+                  {errorMessage && (
+                    <p className="flex items-center gap-1 text-sm text-red-600 dark:text-red-400">
+                      <AlertCircle className="h-4 w-4" />
+                      {errorMessage}
+                    </p>
+                  )}
                 </div>
                 <Button 
                   type="submit" 
@@ -90,11 +166,6 @@ export default function Home() {
                   )}
                 </Button>
               </form>
-              <div className="mt-4 text-center">
-                <p className="text-xs text-slate-500 dark:text-slate-400">
-                  Secure authentication • GDPR compliant
-                </p>
-              </div>
             </CardContent>
           </Card>
         </div>
@@ -138,74 +209,6 @@ export default function Home() {
           </Card>
         </div>
 
-        {/* Stats Section */}
-        <div className="max-w-5xl mx-auto mb-20">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-3 text-slate-900 dark:text-white">
-              Trusted by Employees Worldwide
-            </h2>
-            <p className="text-slate-600 dark:text-slate-400">
-              Experience the future of claims management
-            </p>
-          </div>
-          <div className="grid grid-cols-3 gap-8">
-            <div className="text-center group">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-coral mb-4 group-hover:scale-110 transition-transform duration-300">
-                <div className="text-3xl font-bold text-white">99%</div>
-              </div>
-              <div className="text-sm font-medium text-slate-600 dark:text-slate-400">AI Accuracy</div>
-              <div className="text-xs text-slate-500 dark:text-slate-500 mt-1">Industry leading</div>
-            </div>
-            <div className="text-center group">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-emerald mb-4 group-hover:scale-110 transition-transform duration-300">
-                <div className="text-3xl font-bold text-white">&lt;2s</div>
-              </div>
-              <div className="text-sm font-medium text-slate-600 dark:text-slate-400">Response Time</div>
-              <div className="text-xs text-slate-500 dark:text-slate-500 mt-1">Lightning fast</div>
-            </div>
-            <div className="text-center group">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 mb-4 group-hover:scale-110 transition-transform duration-300">
-                <div className="text-3xl font-bold text-white">24/7</div>
-              </div>
-              <div className="text-sm font-medium text-slate-600 dark:text-slate-400">Available</div>
-              <div className="text-xs text-slate-500 dark:text-slate-500 mt-1">Always online</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Trust Badges */}
-        <div className="max-w-4xl mx-auto">
-          <Card className="bg-gradient-to-br from-slate-50 to-white dark:from-slate-900 dark:to-slate-800 border-slate-200 dark:border-slate-700">
-            <CardContent className="py-8">
-              <div className="flex flex-wrap items-center justify-center gap-8 text-slate-600 dark:text-slate-400">
-                <div className="flex items-center gap-2">
-                  <Shield className="h-5 w-5 text-coral-700" />
-                  <span className="text-sm font-medium">Bank-level Security</span>
-                </div>
-                <div className="w-px h-6 bg-slate-300 dark:bg-slate-600"></div>
-                <div className="flex items-center gap-2">
-                  <Zap className="h-5 w-5 text-emerald-700" />
-                  <span className="text-sm font-medium">Instant Processing</span>
-                </div>
-                <div className="w-px h-6 bg-slate-300 dark:bg-slate-600"></div>
-                <div className="flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-blue-700" />
-                  <span className="text-sm font-medium">AI-Powered</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Footer */}
-        <div className="mt-16 text-center">
-          <p className="text-sm text-slate-500 dark:text-slate-400">
-            © 2025 ClaimEase. Powered by Deriv AI Technology.
-          </p>
-          <p className="text-xs text-slate-400 dark:text-slate-500 mt-2">
-            Secure • Fast • Reliable • GDPR Compliant
-          </p>
-        </div>
       </div>
     </div>
   )

@@ -42,7 +42,7 @@ The AI now understands there are TWO separate systems:
 - **Processing:** 21 days after submission
 - **Contact:** 1300 8888 60/70
 
-#### Deriv Health Benefits (MYR 2,000)
+#### Deriv Employee Benefits (MYR 2,000)
 - **Coverage:** Dental, Optical, Health Screening ONLY
 - **Method:** Pay first, claim via Sage People
 - **Deadline:** Same month as service
@@ -140,7 +140,7 @@ The AI has been instructed to:
 
 **AI Response:**
 ```
-Yes! Dental claims fall under Deriv Health Benefits (MYR 2,000 annual limit), 
+Yes! Dental claims fall under Deriv Employee Benefits (MYR 2,000 annual limit), 
 not AIA insurance. Here's how:
 
 1. Visit any dental provider

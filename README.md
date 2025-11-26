@@ -186,10 +186,7 @@ pip3 install -r config/requirements_kb.txt
 
 # 3. Configure environment
 cp config/.env.example config/.env
-# Edit config/.env with your API keys
-
-# 4. Initialize database
-python3 src/db_setup.py data database/claims.db
+# Edit config/.env with your API keys and Supabase credentials
 ```
 
 ### Environment Variables
@@ -206,27 +203,47 @@ SLACK_BOT_TOKEN=xoxb-your-bot-token
 SLACK_SIGNING_SECRET=your-signing-secret
 
 # Server Configuration
-PORT=8000
+PORT=8001
 
 # Default User (for CLI testing)
 LOCAL_USER_EMAIL=aainaa@regentmarkets.com
+
+# Supabase (backend)
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+SUPABASE_SUMMARY_TABLE=claim_summary
+SUPABASE_ANALYSIS_TABLE=claim_analysis
 ```
 
 ### Supabase Integration (Frontend)
 
 1. Copy `.env.example` to `.env.local`.
-2. Provide your Supabase project URL and anon key:
+2. Provide your Supabase credentials and table names (override only if your schema differs):
 
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-NEXT_PUBLIC_SUPABASE_CLAIMS_TABLE=claims         # optional override
-NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET=claim_receipts  # optional bucket for receipts
+NEXT_PUBLIC_SUPABASE_SUMMARY_TABLE=claim_summary          # feeds dashboard top-cards
+NEXT_PUBLIC_SUPABASE_ANALYSIS_TABLE=claim_analysis        # feeds charts + recent claims
+NEXT_PUBLIC_SUPABASE_CLAIMS_TABLE=claims                  # form submissions (point to claim_analysis if you reuse that table)
+NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET=claim_receipts        # bucket for uploaded receipts
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key           # server-only key for /api/dashboard-data
 ```
 
-3. In Supabase, create a `claims` table (or match the value of `NEXT_PUBLIC_SUPABASE_CLAIMS_TABLE`) with columns such as `user_email`, `category`, `amount`, `date`, `description`, `provider`, `status`, and `receipt_path`. Enable Row Level Security so clients can only manage their own rows.
-4. (Optional) Create a Storage bucket (defaults to `claim_receipts`) for uploading supporting documents.
-5. Grant the anon role `insert` access to the claims table (and storage bucket) via policies tailored to your org's security rules.
+3. Expected schemas (all filtered by `email = authenticated user`):
+   - **`claim_summary`** – `employee_id`, `email`, `year`, `max_amount`, `total_transaction_amount`, `remaining_balance`.
+   - **`claim_analysis`** – `employee_id`, `email`, `claim_type`, `claim_description`, `transaction_amount`, `transaction_currency`, `date_submitted`, `date_paid`, `state`.
+   - **`claims`** (optional) – used by the submit form; include `user_email`, `category`, `amount`, `date`, `description`, `provider`, `status`, `receipt_path`. If you write directly into `claim_analysis`, map the payload fields accordingly.
+   - **Storage bucket** – defaults to `claim_receipts` for receipt uploads.
+
+4. Policies:
+   - Allow read access on `claim_summary` and `claim_analysis` where `email = auth.email()` (or handle via the provided `/api/dashboard-data` service-role endpoint).
+   - Allow insert/write on the submission table for the authenticated user.
+   - Grant upload permissions for the receipt bucket.
+
+5. Diagnostics:
+   - Run `npm run verify:supabase` (optionally append an email) to confirm Supabase connectivity and sample data: `npm run verify:supabase -- user@example.com`.
+   - The script auto-detects the service-role key (if present) to bypass RLS and prints sample rows or reports if no data is present.
 
 ### Slack Setup
 

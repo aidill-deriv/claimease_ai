@@ -11,14 +11,11 @@ from pathlib import Path
 
 # Use absolute imports for better compatibility
 try:
-    from db_retriever import DatabaseRetriever
+    from supabase_service import SupabaseService, SupabaseServiceError
 except ImportError:
-    from src.db_retriever import DatabaseRetriever
+    from src.supabase_service import SupabaseService, SupabaseServiceError
 
-# Initialize database retriever (shared across tools)
-# Path relative to project root
-db_path = Path(__file__).parent.parent / "database" / "claims.db"
-db_retriever = DatabaseRetriever(str(db_path))
+supabase_service = SupabaseService()
 
 
 @tool
@@ -32,26 +29,18 @@ def get_user_claims(user_email: str) -> str:
     Returns:
         JSON string containing user's claim records
     """
-    docs = db_retriever.retrieve(user_email, limit=100)
-    
-    if not docs:
-        return json.dumps({"message": f"No claims found for user", "claims": []})
-    
-    # Format for AI consumption
-    result = {
-        "total_claims": len(docs),
-        "claims": []
-    }
-    
-    for doc in docs:
-        # Only include relevant fields
-        claim = {
-            "source": doc.get("source_table", "unknown"),
-            **{k: v for k, v in doc.items() if k not in ["source_table"]}
-        }
-        result["claims"].append(claim)
-    
-    return json.dumps(result, default=str)
+    try:
+        docs = supabase_service.get_claim_analysis(user_email, limit=100)
+    except SupabaseServiceError as exc:
+        return json.dumps({"error": str(exc)})
+
+    return json.dumps(
+        {
+            "total_claims": len(docs),
+            "claims": docs,
+        },
+        default=str,
+    )
 
 
 @tool
@@ -65,21 +54,25 @@ def calculate_balance(user_email: str) -> str:
     Returns:
         JSON string with balance information
     """
-    result = db_retriever.compute(
-        user_email,
-        "sum",
-        "Remaining_Balance",
-        table="claims_2025"
+    try:
+        summary = supabase_service.get_claim_summary(user_email)
+    except SupabaseServiceError as exc:
+        return json.dumps({"error": str(exc)})
+
+    if not summary:
+        return json.dumps({"message": "No claim summary found for user."})
+
+    return json.dumps(
+        {
+            "year": summary.get("year"),
+            "currency": summary.get("currency"),
+            "remaining_balance": summary.get("remaining_balance"),
+            "total_transaction_amount": summary.get("total_transaction_amount"),
+            "max_amount": summary.get("max_amount"),
+            "employee_name": summary.get("employee_name"),
+        },
+        default=str,
     )
-    
-    if "error" in result:
-        return json.dumps({"error": result["error"]})
-    
-    return json.dumps({
-        "remaining_balance": result["result"],
-        "rows_used": result["rows_used"],
-        "user_email_hash": result["filter_applied"]
-    })
 
 
 @tool
@@ -93,20 +86,22 @@ def calculate_total_spent(user_email: str) -> str:
     Returns:
         JSON string with spending information
     """
-    result = db_retriever.compute(
-        user_email,
-        "sum",
-        "Total_Transaction_Amount",
-        table="claims_2025"
+    try:
+        summary = supabase_service.get_claim_summary(user_email)
+    except SupabaseServiceError as exc:
+        return json.dumps({"error": str(exc)})
+
+    if not summary:
+        return json.dumps({"message": "No claim summary found for user."})
+
+    return json.dumps(
+        {
+            "currency": summary.get("currency"),
+            "total_transaction_amount": summary.get("total_transaction_amount"),
+            "max_amount": summary.get("max_amount"),
+        },
+        default=str,
     )
-    
-    if "error" in result:
-        return json.dumps({"error": result["error"]})
-    
-    return json.dumps({
-        "total_spent": result["result"],
-        "rows_used": result["rows_used"]
-    })
 
 
 @tool
@@ -120,18 +115,12 @@ def get_claim_count(user_email: str) -> str:
     Returns:
         JSON string with claim count
     """
-    result = db_retriever.compute(
-        user_email,
-        "count",
-        table="claims_2025"
-    )
-    
-    if "error" in result:
-        return json.dumps({"error": result["error"]})
-    
-    return json.dumps({
-        "claim_count": result["result"]
-    })
+    try:
+        count = supabase_service.count_claims(user_email)
+    except SupabaseServiceError as exc:
+        return json.dumps({"error": str(exc)})
+
+    return json.dumps({"claim_count": count})
 
 
 @tool
@@ -145,8 +134,11 @@ def get_user_summary(user_email: str) -> str:
     Returns:
         JSON string with user data summary
     """
-    summary = db_retriever.get_user_data_summary(user_email)
-    
+    try:
+        summary = supabase_service.build_user_summary(user_email)
+    except SupabaseServiceError as exc:
+        return json.dumps({"error": str(exc)})
+
     return json.dumps(summary, default=str)
 
 
@@ -161,19 +153,15 @@ def get_max_amount(user_email: str) -> str:
     Returns:
         JSON string with max amount information
     """
-    result = db_retriever.compute(
-        user_email,
-        "max",
-        "Max_Amount",
-        table="claims_2025"
-    )
-    
-    if "error" in result:
-        return json.dumps({"error": result["error"]})
-    
-    return json.dumps({
-        "max_amount": result["result"]
-    })
+    try:
+        summary = supabase_service.get_claim_summary(user_email)
+    except SupabaseServiceError as exc:
+        return json.dumps({"error": str(exc)})
+
+    if not summary:
+        return json.dumps({"message": "No claim summary found for user."})
+
+    return json.dumps({"max_amount": summary.get("max_amount"), "currency": summary.get("currency")})
 
 
 # Import knowledge base tools

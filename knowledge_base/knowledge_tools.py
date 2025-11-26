@@ -3,26 +3,68 @@
 LangChain tools for querying the knowledge base.
 These tools allow the AI agent to search PDF documents.
 """
+import json
+import os
 import sys
 from pathlib import Path
+
 from langchain.tools import tool
-import json
 
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent))
 
-from vector_store import VectorStoreManager
+_BOOL_TRUE = {"1", "true", "yes", "on"}
 
-# Initialize vector store (shared across all tools)
-try:
-    kb_store = VectorStoreManager(
-        persist_directory="chroma_db",
-        collection_name="knowledge_base"
-    )
-    print("[KNOWLEDGE_TOOLS] ✅ Knowledge base loaded")
-except Exception as e:
-    print(f"[KNOWLEDGE_TOOLS] ⚠️  Error loading knowledge base: {e}")
+raw_disable = os.getenv("DISABLE_KNOWLEDGE_BASE", "")
+resolved_source = (os.getenv("KNOWLEDGE_BASE_SOURCE") or "disabled").strip().lower()
+
+if resolved_source not in {"supabase", "local", "auto"}:
+    resolved_source = "disabled"
+
+if raw_disable:
+    DISABLE_KB = raw_disable.strip().lower() in _BOOL_TRUE
+else:
+    DISABLE_KB = resolved_source == "disabled"
+
+if DISABLE_KB:
+    print("[KNOWLEDGE_TOOLS] ⚠️  Knowledge base disabled. Set KNOWLEDGE_BASE_SOURCE=supabase or local to enable.")
     kb_store = None
+else:
+    kb_store = None
+
+    def _init_supabase_store():
+        try:
+            from supabase_kb_store import SupabaseKnowledgeStore
+
+            store = SupabaseKnowledgeStore()
+            print("[KNOWLEDGE_TOOLS] ✅ Using Supabase knowledge base")
+            return store
+        except Exception as exc:
+            print(f"[KNOWLEDGE_TOOLS] ⚠️  Failed to init Supabase KB: {exc}")
+            return None
+
+    def _init_local_store():
+        try:
+            from vector_store import VectorStoreManager
+
+            store = VectorStoreManager(
+                persist_directory="chroma_db",
+                collection_name="knowledge_base",
+            )
+            print("[KNOWLEDGE_TOOLS] ✅ Using local Chroma knowledge base")
+            return store
+        except Exception as exc:
+            print(f"[KNOWLEDGE_TOOLS] ⚠️  Error loading local knowledge base: {exc}")
+            return None
+
+    if resolved_source in {"supabase", "auto"}:
+        kb_store = _init_supabase_store()
+
+    if kb_store is None and resolved_source in {"local", "auto"}:
+        kb_store = _init_local_store()
+
+    if kb_store is None:
+        print("[KNOWLEDGE_TOOLS] ⚠️  Knowledge base unavailable; tools will return friendly errors.")
 
 
 @tool

@@ -45,7 +45,7 @@ The app will be available at [http://localhost:3000](http://localhost:3000)
 
 ### 3. Start Backend API
 
-Make sure your FastAPI backend is running on port 8000:
+Make sure your FastAPI backend is running on port 8001:
 
 ```bash
 cd ..
@@ -82,7 +82,7 @@ react_app/
 
 ## 🌐 API Integration
 
-The app connects to the FastAPI backend running on `http://localhost:8000`. API routes are proxied through Next.js:
+The app connects to the FastAPI backend running on `http://localhost:8001`. API routes are proxied through Next.js:
 
 ```typescript
 // Example API call
@@ -171,7 +171,7 @@ vercel
 Create a `.env.local` file:
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXT_PUBLIC_API_URL=http://localhost:8001
 ```
 
 ## 🤝 Contributing

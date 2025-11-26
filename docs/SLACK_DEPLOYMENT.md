@@ -6,7 +6,7 @@ Once you've tested locally (CLI + FastAPI), here's how to deploy to Slack.
 
 ./start_server.sh
 
-~/ngrok http 8000
+~/ngrok http 8001
 
 
 ## High-Level Flow
@@ -213,7 +213,7 @@ Choose one:
 python -m src.api
 
 # Use ngrok or similar to tunnel to public URL
-ngrok http 8000
+ngrok http 8001
 # Copy forwarding URL → paste into Slack app settings /slack/events
 ```
 
@@ -257,7 +257,7 @@ services:
   claimbot:
     build: .
     ports:
-      - "8000:8000"
+      - "8001:8001"
     environment:
       SLACK_BOT_TOKEN: ${SLACK_BOT_TOKEN}
       SLACK_SIGNING_SECRET: ${SLACK_SIGNING_SECRET}
@@ -267,7 +267,7 @@ services:
 
 # Run
 docker-compose up
-# Access at http://localhost:8000
+# Access at http://localhost:8001
 ```
 
 ---

@@ -21,12 +21,14 @@ load_dotenv("config/.env")
 # Import AI agent
 try:
     from ai_agent import ClaimAIAgent
-    from auth_stub import mask_email
+    from auth_stub import mask_email, validate_email
     from logger import setup_logger
+    from supabase_service import SupabaseService, SupabaseServiceError
 except ImportError:
     from src.ai_agent import ClaimAIAgent
-    from src.auth_stub import mask_email
+    from src.auth_stub import mask_email, validate_email
     from src.logger import setup_logger
+    from src.supabase_service import SupabaseService, SupabaseServiceError
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -49,6 +51,7 @@ logger = setup_logger('api')
 
 # Initialize AI agent (singleton)
 agent = None
+supabase_client = None
 
 def get_agent():
     """Get or create AI agent instance."""
@@ -57,6 +60,14 @@ def get_agent():
         agent = ClaimAIAgent()
         logger.info("AI Agent initialized")
     return agent
+
+def get_supabase_client():
+    """Get or create Supabase service instance."""
+    global supabase_client
+    if supabase_client is None:
+        supabase_client = SupabaseService()
+        logger.info("Supabase service initialized")
+    return supabase_client
 
 
 @app.on_event("startup")
@@ -131,11 +142,12 @@ async def query_endpoint(request: Request):
     """
     Direct query endpoint for testing.
     
-    Body:
+    Body sample:
     {
         "user_email": "user@example.com",
         "query_text": "What's my balance?",
-        "thread_id": "optional-thread-id"
+        "thread_id": "optional-thread-id",
+        "context_messages": [{"role": "user", "content": "..."}]
     }
     """
     try:
@@ -143,6 +155,7 @@ async def query_endpoint(request: Request):
         user_email = data.get("user_email")
         query_text = data.get("query_text")  # Changed from "query" to "query_text"
         thread_id = data.get("thread_id")
+        context_messages = data.get("context_messages")
         
         if not user_email or not query_text:
             raise HTTPException(
@@ -152,7 +165,7 @@ async def query_endpoint(request: Request):
         
         # Query agent
         agent = get_agent()
-        result = agent.query(user_email, query_text, thread_id)
+        result = agent.query(user_email, query_text, thread_id, context_messages)
         
         # Return response in format expected by React frontend
         return {
@@ -166,6 +179,73 @@ async def query_endpoint(request: Request):
         
     except Exception as e:
         logger.error(f"Query endpoint error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/feedback")
+async def feedback_endpoint(request: Request):
+    """Collect thumbs up/down feedback for AI responses."""
+    try:
+        data = await request.json()
+        user_email = (data.get("user_email") or "").strip().lower()
+        if not validate_email(user_email):
+            raise HTTPException(status_code=400, detail="Invalid user_email")
+
+        message_id = (data.get("message_id") or "").strip()
+        rating = (data.get("rating") or "").strip().lower()
+        response_text = (data.get("response_text") or "").strip()
+
+        if not message_id:
+            raise HTTPException(status_code=400, detail="Missing message_id")
+        if rating not in {"up", "down"}:
+            raise HTTPException(status_code=400, detail="rating must be 'up' or 'down'")
+        if not response_text:
+            raise HTTPException(status_code=400, detail="Missing response_text")
+
+        thread_id = (data.get("thread_id") or "").strip() or None
+        comment = data.get("comment")
+        if isinstance(comment, str):
+            comment = comment.strip() or None
+        else:
+            comment = None
+
+        model = (data.get("model") or "").strip() or None
+        metadata = data.get("metadata")
+        if not isinstance(metadata, dict):
+            metadata = {}
+
+        try:
+            supabase = get_supabase_client()
+        except SupabaseServiceError as exc:
+            logger.error(f"Supabase configuration error: {exc}")
+            raise HTTPException(status_code=500, detail="Supabase service unavailable")
+
+        payload: Dict[str, Any] = {
+            "thread_id": thread_id,
+            "message_id": message_id,
+            "user_email_hash": mask_email(user_email),
+            "rating": rating,
+            "comment": comment,
+            "response_text": response_text,
+            "model": model,
+            "metadata": metadata,
+        }
+
+        inserted = supabase.insert_feedback(payload)
+
+        return {
+            "status": "success",
+            "feedback_id": inserted.get("id"),
+            "data": inserted,
+        }
+
+    except HTTPException:
+        raise
+    except SupabaseServiceError as exc:
+        logger.error(f"Supabase feedback error: {exc}")
+        raise HTTPException(status_code=502, detail="Failed to persist feedback")
+    except Exception as e:
+        logger.error(f"Feedback endpoint error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 

@@ -3,6 +3,7 @@ python-dotenv
 fastapi
 uvicorn[standard]
 slack-sdk
+requests
 
 # AI/ML dependencies (compatible versions)
 langchain

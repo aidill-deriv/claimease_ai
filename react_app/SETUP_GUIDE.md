@@ -60,7 +60,7 @@ Create a `.env.local` file in the `react_app` directory:
 
 ```bash
 # API Configuration
-NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXT_PUBLIC_API_URL=http://localhost:8001
 
 # Optional: Analytics, etc.
 # NEXT_PUBLIC_GA_ID=your-google-analytics-id
@@ -75,7 +75,7 @@ async rewrites() {
   return [
     {
       source: '/api/:path*',
-      destination: 'http://localhost:8000/:path*',
+      destination: 'http://localhost:8001/:path*',
     },
   ]
 }
@@ -93,7 +93,7 @@ cd ..  # Go to project root
 python src/api.py
 ```
 
-The API should start on `http://localhost:8000`
+The API should start on `http://localhost:8001`
 
 2. **Start the React App**:
 ```bash
@@ -270,7 +270,7 @@ npm install
 **Error:** `Failed to fetch` or CORS errors
 
 **Solution:**
-- Ensure FastAPI backend is running on port 8000
+- Ensure FastAPI backend is running on port 8001
 - Check `next.config.js` proxy settings
 - Verify `NEXT_PUBLIC_API_URL` in `.env.local`
 

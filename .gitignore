@@ -32,7 +32,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -157,6 +156,14 @@ yarn-error.log*
 package-lock.json
 yarn.lock
 
+# Next.js build output
+.next/
+react_app/.next/
+out/
+react_app/out/
+.vercel/
+react_app/.vercel/
+
 # ============================================
 # Temporary Files
 # ============================================
@@ -175,6 +182,12 @@ temp/
 # ============================================
 # Deprecated files (optional - uncomment if you want to ignore)
 # deprecated/
+
+# Legacy stacks no longer maintained
+tests/
+streamlit_app/
+slack/
+docs/SLACK_*.md
 
 # User data outputs
 mnt/user-data/outputs/

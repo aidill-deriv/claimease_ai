@@ -336,6 +336,11 @@
   border: 1px solid rgba(255, 156, 19, 0.3);
 }
 
+.status-paid {
+  @apply bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300;
+  border: 1px solid rgba(5, 150, 105, 0.3);
+}
+
 .status-rejected {
   @apply bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-400;
   border: 1px solid rgba(230, 25, 14, 0.3);

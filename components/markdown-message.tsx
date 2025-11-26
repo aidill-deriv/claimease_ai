@@ -20,9 +20,13 @@ export function MarkdownMessage({ content, className = '' }: MarkdownMessageProp
     html = html.replace(/\*\*([^*]+)\*\*/g, '<strong class="font-bold">$1</strong>')
     html = html.replace(/__([^_]+)__/g, '<strong class="font-bold">$1</strong>')
     
-    // Italic (*text* or _text_)
-    html = html.replace(/\*([^*]+)\*/g, '<em class="italic">$1</em>')
-    html = html.replace(/_([^_]+)_/g, '<em class="italic">$1</em>')
+    // Italic (*text* or _text_) - only when markers aren't embedded in words
+    html = html.replace(/(^|[^\w])\*([^*]+)\*([^\w]|$)/g, (_, before, text, after) => {
+      return `${before}<em class="italic">${text}</em>${after === undefined ? '' : after}`
+    })
+    html = html.replace(/(^|[^\w])_([^_]+)_([^\w]|$)/g, (_, before, text, after) => {
+      return `${before}<em class="italic">${text}</em>${after === undefined ? '' : after}`
+    })
     
     // Links [text](url)
     html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-blue-500 hover:underline" target="_blank" rel="noopener noreferrer">$1</a>')
