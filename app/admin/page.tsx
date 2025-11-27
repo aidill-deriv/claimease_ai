@@ -44,6 +44,7 @@ export default function AdminConsole() {
     fullName: "",
     role: "viewer",
   })
+  const [roleFilter, setRoleFilter] = useState<AllowedUserListItem["role"] | "all">("all")
 
   const fetchUsers = useCallback(async () => {
     try {
@@ -143,16 +144,19 @@ export default function AdminConsole() {
 
   const totalMembers = users.length
   const filteredUsers = useMemo(() => {
-    if (!searchTerm.trim()) {
-      return users
-    }
     const query = searchTerm.trim().toLowerCase()
     return users.filter((member) => {
+      if (roleFilter !== "all" && member.role !== roleFilter) {
+        return false
+      }
+      if (!query) {
+        return true
+      }
       const name = member.fullName?.toLowerCase() ?? ""
       const email = member.email.toLowerCase()
       return name.includes(query) || email.includes(query)
     })
-  }, [searchTerm, users])
+  }, [searchTerm, users, roleFilter])
 
   if (state.status === "loading") {
     return (
@@ -279,21 +283,39 @@ export default function AdminConsole() {
                   )
                 })}
               </div>
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                 <p className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
                   Search or filter members
                 </p>
-                <div className="w-full sm:max-w-xs">
-                  <Label htmlFor="member-search" className="sr-only">
-                    Search members
-                  </Label>
-                  <Input
-                    id="member-search"
-                    value={searchTerm}
-                    onChange={(event) => setSearchTerm(event.target.value)}
-                    placeholder="Search by name or email"
-                    className="bg-white dark:bg-slate-1000"
-                  />
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+                  <div className="w-full sm:max-w-xs">
+                    <Label htmlFor="member-search" className="sr-only">
+                      Search members
+                    </Label>
+                    <Input
+                      id="member-search"
+                      value={searchTerm}
+                      onChange={(event) => setSearchTerm(event.target.value)}
+                      placeholder="Search by name or email"
+                      className="bg-white dark:bg-slate-1000"
+                    />
+                  </div>
+                  <div className="w-full sm:w-48">
+                    <Label htmlFor="role-filter" className="sr-only">
+                      Filter by role
+                    </Label>
+                    <select
+                      id="role-filter"
+                      value={roleFilter}
+                      onChange={(event) => setRoleFilter(event.target.value as typeof roleFilter)}
+                      className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm dark:border-slate-700 dark:bg-slate-1000 dark:text-slate-200"
+                    >
+                      <option value="all">All roles</option>
+                      <option value="viewer">Viewer</option>
+                      <option value="admin">Admin</option>
+                      <option value="superadmin">Super Admin</option>
+                    </select>
+                  </div>
                 </div>
               </div>
             </CardHeader>
@@ -302,7 +324,9 @@ export default function AdminConsole() {
                 <p className="text-sm text-slate-500 dark:text-slate-400">Loading members…</p>
               ) : filteredUsers.length === 0 ? (
                 <p className="text-sm text-slate-500 dark:text-slate-400">
-                  {searchTerm ? `No members match "${searchTerm}".` : "No members found."}
+                  {roleFilter !== "all" || searchTerm
+                    ? "No members match the current search/filter."
+                    : "No members found."}
                 </p>
               ) : (
                 <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
