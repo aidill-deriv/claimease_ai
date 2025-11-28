@@ -1254,6 +1254,9 @@ video {
 .whitespace-nowrap {
   white-space: nowrap;
 }
+.break-all {
+  word-break: break-all;
+}
 .rounded {
   border-radius: 0.25rem;
 }
@@ -1377,6 +1380,9 @@ video {
 .border-yellow-100 {
   --tw-border-opacity: 1;
   border-color: rgb(255 247 230 / var(--tw-border-opacity, 1));
+}
+.border-muted-foreground\/20 {
+  border-color: hsl(var(--muted-foreground) / 0.2);
 }
 .border-t-transparent {
   border-top-color: transparent;

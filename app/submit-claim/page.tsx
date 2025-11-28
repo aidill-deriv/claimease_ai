@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Navigation } from "@/components/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -20,6 +20,7 @@ import {
   GraduationCap,
   Loader2,
   Sparkles,
+  XCircle,
 } from "lucide-react"
 import { submitClaimToSupabase } from "@/lib/supabase-claims"
 import { fetchDashboardData, type BalanceData } from "@/lib/supabase-dashboard"
@@ -85,6 +86,13 @@ const normalizeDateForInput = (value?: string | null) => {
   }
 
   return ""
+}
+
+const createFilePreviewUrl = (file: File | null) => {
+  if (file && file.type.startsWith("image/")) {
+    return URL.createObjectURL(file)
+  }
+  return null
 }
 
 const normalizeBenefitType = (value?: string | null): (typeof employeeBenefitTypeOptions)[number] | "" => {
@@ -227,6 +235,8 @@ type ClaimEntry = {
   amount: string
   attachment: File | null
   supportingAttachment: File | null
+  attachmentPreviewUrl: string | null
+  supportingAttachmentPreviewUrl: string | null
   serviceDate: string
   claimantName: string
   merchantName: string
@@ -237,6 +247,19 @@ type ClaimEntry = {
     hasPrescriptionDetails?: boolean
     note?: string | null
   }
+}
+
+const revokePreviewUrl = (url?: string | null) => {
+  if (url) {
+    URL.revokeObjectURL(url)
+  }
+}
+
+const cleanupEntryPreviews = (entries: ClaimEntry[]) => {
+  entries.forEach((entry) => {
+    revokePreviewUrl(entry.attachmentPreviewUrl)
+    revokePreviewUrl(entry.supportingAttachmentPreviewUrl)
+  })
 }
 
 type FormState = {
@@ -302,6 +325,7 @@ export default function SubmitClaim() {
   const [isProfileVerified, setIsProfileVerified] = useState(false)
   const [claimEntries, setClaimEntries] = useState<ClaimEntry[]>([])
   const [ocrStatuses, setOcrStatuses] = useState<Record<number, ReceiptOcrState>>({})
+  const claimEntriesRef = useRef<ClaimEntry[]>([])
   const [formData, setFormData] = useState<FormState>({
     fullName: "",
     employeeId: "",
@@ -319,6 +343,15 @@ export default function SubmitClaim() {
   })
   const [balanceData, setBalanceData] = useState<BalanceData | null>(null)
   const [balanceError, setBalanceError] = useState<string | null>(null)
+  useEffect(() => {
+    claimEntriesRef.current = claimEntries
+  }, [claimEntries])
+
+  useEffect(() => {
+    return () => {
+      cleanupEntryPreviews(claimEntriesRef.current)
+    }
+  }, [])
   const [isBalanceLoading, setIsBalanceLoading] = useState(false)
 
   const formatAmountForInput = (value: number | string | null | undefined) => {
@@ -640,7 +673,11 @@ export default function SubmitClaim() {
   useEffect(() => {
     setClaimEntries((prev) => {
       if (activeReceiptCount === 0) {
-        return prev.length === 0 ? prev : []
+        if (prev.length === 0) {
+          return prev
+        }
+        cleanupEntryPreviews(prev)
+        return []
       }
 
       if (activeReceiptCount > prev.length) {
@@ -650,6 +687,8 @@ export default function SubmitClaim() {
           amount: "",
           attachment: null,
           supportingAttachment: null,
+          attachmentPreviewUrl: null,
+          supportingAttachmentPreviewUrl: null,
           serviceDate: "",
           claimantName: "",
           merchantName: "",
@@ -661,6 +700,10 @@ export default function SubmitClaim() {
       }
 
       if (activeReceiptCount < prev.length) {
+        for (let i = activeReceiptCount; i < prev.length; i += 1) {
+          revokePreviewUrl(prev[i].attachmentPreviewUrl)
+          revokePreviewUrl(prev[i].supportingAttachmentPreviewUrl)
+        }
         return prev.slice(0, activeReceiptCount)
       }
 
@@ -714,7 +757,12 @@ export default function SubmitClaim() {
   )
 
   const resetClaimEntryState = useCallback(() => {
-    setClaimEntries([])
+    setClaimEntries((prev) => {
+      if (prev.length > 0) {
+        cleanupEntryPreviews(prev)
+      }
+      return []
+    })
     setOcrStatuses({})
   }, [])
 
@@ -762,7 +810,10 @@ export default function SubmitClaim() {
 
   const handleClaimEntryChange = (
     index: number,
-    field: keyof Omit<ClaimEntry, "attachment" | "supportingAttachment" | "opticalVerification">,
+    field: keyof Omit<
+      ClaimEntry,
+      "attachment" | "supportingAttachment" | "opticalVerification" | "attachmentPreviewUrl" | "supportingAttachmentPreviewUrl"
+    >,
     value: string,
   ) => {
     setClaimEntries((prev) => {
@@ -795,7 +846,15 @@ export default function SubmitClaim() {
     const currentEntry = claimEntries[index]
     setClaimEntries((prev) => {
       const next = [...prev]
-      next[index] = { ...next[index], attachment: file }
+      const existing = next[index]
+      if (!existing) {
+        return prev
+      }
+      if (existing.attachmentPreviewUrl) {
+        revokePreviewUrl(existing.attachmentPreviewUrl)
+      }
+      const previewUrl = createFilePreviewUrl(file)
+      next[index] = { ...existing, attachment: file, attachmentPreviewUrl: previewUrl }
       return next
     })
 
@@ -820,7 +879,15 @@ export default function SubmitClaim() {
   const handleSupportingAttachmentChange = (index: number, file: File | null) => {
     setClaimEntries((prev) => {
       const next = [...prev]
-      next[index] = { ...next[index], supportingAttachment: file }
+      const existing = next[index]
+      if (!existing) {
+        return prev
+      }
+      if (existing.supportingAttachmentPreviewUrl) {
+        revokePreviewUrl(existing.supportingAttachmentPreviewUrl)
+      }
+      const previewUrl = createFilePreviewUrl(file)
+      next[index] = { ...existing, supportingAttachment: file, supportingAttachmentPreviewUrl: previewUrl }
       return next
     })
   }
@@ -985,7 +1052,12 @@ export default function SubmitClaim() {
         headcount: "",
         localCurrency: "",
       })
-      setClaimEntries([])
+      setClaimEntries((prev) => {
+        if (prev.length > 0) {
+          cleanupEntryPreviews(prev)
+        }
+        return []
+      })
       setOcrStatuses({})
 
       setTimeout(() => {
@@ -1539,10 +1611,11 @@ export default function SubmitClaim() {
                             Claim {index + 1} Attachment (Invoice, approval and related document)*
                           </Label>
                           <div
-                            className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-4 text-center"
+                            className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-4 text-center transition-colors hover:border-coral-300 dark:hover:border-coral-600"
                             onDragOver={(event) => {
                               event.preventDefault()
                               event.stopPropagation()
+                              event.dataTransfer.dropEffect = "copy"
                             }}
                             onDrop={(event) => handleAttachmentDrop(event, index, "primary")}
                           >
@@ -1551,22 +1624,56 @@ export default function SubmitClaim() {
                               type="file"
                               className="hidden"
                               required
-                              onChange={(event) =>
-                                handleClaimEntryFileChange(index, event.target.files ? event.target.files[0] : null)
-                              }
+                              onChange={(event) => {
+                                const file = event.target.files ? event.target.files[0] : null
+                                handleClaimEntryFileChange(index, file)
+                                event.target.value = ""
+                              }}
                               accept=".pdf,.jpg,.jpeg,.png"
                             />
                             <label htmlFor={`claim-${index}-attachment`} className="cursor-pointer block">
-                              <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
                               {entry.attachment ? (
-                                <div className="space-y-1">
-                                  <p className="text-sm font-medium">{entry.attachment.name}</p>
-                                  <p className="text-xs text-muted-foreground">
-                                    {((entry.attachment.size || 0) / 1024).toFixed(2)} KB
-                                  </p>
+                                <div className="flex items-center justify-between gap-4 text-left">
+                                  <div className="flex items-center gap-3">
+                                    <div className="h-14 w-14 rounded-md border border-muted-foreground/20 bg-white dark:bg-slate-950 flex items-center justify-center overflow-hidden">
+                                      {entry.attachmentPreviewUrl ? (
+                                        // eslint-disable-next-line @next/next/no-img-element
+                                        <img
+                                          src={entry.attachmentPreviewUrl}
+                                          alt={`Receipt preview for claim ${index + 1}`}
+                                          className="h-full w-full object-cover"
+                                        />
+                                      ) : (
+                                        <FileText className="h-6 w-6 text-muted-foreground" />
+                                      )}
+                                    </div>
+                                    <div>
+                                      <p className="text-sm font-medium break-all">{entry.attachment.name}</p>
+                                      <p className="text-xs text-muted-foreground">
+                                        {((entry.attachment.size || 0) / 1024).toFixed(2)} KB
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <button
+                                    type="button"
+                                    onClick={(event) => {
+                                      event.preventDefault()
+                                      event.stopPropagation()
+                                      handleClaimEntryFileChange(index, null)
+                                    }}
+                                    className="inline-flex items-center gap-1 rounded-full border border-slate-200 dark:border-slate-700 px-3 py-1 text-xs text-slate-600 dark:text-slate-300 hover:border-coral-300 dark:hover:border-coral-600"
+                                  >
+                                    <XCircle className="h-3.5 w-3.5" />
+                                    Remove
+                                  </button>
                                 </div>
                               ) : (
-                                <p className="text-sm text-muted-foreground">Click to upload PDF/JPG/PNG (Max 5MB)</p>
+                                <div className="space-y-2">
+                                  <Upload className="h-8 w-8 mx-auto text-muted-foreground" />
+                                  <p className="text-sm text-muted-foreground">
+                                    Click or drag a receipt (PDF/JPG/PNG, max 5MB)
+                                  </p>
+                                </div>
                               )}
                             </label>
                           </div>
@@ -1608,10 +1715,11 @@ export default function SubmitClaim() {
                             Supporting documents / additional receipts (Optional)
                           </Label>
                           <div
-                            className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-4 text-center"
+                            className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-4 text-center transition-colors hover:border-coral-300 dark:hover:border-coral-600"
                             onDragOver={(event) => {
                               event.preventDefault()
                               event.stopPropagation()
+                              event.dataTransfer.dropEffect = "copy"
                             }}
                             onDrop={(event) => handleAttachmentDrop(event, index, "supporting")}
                           >
@@ -1619,27 +1727,56 @@ export default function SubmitClaim() {
                               id={`claim-${index}-supporting-attachment`}
                               type="file"
                               className="hidden"
-                              onChange={(event) =>
-                                handleSupportingAttachmentChange(
-                                  index,
-                                  event.target.files ? event.target.files[0] : null,
-                                )
-                              }
+                              onChange={(event) => {
+                                const file = event.target.files ? event.target.files[0] : null
+                                handleSupportingAttachmentChange(index, file)
+                                event.target.value = ""
+                              }}
                               accept=".pdf,.jpg,.jpeg,.png"
                             />
                             <label htmlFor={`claim-${index}-supporting-attachment`} className="cursor-pointer block">
-                              <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
                               {entry.supportingAttachment ? (
-                                <div className="space-y-1">
-                                  <p className="text-sm font-medium">{entry.supportingAttachment.name}</p>
-                                  <p className="text-xs text-muted-foreground">
-                                    {((entry.supportingAttachment.size || 0) / 1024).toFixed(2)} KB
-                                  </p>
+                                <div className="flex items-center justify-between gap-4 text-left">
+                                  <div className="flex items-center gap-3">
+                                    <div className="h-12 w-12 rounded-md border border-muted-foreground/20 bg-white dark:bg-slate-950 flex items-center justify-center overflow-hidden">
+                                      {entry.supportingAttachmentPreviewUrl ? (
+                                        // eslint-disable-next-line @next/next/no-img-element
+                                        <img
+                                          src={entry.supportingAttachmentPreviewUrl}
+                                          alt={`Supporting document preview for claim ${index + 1}`}
+                                          className="h-full w-full object-cover"
+                                        />
+                                      ) : (
+                                        <FileText className="h-5 w-5 text-muted-foreground" />
+                                      )}
+                                    </div>
+                                    <div>
+                                      <p className="text-sm font-medium break-all">{entry.supportingAttachment.name}</p>
+                                      <p className="text-xs text-muted-foreground">
+                                        {((entry.supportingAttachment.size || 0) / 1024).toFixed(2)} KB
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <button
+                                    type="button"
+                                    onClick={(event) => {
+                                      event.preventDefault()
+                                      event.stopPropagation()
+                                      handleSupportingAttachmentChange(index, null)
+                                    }}
+                                    className="inline-flex items-center gap-1 rounded-full border border-slate-200 dark:border-slate-700 px-3 py-1 text-xs text-slate-600 dark:text-slate-300 hover:border-coral-300 dark:hover:border-coral-600"
+                                  >
+                                    <XCircle className="h-3.5 w-3.5" />
+                                    Remove
+                                  </button>
                                 </div>
                               ) : (
-                                <p className="text-sm text-muted-foreground">
-                                  Upload approvals, proposals, or other supporting documents (optional)
-                                </p>
+                                <div className="space-y-2">
+                                  <Upload className="h-8 w-8 mx-auto text-muted-foreground" />
+                                  <p className="text-sm text-muted-foreground">
+                                    Drag or click to add approvals, proposals, or extra receipts (optional)
+                                  </p>
+                                </div>
                               )}
                             </label>
                           </div>
