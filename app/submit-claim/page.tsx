@@ -1650,9 +1650,12 @@ export default function SubmitClaim() {
                   </p>
                 )}
                 {claimExceedsBalance && (
-                  <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-3 text-sm font-medium text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300">
-                    <p>Your claim total exceeds your remaining balance by {formatCurrency(claimOverageAmount, balanceSnapshot.currency)}.</p>
-                    <p className="text-xs mt-1 text-red-600 dark:text-red-300">
+                  <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-3 text-sm font-medium text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-white">
+                    <p>
+                      Your claim total exceeds your remaining balance by{" "}
+                      {formatCurrency(claimOverageAmount, balanceSnapshot.currency)}.
+                    </p>
+                    <p className="text-xs mt-1 text-red-600 dark:text-white/80">
                       You will only receive {formatCurrency(balanceSnapshot.remaining, balanceSnapshot.currency)} after submission.
                     </p>
                   </div>
@@ -1673,7 +1676,7 @@ export default function SubmitClaim() {
                         </div>
                       </div>
                       <p className="text-xs text-slate-500 dark:text-slate-400">
-                        We’ll update your dashboard with this figure once Finance approves the claim.
+                        We’ll update your balance with this figure once Finance approves the claim.
                       </p>
                     </div>
                   </div>

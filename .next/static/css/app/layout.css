@@ -2503,6 +2503,11 @@ video {
   color: rgb(225 29 72 / var(--tw-text-opacity, 1));
 }
 
+.hover\:text-white:hover {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+}
+
 .hover\:underline:hover {
   text-decoration-line: underline;
 }
@@ -2556,6 +2561,11 @@ video {
 .focus\:ring-rose-500:focus {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(244 63 94 / var(--tw-ring-opacity, 1));
+}
+
+.focus-visible\:text-white:focus-visible {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
 }
 
 .focus-visible\:outline-none:focus-visible {
@@ -3075,6 +3085,10 @@ video {
   color: rgb(255 190 77 / var(--tw-text-opacity, 1));
 }
 
+.dark\:text-white\/80:is(.dark *) {
+  color: rgb(255 255 255 / 0.8);
+}
+
 .dark\:ring-coral-800:is(.dark *) {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(225 46 58 / var(--tw-ring-opacity, 1));
@@ -3147,6 +3161,16 @@ video {
 .dark\:hover\:text-red-300:hover:is(.dark *) {
   --tw-text-opacity: 1;
   color: rgb(255 153 153 / var(--tw-text-opacity, 1));
+}
+
+.dark\:hover\:text-white:hover:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+}
+
+.dark\:focus-visible\:text-white:focus-visible:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
 }
 
 .group:hover .dark\:group-hover\:border-coral-700:is(.dark *) {

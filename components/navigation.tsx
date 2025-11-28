@@ -90,8 +90,8 @@ export function Navigation() {
               isVertical ? "w-full justify-start" : ""
             } ${
               active
-                ? "bg-gradient-coral text-white shadow-lg hover:bg-gradient-coral-dark"
-                : "text-slate-700 dark:text-slate-300 hover:bg-coral-50 dark:hover:bg-coral-950 hover:text-coral-700 dark:hover:text-coral-400"
+                ? "bg-gradient-coral text-white dark:text-white shadow-lg hover:bg-gradient-coral-dark hover:text-white dark:hover:text-white focus-visible:text-white dark:focus-visible:text-white"
+                : "text-slate-700 dark:text-slate-300 hover:bg-coral-50 dark:hover:bg-coral-950 hover:text-coral-700 dark:hover:text-white"
             }`}
           >
             <Icon className="h-4 w-4 mr-2" />
@@ -196,7 +196,7 @@ export function Navigation() {
             variant="ghost"
             size="sm"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="w-full justify-start rounded-2xl hover:bg-coral-50 dark:hover:bg-coral-950 hover:text-coral-700 dark:hover:text-coral-400 transition-all duration-300"
+            className="w-full justify-start rounded-2xl text-slate-700 dark:text-white hover:bg-coral-50 dark:hover:bg-coral-950 hover:text-coral-700 dark:hover:text-white transition-all duration-300"
           >
             {theme === "dark" ? (
               <>
@@ -224,7 +224,7 @@ export function Navigation() {
                 variant="ghost"
                 size="icon"
                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                className="h-9 w-9 rounded-xl hover:bg-coral-50 dark:hover:bg-coral-950 hover:text-coral-700 dark:hover:text-coral-400 transition-all duration-300"
+                className="h-9 w-9 rounded-xl text-slate-700 dark:text-white hover:bg-coral-50 dark:hover:bg-coral-950 hover:text-coral-700 dark:hover:text-white transition-all duration-300"
               >
                 {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               </Button>
