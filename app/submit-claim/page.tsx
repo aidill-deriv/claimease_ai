@@ -226,6 +226,7 @@ type ClaimEntry = {
   currency: string
   amount: string
   attachment: File | null
+  supportingAttachment: File | null
   serviceDate: string
   claimantName: string
   merchantName: string
@@ -648,6 +649,7 @@ export default function SubmitClaim() {
           currency: "",
           amount: "",
           attachment: null,
+          supportingAttachment: null,
           serviceDate: "",
           claimantName: "",
           merchantName: "",
@@ -760,7 +762,7 @@ export default function SubmitClaim() {
 
   const handleClaimEntryChange = (
     index: number,
-    field: keyof Omit<ClaimEntry, "attachment" | "opticalVerification">,
+    field: keyof Omit<ClaimEntry, "attachment" | "supportingAttachment" | "opticalVerification">,
     value: string,
   ) => {
     setClaimEntries((prev) => {
@@ -812,6 +814,14 @@ export default function SubmitClaim() {
       location: formData.location,
       benefitType:
         formData.staffClaimType === "Employee Benefit" ? currentEntry?.benefitType || undefined : undefined,
+    })
+  }
+
+  const handleSupportingAttachmentChange = (index: number, file: File | null) => {
+    setClaimEntries((prev) => {
+      const next = [...prev]
+      next[index] = { ...next[index], supportingAttachment: file }
+      return next
     })
   }
 
@@ -927,6 +937,7 @@ export default function SubmitClaim() {
           currency: entry.currency,
           amount: parseFloat(entry.amount),
           attachment: entry.attachment,
+          supportingAttachment: entry.supportingAttachment,
           serviceDate: entry.serviceDate,
           claimantName: entry.claimantName,
           merchantName: entry.merchantName,
@@ -1567,6 +1578,44 @@ export default function SubmitClaim() {
                               )}
                             </div>
                           )}
+                        </div>
+                        <div className="space-y-2 md:col-span-2">
+                          <Label htmlFor={`claim-${index}-supporting-attachment`}>
+                            Supporting documents / additional receipts (Optional)
+                          </Label>
+                          <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-4 text-center">
+                            <input
+                              id={`claim-${index}-supporting-attachment`}
+                              type="file"
+                              className="hidden"
+                              onChange={(event) =>
+                                handleSupportingAttachmentChange(
+                                  index,
+                                  event.target.files ? event.target.files[0] : null,
+                                )
+                              }
+                              accept=".pdf,.jpg,.jpeg,.png"
+                            />
+                            <label htmlFor={`claim-${index}-supporting-attachment`} className="cursor-pointer block">
+                              <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                              {entry.supportingAttachment ? (
+                                <div className="space-y-1">
+                                  <p className="text-sm font-medium">{entry.supportingAttachment.name}</p>
+                                  <p className="text-xs text-muted-foreground">
+                                    {((entry.supportingAttachment.size || 0) / 1024).toFixed(2)} KB
+                                  </p>
+                                </div>
+                              ) : (
+                                <p className="text-sm text-muted-foreground">
+                                  Upload approvals, proposals, or other supporting documents (optional)
+                                </p>
+                              )}
+                            </label>
+                          </div>
+                          <p className="text-xs text-muted-foreground">
+                            Attach any extra documents Finance may need, such as approvals or proposals. Leave blank if not
+                            applicable.
+                          </p>
                         </div>
                       </div>
                       {formData.staffClaimType === "Employee Benefit" &&

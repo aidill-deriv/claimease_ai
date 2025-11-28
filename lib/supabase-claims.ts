@@ -23,6 +23,7 @@ export interface ClaimEntryPayload {
   currency: string
   amount: number
   attachment?: File | null
+  supportingAttachment?: File | null
   serviceDate?: string | null
   claimantName?: string | null
   merchantName?: string | null
@@ -91,12 +92,19 @@ export const submitClaimToSupabase = async (
 
   try {
     const attachmentPaths: (string | null)[] = []
+    const supportingAttachmentPaths: (string | null)[] = []
     for (const entry of payload.claimEntries) {
       if (entry.attachment) {
         const path = await uploadReceipt(entry.attachment, supabaseClient)
         attachmentPaths.push(path)
       } else {
         attachmentPaths.push(null)
+      }
+      if (entry.supportingAttachment) {
+        const supportingPath = await uploadReceipt(entry.supportingAttachment, supabaseClient)
+        supportingAttachmentPaths.push(supportingPath)
+      } else {
+        supportingAttachmentPaths.push(null)
       }
     }
 
@@ -111,6 +119,7 @@ export const submitClaimToSupabase = async (
       benefit_type: entry.benefitType || null,
       optical_verification: entry.opticalVerification || null,
       receipt_path: attachmentPaths[index],
+      supporting_receipt_path: supportingAttachmentPaths[index],
     }))
 
     const metadata = {
@@ -121,6 +130,8 @@ export const submitClaimToSupabase = async (
       receiptCount: payload.receiptCount,
       localCurrency: payload.localCurrency,
       claimEntries: claimEntrySummary,
+      primaryReceiptPaths: attachmentPaths,
+      supportingReceiptPaths: supportingAttachmentPaths,
     }
 
     const { error } = await supabaseClient.from(claimsTable).insert({
