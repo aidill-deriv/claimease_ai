@@ -824,6 +824,23 @@ export default function SubmitClaim() {
       return next
     })
   }
+  const handleAttachmentDrop = (
+    event: React.DragEvent<HTMLDivElement>,
+    index: number,
+    type: "primary" | "supporting",
+  ) => {
+    event.preventDefault()
+    event.stopPropagation()
+    const droppedFile = event.dataTransfer?.files?.[0]
+    if (!droppedFile) {
+      return
+    }
+    if (type === "primary") {
+      handleClaimEntryFileChange(index, droppedFile)
+    } else {
+      handleSupportingAttachmentChange(index, droppedFile)
+    }
+  }
 
   const departmentSelectOptions = useMemo(() => {
     if (formData.department && !departmentOptions.includes(formData.department)) {
@@ -1521,7 +1538,14 @@ export default function SubmitClaim() {
                           <Label htmlFor={`claim-${index}-attachment`}>
                             Claim {index + 1} Attachment (Invoice, approval and related document)*
                           </Label>
-                          <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-4 text-center">
+                          <div
+                            className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-4 text-center"
+                            onDragOver={(event) => {
+                              event.preventDefault()
+                              event.stopPropagation()
+                            }}
+                            onDrop={(event) => handleAttachmentDrop(event, index, "primary")}
+                          >
                             <input
                               id={`claim-${index}-attachment`}
                               type="file"
@@ -1583,7 +1607,14 @@ export default function SubmitClaim() {
                           <Label htmlFor={`claim-${index}-supporting-attachment`}>
                             Supporting documents / additional receipts (Optional)
                           </Label>
-                          <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-4 text-center">
+                          <div
+                            className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-4 text-center"
+                            onDragOver={(event) => {
+                              event.preventDefault()
+                              event.stopPropagation()
+                            }}
+                            onDrop={(event) => handleAttachmentDrop(event, index, "supporting")}
+                          >
                             <input
                               id={`claim-${index}-supporting-attachment`}
                               type="file"
