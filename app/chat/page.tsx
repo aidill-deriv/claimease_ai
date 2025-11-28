@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef, useMemo } from "react"
 import { useRouter } from "next/navigation"
 import { Navigation } from "@/components/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -31,12 +31,44 @@ const generateMessageId = () => {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`
 }
 
+const extractFirstNameFromEmail = (email: string) => {
+  if (!email) return ""
+  const [localPart] = email.split("@")
+  if (!localPart) return ""
+  const sanitized = localPart.replace(/[0-9]/g, "")
+  const firstSegment = sanitized.split(/[._-]+/).filter(Boolean)[0]
+  if (!firstSegment) return ""
+  const lower = firstSegment.toLowerCase()
+  return lower.charAt(0).toUpperCase() + lower.slice(1)
+}
+
+const personalizeAssistantResponse = (message: string, firstName: string) => {
+  if (!firstName || !message.trim()) {
+    return message
+  }
+
+  const trimmedMessage = message.trim()
+  const lowerMessage = trimmedMessage.toLowerCase()
+  const lowerFirstName = firstName.toLowerCase()
+  const alreadyAddressesUser =
+    lowerMessage.startsWith(`hi ${lowerFirstName}`) ||
+    lowerMessage.startsWith(`hello ${lowerFirstName}`) ||
+    lowerMessage.startsWith(`${lowerFirstName},`)
+
+  if (alreadyAddressesUser) {
+    return message
+  }
+
+  return `Hi ${firstName},\n\n${trimmedMessage}`
+}
+
 export default function Chat() {
   const router = useRouter()
   const { state, user } = useSession({
     redirectIfUnauthorized: () => router.push("/no-access"),
   })
   const userEmail = user?.email ?? ""
+  const userFirstName = useMemo(() => extractFirstNameFromEmail(userEmail), [userEmail])
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -68,11 +100,14 @@ export default function Chat() {
         console.warn("Failed to parse stored chat messages:", error)
       }
     } else {
+      const defaultGreeting = userFirstName
+        ? `Hi ${userFirstName}, I'm your AI assistant for claims and benefits. How can I help you today?`
+        : "Hello! I'm your AI assistant for claims and benefits. How can I help you today?"
       setMessages([
         {
           id: "welcome",
           role: "assistant",
-          content: "Hello! I'm your AI assistant for claims and benefits. How can I help you today?",
+          content: defaultGreeting,
           timestamp: new Date(),
         },
       ])
@@ -83,7 +118,7 @@ export default function Chat() {
     }
 
     setIsHydrated(true)
-  }, [userEmail, state.status])
+  }, [userEmail, state.status, userFirstName])
 
   useEffect(() => {
     if (!userEmail || !isHydrated) {
@@ -215,7 +250,7 @@ export default function Chat() {
       const assistantMessage: Message = {
         id: generateMessageId(),
         role: "assistant",
-        content: response.response,
+        content: personalizeAssistantResponse(response.response, userFirstName),
         timestamp: new Date(),
         model: response.model,
       }
