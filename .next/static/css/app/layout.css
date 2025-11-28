@@ -1234,6 +1234,9 @@ video {
   --tw-divide-opacity: 1;
   border-color: rgb(206 208 214 / var(--tw-divide-opacity, 1));
 }
+.self-start {
+  align-self: flex-start;
+}
 .overflow-hidden {
   overflow: hidden;
 }
@@ -3134,6 +3137,11 @@ video {
   border-color: rgb(244 63 94 / var(--tw-border-opacity, 1));
 }
 
+.dark\:hover\:border-coral-600:hover:is(.dark *) {
+  --tw-border-opacity: 1;
+  border-color: rgb(255 83 94 / var(--tw-border-opacity, 1));
+}
+
 .dark\:hover\:bg-coral-950:hover:is(.dark *) {
   --tw-bg-opacity: 1;
   background-color: rgb(166 14 25 / var(--tw-bg-opacity, 1));
@@ -3210,6 +3218,10 @@ video {
 
   .sm\:gap-4 {
     gap: 1rem;
+  }
+
+  .sm\:self-auto {
+    align-self: auto;
   }
 }
 

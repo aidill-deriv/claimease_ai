@@ -1,13 +1,13 @@
 "use client"
 
-import { useEffect, useState, useRef, useMemo } from "react"
+import { useEffect, useState, useRef, useMemo, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { Navigation } from "@/components/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Send, Bot, User, Sparkles, Lightbulb, Zap, ThumbsUp, ThumbsDown } from "lucide-react"
+import { Send, Bot, User, Sparkles, Lightbulb, Zap, ThumbsUp, ThumbsDown, RefreshCcw } from "lucide-react"
 import { API_BASE_URL, queryAI, submitFeedback } from "@/lib/api"
 import { MarkdownMessage } from "@/components/markdown-message"
 import { useSession } from "@/hooks/useSession"
@@ -42,9 +42,14 @@ const extractFirstNameFromEmail = (email: string) => {
   return lower.charAt(0).toUpperCase() + lower.slice(1)
 }
 
-const personalizeAssistantResponse = (message: string, firstName: string) => {
-  if (!firstName || !message.trim()) {
-    return message
+const messageContainsFirstName = (message: string, firstName: string) => {
+  if (!firstName || !message) return false
+  return message.toLowerCase().includes(firstName.toLowerCase())
+}
+
+const personalizeAssistantResponse = (message: string, firstName: string, shouldPersonalize: boolean) => {
+  if (!shouldPersonalize || !firstName || !message.trim()) {
+    return { text: message, personalized: false }
   }
 
   const trimmedMessage = message.trim()
@@ -55,12 +60,21 @@ const personalizeAssistantResponse = (message: string, firstName: string) => {
     lowerMessage.startsWith(`hello ${lowerFirstName}`) ||
     lowerMessage.startsWith(`${lowerFirstName},`)
 
-  if (alreadyAddressesUser) {
-    return message
+  if (alreadyAddressesUser || messageContainsFirstName(trimmedMessage, firstName)) {
+    return { text: message, personalized: false }
   }
 
-  return `Hi ${firstName},\n\n${trimmedMessage}`
+  return { text: `Hi ${firstName},\n\n${trimmedMessage}`, personalized: true }
 }
+
+const buildDefaultWelcomeMessage = (firstName?: string) => ({
+  id: "welcome",
+  role: "assistant" as const,
+  content: firstName
+    ? `Hi ${firstName}, I'm your AI assistant for claims and benefits. How can I help you today?`
+    : "Hello! I'm your AI assistant for claims and benefits. How can I help you today?",
+  timestamp: new Date(),
+})
 
 export default function Chat() {
   const router = useRouter()
@@ -76,6 +90,20 @@ export default function Chat() {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const [isHydrated, setIsHydrated] = useState(false)
   const [feedbackSubmittingId, setFeedbackSubmittingId] = useState<string | null>(null)
+  const [hasAddressedUser, setHasAddressedUser] = useState(false)
+  const handleNewConversation = useCallback(() => {
+    const welcomeMessage = buildDefaultWelcomeMessage(userFirstName)
+    setMessages([welcomeMessage])
+    setThreadId("")
+    setHasAddressedUser(Boolean(userFirstName))
+
+    if (typeof window !== "undefined" && userEmail) {
+      const messagesKey = `chatMessages:${userEmail}`
+      const threadKey = `chatThread:${userEmail}`
+      sessionStorage.removeItem(messagesKey)
+      sessionStorage.removeItem(threadKey)
+    }
+  }, [userFirstName, userEmail])
 
   useEffect(() => {
     if (!userEmail || state.status !== "authenticated") {
@@ -96,21 +124,20 @@ export default function Chat() {
             timestamp: new Date(msg.timestamp),
           })),
         )
+        if (userFirstName) {
+          const alreadyAddressed = parsed.some(
+            (msg) => msg.role === "assistant" && messageContainsFirstName(msg.content, userFirstName),
+          )
+          setHasAddressedUser(alreadyAddressed)
+        } else {
+          setHasAddressedUser(false)
+        }
       } catch (error) {
         console.warn("Failed to parse stored chat messages:", error)
       }
     } else {
-      const defaultGreeting = userFirstName
-        ? `Hi ${userFirstName}, I'm your AI assistant for claims and benefits. How can I help you today?`
-        : "Hello! I'm your AI assistant for claims and benefits. How can I help you today?"
-      setMessages([
-        {
-          id: "welcome",
-          role: "assistant",
-          content: defaultGreeting,
-          timestamp: new Date(),
-        },
-      ])
+      setMessages([buildDefaultWelcomeMessage(userFirstName)])
+      setHasAddressedUser(Boolean(userFirstName))
     }
 
     if (storedThread) {
@@ -139,6 +166,18 @@ export default function Chat() {
       console.warn("Failed to persist chat session:", error)
     }
   }, [messages, threadId, userEmail, isHydrated])
+
+  useEffect(() => {
+    if (!userFirstName || hasAddressedUser) {
+      return
+    }
+    const alreadyAddressed = messages.some(
+      (msg) => msg.role === "assistant" && messageContainsFirstName(msg.content, userFirstName),
+    )
+    if (alreadyAddressed) {
+      setHasAddressedUser(true)
+    }
+  }, [userFirstName, hasAddressedUser, messages])
 
   useEffect(() => {
     scrollToBottom()
@@ -247,15 +286,25 @@ export default function Chat() {
         context_messages: contextMessages,
       })
 
+      const { text: personalizedContent, personalized } = personalizeAssistantResponse(
+        response.response,
+        userFirstName,
+        Boolean(userFirstName) && !hasAddressedUser,
+      )
+
       const assistantMessage: Message = {
         id: generateMessageId(),
         role: "assistant",
-        content: personalizeAssistantResponse(response.response, userFirstName),
+        content: personalizedContent,
         timestamp: new Date(),
         model: response.model,
       }
 
       setMessages((prev) => [...prev, assistantMessage])
+      if (personalized) {
+        setHasAddressedUser(true)
+      }
+
       if (response.thread_id) {
         setThreadId(response.thread_id)
       }
@@ -279,13 +328,28 @@ export default function Chat() {
       <div className="container mx-auto px-4 py-8 max-w-5xl">
         {/* Header */}
         <div className="mb-6 animate-fade-in">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-1 h-8 bg-gradient-coral rounded-full"></div>
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">AI Assistant</h1>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-1 h-8 bg-gradient-coral rounded-full"></div>
+                <h1 className="text-3xl font-bold text-slate-900 dark:text-white">AI Assistant</h1>
+              </div>
+              <p className="text-slate-600 dark:text-slate-400 ml-7">
+                Ask me anything about your claims, policies, and benefits
+              </p>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleNewConversation}
+              disabled={isLoading}
+              className="inline-flex items-center gap-2 self-start sm:self-auto border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:border-coral-300 dark:hover:border-coral-600"
+            >
+              <RefreshCcw className="h-4 w-4" />
+              New conversation
+            </Button>
           </div>
-          <p className="text-slate-600 dark:text-slate-400 ml-7">
-            Ask me anything about your claims, policies, and benefits
-          </p>
         </div>
 
         {/* Chat Container */}
