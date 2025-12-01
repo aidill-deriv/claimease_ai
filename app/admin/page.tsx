@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { Trash2, Users, UserPlus, ShieldAlert } from "lucide-react"
+import { Trash2, Users, UserPlus, ShieldAlert, Crown } from "lucide-react"
 import { useSession } from "@/hooks/useSession"
 import { getAuthHeaders } from "@/lib/session"
 
@@ -196,6 +196,23 @@ export default function AdminConsole() {
             </div>
           )}
         </div>
+
+        {user?.role === "superadmin" && (
+          <Card className="border-amber-100 dark:border-amber-900 shadow-lg">
+            <CardHeader className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div className="space-y-1">
+                <CardTitle className="flex items-center gap-2 text-xl">
+                  <Crown className="h-5 w-5 text-amber-500" />
+                  Super Admin Tools
+                </CardTitle>
+                <CardDescription>Impersonate any active account to troubleshoot without knowing their password.</CardDescription>
+              </div>
+              <Button onClick={() => router.push("/admin/impersonate")} variant="outline">
+                Open impersonation page
+              </Button>
+            </CardHeader>
+          </Card>
+        )}
 
         <div className="grid gap-6 lg:grid-cols-2">
           <Card className="border-coral-100 dark:border-coral-900 shadow-lg">

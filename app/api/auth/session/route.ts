@@ -9,8 +9,12 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: result.error || "Unauthorized" }, { status: 401 })
     }
 
-    const { user } = result
-    const { token } = createSessionToken({ email: user.email, role: user.role })
+    const { user, payload } = result
+    const { token } = createSessionToken({
+      email: user.email,
+      role: user.role,
+      syntheticUser: payload.syntheticUser,
+    })
 
     return NextResponse.json({
       sessionToken: token,

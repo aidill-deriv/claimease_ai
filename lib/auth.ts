@@ -18,10 +18,19 @@ export type AllowedUserRecord = {
   updated_at?: string
 }
 
+export type SyntheticUserPayload = {
+  id: string
+  fullName?: string | null
+  source?: string
+  actorId?: string | null
+  actorEmail?: string | null
+}
+
 export type SessionPayload = {
   email: string
   role: AllowedUserRole
   exp: number
+  syntheticUser?: SyntheticUserPayload
 }
 
 const ROLE_RANK: Record<AllowedUserRole, number> = {
@@ -51,6 +60,9 @@ export const createSessionToken = (payload: Omit<SessionPayload, "exp"> & { ttlM
     email: payload.email,
     role: payload.role,
     exp: Date.now() + ttl,
+  }
+  if (payload.syntheticUser) {
+    sessionPayload.syntheticUser = payload.syntheticUser
   }
   const json = JSON.stringify(sessionPayload)
   const encoded = Buffer.from(json).toString("base64url")
@@ -215,12 +227,26 @@ export const requireSessionFromRequest = async (
     return { error: "Invalid or expired session token." }
   }
 
-  const user = await findAllowedUserByEmail(payload.email)
+  let user = await findAllowedUserByEmail(payload.email)
+  const isSyntheticUser = !user && Boolean(payload.syntheticUser)
+
   if (!user) {
-    return { error: "User no longer exists." }
+    if (!payload.syntheticUser) {
+      return { error: "User no longer exists." }
+    }
+    user = {
+      id: payload.syntheticUser.id,
+      email: payload.email,
+      full_name: payload.syntheticUser.fullName ?? null,
+      role: payload.role,
+      status: "active",
+      last_login_at: undefined,
+      created_at: undefined,
+      updated_at: undefined,
+    }
   }
 
-  if (user.status !== "active") {
+  if (!isSyntheticUser && user.status !== "active") {
     return { error: "Account is suspended." }
   }
 
