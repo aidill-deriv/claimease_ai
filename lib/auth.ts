@@ -1,6 +1,7 @@
 import crypto from "crypto"
 import { getSupabaseServiceClient } from "./supabase-service-client"
 import type { AllowedUserRole, AllowedUserStatus } from "@/types/auth"
+export type { AllowedUserRole, AllowedUserStatus } from "@/types/auth"
 
 const SESSION_TTL_MS = 12 * 60 * 60 * 1000 // 12 hours
 const SESSION_SECRET = process.env.CLAIMEASE_SESSION_SECRET || ""
@@ -99,7 +100,7 @@ export const verifySessionToken = (token: string): SessionPayload | null => {
 export const findAllowedUserByEmail = async (email: string) => {
   const supabase = getSupabaseServiceClient()
   const { data, error } = await supabase
-    .from<AllowedUserRecord>(allowedUsersTable)
+    .from(allowedUsersTable)
     .select("*")
     .ilike("email", email.toLowerCase())
     .maybeSingle()
@@ -114,7 +115,7 @@ export const findAllowedUserByEmail = async (email: string) => {
 export const findAllowedUserById = async (id: string) => {
   const supabase = getSupabaseServiceClient()
   const { data, error } = await supabase
-    .from<AllowedUserRecord>(allowedUsersTable)
+    .from(allowedUsersTable)
     .select("*")
     .eq("id", id)
     .maybeSingle()
@@ -182,7 +183,7 @@ export const deleteAllowedUserByEmail = async (email: string) => {
 export const listAllowedUsers = async () => {
   const supabase = getSupabaseServiceClient()
   const { data, error } = await supabase
-    .from<AllowedUserRecord>(allowedUsersTable)
+    .from(allowedUsersTable)
     .select("id,email,full_name,role,status,last_login_at,created_at")
     .order("email", { ascending: true })
 

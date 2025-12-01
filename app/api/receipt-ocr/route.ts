@@ -53,13 +53,29 @@ const formatAmount = (amount: number | string | null | undefined) => {
   return Number(parsed.toFixed(2))
 }
 
+const parseBooleanish = (value: unknown) => {
+  if (typeof value === "boolean") {
+    return value
+  }
+  if (typeof value === "string") {
+    const normalized = value.trim().toLowerCase()
+    if (["true", "1", "yes"].includes(normalized)) {
+      return true
+    }
+    if (["false", "0", "no"].includes(normalized)) {
+      return false
+    }
+  }
+  return null
+}
+
 export const runtime = "nodejs"
 export const maxDuration = 60
 
 export async function POST(request: Request) {
   const session = await requireSessionFromRequest(request)
-  if (session.error) {
-    return NextResponse.json({ error: session.error }, { status: 401 })
+  if (session.error || !session.user) {
+    return NextResponse.json({ error: session.error || "Unauthorized." }, { status: 401 })
   }
   const sessionUser = session.user
   if (!isOcrEnabled()) {
@@ -183,18 +199,8 @@ Extra context:
           ? Number(parsed.confidence.toFixed(3))
           : null,
       customerName: parsed.customerName?.toString().trim() || null,
-      isOpticalReceipt:
-        typeof parsed.isOpticalReceipt === "boolean"
-          ? parsed.isOpticalReceipt
-          : typeof parsed.isOpticalReceipt === "string"
-            ? ["true", "1", "yes"].includes(parsed.isOpticalReceipt.toLowerCase())
-            : null,
-      hasPrescriptionDetails:
-        typeof parsed.hasPrescriptionDetails === "boolean"
-          ? parsed.hasPrescriptionDetails
-          : typeof parsed.hasPrescriptionDetails === "string"
-            ? ["true", "1", "yes"].includes(parsed.hasPrescriptionDetails.toLowerCase())
-            : null,
+      isOpticalReceipt: parseBooleanish(parsed.isOpticalReceipt),
+      hasPrescriptionDetails: parseBooleanish(parsed.hasPrescriptionDetails),
       opticalVerificationNote: parsed.opticalVerificationNote?.toString().trim() || null,
       benefitType: parsed.benefitType?.toString().trim() || null,
     }

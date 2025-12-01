@@ -15,6 +15,7 @@ type EmployeeProfile = {
   location?: string | null
   country?: string | null
   company?: string | null
+  company_name?: string | null
   hiring_company?: string | null
 }
 
@@ -60,9 +61,9 @@ export async function POST(request: Request) {
     }
 
     const normalized = {
-      fullName: data.employee_name || data.name || data.full_name || data.fullName || null,
+      fullName: data.employee_name || data.name || data.full_name || null,
       employeeId: data.employee_id || data.employeeId || null,
-      department: data.department || data.department_name || data.departmentName || null,
+      department: data.department || data.department_name || null,
       email: data.email || email,
       location: data.office_location || data.location || data.country || null,
       company: data.company || data.hiring_company || data.company_name || null,

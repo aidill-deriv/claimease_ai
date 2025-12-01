@@ -180,6 +180,7 @@ type ClaimSummaryRow = {
   total_transaction_amount?: number | null
   remaining_balance?: number | null
   currency?: string | null
+  country?: string | null
 }
 
 type ClaimAnalysisRow = {

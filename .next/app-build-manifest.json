@@ -1,45 +1,89 @@
 {
   "pages": {
-    "/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
+    "/_not-found/page": [
+      "static/chunks/webpack-cf0a3d0edcfcbb3f.js",
+      "static/chunks/fd9d1056-82fc2a82826c61b9.js",
+      "static/chunks/23-82c7f9cb13bcac3f.js",
+      "static/chunks/main-app-9ccdd3a7958b10e2.js",
+      "static/chunks/app/_not-found/page-6ec1fecda0762057.js"
     ],
     "/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/layout.css",
-      "static/chunks/app/layout.js"
-    ],
-    "/dashboard/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/page.js"
-    ],
-    "/chat/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/chat/page.js"
-    ],
-    "/admin/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/admin/page.js"
-    ],
-    "/submit-claim/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/submit-claim/page.js"
+      "static/chunks/webpack-cf0a3d0edcfcbb3f.js",
+      "static/chunks/fd9d1056-82fc2a82826c61b9.js",
+      "static/chunks/23-82c7f9cb13bcac3f.js",
+      "static/chunks/main-app-9ccdd3a7958b10e2.js",
+      "static/css/dd443eda00318f87.css",
+      "static/chunks/app/layout-7a1cdb16e91053f5.js"
     ],
     "/admin/impersonate/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/admin/impersonate/page.js"
+      "static/chunks/webpack-cf0a3d0edcfcbb3f.js",
+      "static/chunks/fd9d1056-82fc2a82826c61b9.js",
+      "static/chunks/23-82c7f9cb13bcac3f.js",
+      "static/chunks/main-app-9ccdd3a7958b10e2.js",
+      "static/chunks/225-12c010b959897413.js",
+      "static/chunks/923-e5e9b07fa27d80da.js",
+      "static/chunks/75-266ef2f060f09814.js",
+      "static/chunks/app/admin/impersonate/page-4cb3392495f08c69.js"
+    ],
+    "/admin/page": [
+      "static/chunks/webpack-cf0a3d0edcfcbb3f.js",
+      "static/chunks/fd9d1056-82fc2a82826c61b9.js",
+      "static/chunks/23-82c7f9cb13bcac3f.js",
+      "static/chunks/main-app-9ccdd3a7958b10e2.js",
+      "static/chunks/225-12c010b959897413.js",
+      "static/chunks/923-e5e9b07fa27d80da.js",
+      "static/chunks/75-266ef2f060f09814.js",
+      "static/chunks/app/admin/page-dd0d87297fe0d514.js"
+    ],
+    "/chat/page": [
+      "static/chunks/webpack-cf0a3d0edcfcbb3f.js",
+      "static/chunks/fd9d1056-82fc2a82826c61b9.js",
+      "static/chunks/23-82c7f9cb13bcac3f.js",
+      "static/chunks/main-app-9ccdd3a7958b10e2.js",
+      "static/chunks/225-12c010b959897413.js",
+      "static/chunks/923-e5e9b07fa27d80da.js",
+      "static/chunks/578-bc2abb5265b5d279.js",
+      "static/chunks/324-9f5fb0dc0914df06.js",
+      "static/chunks/75-266ef2f060f09814.js",
+      "static/chunks/app/chat/page-0173cc9f6e2bb3a9.js"
     ],
     "/no-access/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/no-access/page.js"
+      "static/chunks/webpack-cf0a3d0edcfcbb3f.js",
+      "static/chunks/fd9d1056-82fc2a82826c61b9.js",
+      "static/chunks/23-82c7f9cb13bcac3f.js",
+      "static/chunks/main-app-9ccdd3a7958b10e2.js",
+      "static/chunks/225-12c010b959897413.js",
+      "static/chunks/app/no-access/page-1608eb7dbba221bb.js"
+    ],
+    "/page": [
+      "static/chunks/webpack-cf0a3d0edcfcbb3f.js",
+      "static/chunks/fd9d1056-82fc2a82826c61b9.js",
+      "static/chunks/23-82c7f9cb13bcac3f.js",
+      "static/chunks/main-app-9ccdd3a7958b10e2.js",
+      "static/chunks/225-12c010b959897413.js",
+      "static/chunks/app/page-6c41e1fb67a654d6.js"
+    ],
+    "/submit-claim/page": [
+      "static/chunks/webpack-cf0a3d0edcfcbb3f.js",
+      "static/chunks/fd9d1056-82fc2a82826c61b9.js",
+      "static/chunks/23-82c7f9cb13bcac3f.js",
+      "static/chunks/main-app-9ccdd3a7958b10e2.js",
+      "static/chunks/225-12c010b959897413.js",
+      "static/chunks/923-e5e9b07fa27d80da.js",
+      "static/chunks/578-bc2abb5265b5d279.js",
+      "static/chunks/173-c331719c821c40a5.js",
+      "static/chunks/75-266ef2f060f09814.js",
+      "static/chunks/app/submit-claim/page-d178948e219e8bc4.js"
+    ],
+    "/dashboard/page": [
+      "static/chunks/webpack-cf0a3d0edcfcbb3f.js",
+      "static/chunks/fd9d1056-82fc2a82826c61b9.js",
+      "static/chunks/23-82c7f9cb13bcac3f.js",
+      "static/chunks/main-app-9ccdd3a7958b10e2.js",
+      "static/chunks/225-12c010b959897413.js",
+      "static/chunks/923-e5e9b07fa27d80da.js",
+      "static/chunks/75-266ef2f060f09814.js",
+      "static/chunks/app/dashboard/page-7dafd35ad42629a8.js"
     ]
   }
 }

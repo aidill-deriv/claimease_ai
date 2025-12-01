@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server"
 import { createSessionToken, requireSessionFromRequest } from "@/lib/auth"
 
+export const dynamic = "force-dynamic"
+
 export async function GET(request: Request) {
   try {
     const result = await requireSessionFromRequest(request)

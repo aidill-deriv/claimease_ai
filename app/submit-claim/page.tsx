@@ -249,6 +249,22 @@ type ClaimEntry = {
   }
 }
 
+const createEmptyClaimEntry = (): ClaimEntry => ({
+  description: "",
+  currency: "",
+  amount: "",
+  attachment: null,
+  supportingAttachment: null,
+  attachmentPreviewUrl: null,
+  supportingAttachmentPreviewUrl: null,
+  serviceDate: "",
+  claimantName: "",
+  merchantName: "",
+  isOpticalReceipt: false,
+  benefitType: "",
+  opticalVerification: undefined,
+})
+
 const revokePreviewUrl = (url?: string | null) => {
   if (url) {
     URL.revokeObjectURL(url)
@@ -681,21 +697,7 @@ export default function SubmitClaim() {
       }
 
       if (activeReceiptCount > prev.length) {
-        const additions = Array.from({ length: activeReceiptCount - prev.length }, () => ({
-          description: "",
-          currency: "",
-          amount: "",
-          attachment: null,
-          supportingAttachment: null,
-          attachmentPreviewUrl: null,
-          supportingAttachmentPreviewUrl: null,
-          serviceDate: "",
-          claimantName: "",
-          merchantName: "",
-          isOpticalReceipt: false,
-          benefitType: "",
-          opticalVerification: undefined,
-        }))
+        const additions = Array.from({ length: activeReceiptCount - prev.length }, () => createEmptyClaimEntry())
         return [...prev, ...additions]
       }
 
