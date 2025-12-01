@@ -20,11 +20,6 @@ type ReceiptExtraction = {
 
 const RECEIPT_MAX_MB = 5
 
-const isOcrEnabled = () => {
-  const flag = process.env.ENABLE_RECEIPT_OCR || process.env.NEXT_PUBLIC_ENABLE_RECEIPT_OCR
-  return typeof flag === "string" && ["1", "true", "yes"].includes(flag.toLowerCase())
-}
-
 const sanitizeJsonString = (payload: string) => {
   let cleaned = payload.trim()
   if (!cleaned) {
@@ -78,9 +73,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: session.error || "Unauthorized." }, { status: 401 })
   }
   const sessionUser = session.user
-  if (!isOcrEnabled()) {
-    return NextResponse.json({ error: "Receipt OCR is disabled." }, { status: 503 })
-  }
 
   const apiKey = process.env.GEMINI_API_KEY
   if (!apiKey) {

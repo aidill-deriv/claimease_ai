@@ -15,7 +15,7 @@ Centralized list of every environment variable the ClaimEase stack uses across l
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase service-role key (server-side only). | Store in Render / Cloud Run secrets. |
 | `SUPABASE_ANON_KEY` | Supabase anon/public key (required client-side). | Exposed via `NEXT_PUBLIC_SUPABASE_ANON_KEY`. |
 | `OPENAI_API_KEY` | GPT key for the AI agent & chat. | Format `sk-...`. |
-| `GEMINI_API_KEY` | Google Generative AI key for receipt OCR. | Needed if OCR enabled. |
+| `GEMINI_API_KEY` | Google Generative AI key for receipt OCR (feature always on when key exists). | Format `AIza...`. |
 | `GEMINI_RECEIPT_MODEL` | Optional override of the OCR model. | Default `gemini-2.5-flash`. |
 
 ---
@@ -32,7 +32,6 @@ Set these in Vercel (Production + Preview) or Cloud Run if you host the Next.js 
 | `NEXT_PUBLIC_SUPABASE_SUMMARY_TABLE` | Claim summary table name. | `claim_summary` |
 | `NEXT_PUBLIC_SUPABASE_ANALYSIS_TABLE` | Claim analysis table name. | `claim_analysis` |
 | `NEXT_PUBLIC_SUPABASE_EMPLOYEE_TABLE` | Employee directory table. | `employee_email` |
-| `NEXT_PUBLIC_ENABLE_RECEIPT_OCR` | `"true"` / `"false"` toggle. | Sync with backend flag. |
 | `NEXT_PUBLIC_BENEFIT_INELIGIBLE_COUNTRIES` | CSV list for restricted benefits. | `France,Malta` |
 
 ---
@@ -43,7 +42,6 @@ Add the core secrets plus the following:
 
 | Key | Description | Example |
 | --- | --- | --- |
-| `ENABLE_RECEIPT_OCR` | Mirrors `NEXT_PUBLIC_ENABLE_RECEIPT_OCR`. | `true` |
 | `KNOWLEDGE_BASE_SOURCE` | `supabase` or `local`. | `supabase` |
 | `DISABLE_KNOWLEDGE_BASE` | `"true"` to turn off KB usage. | `false` |
 | `KNOWLEDGE_BASE_COUNTRY` | Restrict KB search. | `global` |
@@ -67,7 +65,6 @@ SUPABASE_SERVICE_ROLE_KEY=service-role-key
 OPENAI_API_KEY=sk-********
 GEMINI_API_KEY=AIza********
 GEMINI_RECEIPT_MODEL=gemini-2.5-flash
-ENABLE_RECEIPT_OCR=true
 KNOWLEDGE_BASE_SOURCE=supabase
 DISABLE_KNOWLEDGE_BASE=false
 BENEFIT_INELIGIBLE_COUNTRIES=France,Malta
@@ -81,7 +78,6 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1...
 NEXT_PUBLIC_SUPABASE_SUMMARY_TABLE=claim_summary
 NEXT_PUBLIC_SUPABASE_ANALYSIS_TABLE=claim_analysis
 NEXT_PUBLIC_SUPABASE_EMPLOYEE_TABLE=employee_email
-NEXT_PUBLIC_ENABLE_RECEIPT_OCR=true
 NEXT_PUBLIC_BENEFIT_INELIGIBLE_COUNTRIES=France,Malta
 CLAIMEASE_SESSION_SECRET=local-dev-secret
 ```

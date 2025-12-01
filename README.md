@@ -70,8 +70,7 @@ docs/                    # How-tos (Cloudflare tunnel, deployment, etc.)
      NEXT_PUBLIC_SUPABASE_SUMMARY_TABLE=claim_summary
      NEXT_PUBLIC_SUPABASE_ANALYSIS_TABLE=claim_analysis
      NEXT_PUBLIC_SUPABASE_EMPLOYEE_TABLE=employee_email
-     NEXT_PUBLIC_ENABLE_RECEIPT_OCR=false
-     ```
+    ```
 
 ---
 
@@ -132,4 +131,3 @@ Backend validation lives in `app/api/admin/impersonate/route.ts` and mints a syn
 For more background (schema diagrams, deployment steps, troubleshooting), browse the `docs/` and `supabase_schema/` folders.
 
 ---
-

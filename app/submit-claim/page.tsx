@@ -29,13 +29,6 @@ import { cn } from "@/lib/utils"
 import { useSession } from "@/hooks/useSession"
 import { getAuthHeaders } from "@/lib/session"
 
-const isTruthyFlag = (value?: string | null) => {
-  if (!value) {
-    return false
-  }
-  return ["1", "true", "yes", "on"].includes(value.toLowerCase())
-}
-
 const appendMerchantToDescription = (description: string, merchantName: string) => {
   const trimmedMerchant = merchantName.trim()
   if (!trimmedMerchant) {
@@ -318,14 +311,7 @@ type ReceiptOcrState = {
   message?: string
 }
 
-const receiptOcrFeatureEnabled = (() => {
-  const flagValue =
-    process.env.NEXT_PUBLIC_ENABLE_RECEIPT_OCR ||
-    process.env.ENABLE_RECEIPT_OCR ||
-    process.env.NEXT_PUBLIC_RECEIPT_OCR ||
-    ""
-  return isTruthyFlag(flagValue.toString())
-})()
+const receiptOcrFeatureEnabled = true
 
 export default function SubmitClaim() {
   const router = useRouter()

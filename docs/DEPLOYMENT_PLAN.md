@@ -32,7 +32,7 @@ ClaimEase uses the same Supabase backend for both environments. We promote code 
 | `SUPABASE_ANON_KEY` | Optional (only if backend proxies anon calls) |
 | `CLAIMEASE_SESSION_SECRET` | Must match frontend |
 | `KNOWLEDGE_BASE_SOURCE`, `DISABLE_KNOWLEDGE_BASE`, `KNOWLEDGE_BASE_COUNTRY` | Feature flags |
-| `ENABLE_RECEIPT_OCR`, `GEMINI_API_KEY`, `GEMINI_RECEIPT_MODEL` | OCR support |
+| `GEMINI_API_KEY`, `GEMINI_RECEIPT_MODEL` | Receipt OCR (always on when keys are set) |
 | Slack keys (optional) | Omit if Slack is disabled |
 
 4. Deploy and grab the Render URL (e.g., `https://claimease-api.onrender.com`). Keep it handy for the frontend.
@@ -49,7 +49,6 @@ ClaimEase uses the same Supabase backend for both environments. We promote code 
 | `SUPABASE_SERVICE_ROLE_KEY` | Only if server components need it (Vercel keeps it server-side) |
 | `CLAIMEASE_SESSION_SECRET` | Same as backend |
 | `NEXT_PUBLIC_SUPABASE_SUMMARY_TABLE`, `NEXT_PUBLIC_SUPABASE_ANALYSIS_TABLE`, etc. | Table names |
-| `NEXT_PUBLIC_ENABLE_RECEIPT_OCR`, `ENABLE_RECEIPT_OCR`, OCR model flags | Optional |
 | Knowledge-base flags | `DISABLE_KNOWLEDGE_BASE`, `KNOWLEDGE_BASE_SOURCE=supabase` |
 
 3. Deploy. Vercel provides a URL like `https://claimease-uat.vercel.app`.
@@ -166,4 +165,3 @@ If you split services:
 - **How do we switch back to local?** Set `NEXT_PUBLIC_API_URL=http://localhost:8001` and run `npm run backend` + `npm run dev`. Environment files already support toggling the knowledge base source (`KNOWLEDGE_BASE_SOURCE=local`).
 
 This two-tier plan keeps UAT lightweight for rapid iteration while giving us a path to a hardened production deployment on Cloud Run once features are stable.
-
