@@ -133,4 +133,3 @@ For more background (schema diagrams, deployment steps, troubleshooting), browse
 
 ---
 
-Happy shipping! 🎉
