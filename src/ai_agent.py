@@ -6,23 +6,8 @@ All queries are email-scoped for security.
 import os
 from typing import List, Dict, Any, Optional
 from dotenv import load_dotenv
-try:
-    from langchain_openai import ChatOpenAI
-except ImportError:
-    try:
-        from langchain.chat_models import ChatOpenAI
-    except ImportError as exc:
-        raise ImportError(
-            "ChatOpenAI import failed. Install either langchain_openai or use a langchain version that "
-            "includes langchain.chat_models."
-        ) from exc
-
-try:
-    from langchain.agents import AgentExecutor, create_tool_calling_agent
-except ImportError:
-    # Newer langchain versions may relocate AgentExecutor; attempt fallback path.
-    from langchain.agents.agent import AgentExecutor  # type: ignore
-    from langchain.agents.tool_calling_agent.base import create_tool_calling_agent  # type: ignore
+from langchain_openai import ChatOpenAI
+from langchain.agents import AgentExecutor, create_tool_calling_agent
 from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.memory import ConversationBufferMemory
 from langchain_core.messages import HumanMessage, AIMessage
