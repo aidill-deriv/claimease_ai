@@ -1,18 +1,18 @@
 # Core dependencies
-python-dotenv
-fastapi
-uvicorn[standard]
-slack-sdk
-requests
+python-dotenv==1.0.1
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+slack-sdk==3.27.2
+requests==2.32.3
 
-# AI/ML dependencies (compatible versions)
-langchain
-langchain-openai
-langchain-community
-openai
+# AI/ML dependencies (pin versions for LangChain API compatibility)
+langchain==0.1.20
+langchain-openai==0.1.8
+langchain-community==0.0.38
+openai==1.51.0
 
 # Database
-chromadb
+chromadb==0.5.5
 
 # Testing
-pytest
+pytest==8.3.2
