@@ -91,6 +91,18 @@ const createFilePreviewUrl = (file: File | null) => {
   return null
 }
 
+const computeFileHash = async (file: File) => {
+  try {
+    const buffer = await file.arrayBuffer()
+    const hashBuffer = await crypto.subtle.digest("SHA-256", buffer)
+    const hashArray = Array.from(new Uint8Array(hashBuffer))
+    return hashArray.map((byte) => byte.toString(16).padStart(2, "0")).join("")
+  } catch (error) {
+    console.error("Failed to hash file", error)
+    return `${file.name}-${file.size}`
+  }
+}
+
 const normalizeBenefitType = (value?: string | null): (typeof employeeBenefitTypeOptions)[number] | "" => {
   if (!value) {
     return ""
@@ -230,6 +242,7 @@ type ClaimEntry = {
   currency: string
   amount: string
   attachment: File | null
+  attachmentHash?: string | null
   supportingAttachment: File | null
   attachmentPreviewUrl: string | null
   supportingAttachmentPreviewUrl: string | null
@@ -250,6 +263,7 @@ const createEmptyClaimEntry = (): ClaimEntry => ({
   currency: "",
   amount: "",
   attachment: null,
+  attachmentHash: null,
   supportingAttachment: null,
   attachmentPreviewUrl: null,
   supportingAttachmentPreviewUrl: null,
@@ -314,6 +328,12 @@ type ReceiptOcrState = {
   message?: string
 }
 
+type DuplicateStatus = {
+  isDuplicate: boolean
+  reason: string
+  matches: number[]
+}
+
 const receiptOcrFeatureEnabled = true
 
 export default function SubmitClaim() {
@@ -331,6 +351,7 @@ export default function SubmitClaim() {
   const [isProfileVerified, setIsProfileVerified] = useState(false)
   const [claimEntries, setClaimEntries] = useState<ClaimEntry[]>([])
   const [ocrStatuses, setOcrStatuses] = useState<Record<number, ReceiptOcrState>>({})
+  const [duplicateStatuses, setDuplicateStatuses] = useState<Record<number, DuplicateStatus>>({})
   const claimEntriesRef = useRef<ClaimEntry[]>([])
   const [formData, setFormData] = useState<FormState>({
     fullName: "",
@@ -716,6 +737,51 @@ export default function SubmitClaim() {
     })
   }, [activeReceiptCount])
 
+  useEffect(() => {
+    const nextStatuses: Record<number, DuplicateStatus> = {}
+
+    claimEntries.forEach((entry, index) => {
+      if (!entry.attachment) {
+        nextStatuses[index] = { isDuplicate: false, reason: "", matches: [] }
+        return
+      }
+
+      const matches = new Set<number>()
+      const reasons = new Set<string>()
+
+      claimEntries.forEach((other, otherIndex) => {
+        if (otherIndex === index || !other.attachment) {
+          return
+        }
+
+        if (entry.attachment.name.toLowerCase() === other.attachment.name.toLowerCase()) {
+          matches.add(otherIndex)
+          reasons.add("same filename")
+        }
+
+        if (entry.attachmentHash && other.attachmentHash && entry.attachmentHash === other.attachmentHash) {
+          matches.add(otherIndex)
+          const amountA = parseFloat(entry.amount)
+          const amountB = parseFloat(other.amount)
+          const amountsMatch = !Number.isNaN(amountA) && !Number.isNaN(amountB) && amountA === amountB
+          reasons.add(amountsMatch ? "identical file & amount" : "identical file content")
+        }
+      })
+
+      if (matches.size > 0) {
+        const matchList = Array.from(matches.values())
+        const reasonText = `Matches claim ${matchList.map((idx) => idx + 1).join(", ")} (${Array.from(reasons).join(
+          " + ",
+        )})`
+        nextStatuses[index] = { isDuplicate: true, reason: reasonText, matches: matchList }
+      } else {
+        nextStatuses[index] = { isDuplicate: false, reason: "", matches: [] }
+      }
+    })
+
+    setDuplicateStatuses(nextStatuses)
+  }, [claimEntries])
+
   const calculatedTotal = useMemo(() => {
     return claimEntries.reduce((sum, entry) => {
       const parsedAmount = parseFloat(entry.amount)
@@ -726,8 +792,19 @@ export default function SubmitClaim() {
     }, 0)
   }, [claimEntries])
 
+  const hasDuplicates = useMemo(
+    () => Object.values(duplicateStatuses).some((status) => status?.isDuplicate),
+    [duplicateStatuses],
+  )
+
   const lockPersonalFields = isProfileVerified && !profileError
   const lockedFieldClass = lockPersonalFields ? "bg-muted/60 text-muted-foreground cursor-not-allowed" : ""
+
+  const entryRequiresOpticalProof = useCallback(
+    (entry: ClaimEntry) =>
+      formData.staffClaimType === "Employee Benefit" && entry.benefitType === "Optical" && !entry.opticalVerification?.verified,
+    [formData.staffClaimType],
+  )
 
   const verifiedProfileFields = useMemo(
     () => [
@@ -846,9 +923,24 @@ export default function SubmitClaim() {
         revokePreviewUrl(existing.attachmentPreviewUrl)
       }
       const previewUrl = createFilePreviewUrl(file)
-      next[index] = { ...existing, attachment: file, attachmentPreviewUrl: previewUrl }
+      next[index] = { ...existing, attachment: file, attachmentPreviewUrl: previewUrl, attachmentHash: file ? undefined : null }
       return next
     })
+
+    if (file) {
+      void (async () => {
+        const hash = await computeFileHash(file)
+        setClaimEntries((prev) => {
+          const next = [...prev]
+          const existing = next[index]
+          if (!existing || existing.attachment !== file) {
+            return prev
+          }
+          next[index] = { ...existing, attachmentHash: hash }
+          return next
+        })
+      })()
+    }
 
     if (!receiptOcrFeatureEnabled) {
       return
@@ -960,7 +1052,13 @@ export default function SubmitClaim() {
       if (Number.isNaN(parsedAmount) || parsedAmount <= 0) {
         return true
       }
-      return entry.attachment === null
+      if (entry.attachment === null) {
+        return true
+      }
+      if (entryRequiresOpticalProof(entry) && !entry.supportingAttachment) {
+        return true
+      }
+      return false
     })
 
     if (invalidEntry) {
@@ -1101,14 +1199,30 @@ export default function SubmitClaim() {
     { number: 3, title: "Supporting Documents", description: "Add optional supporting documents" },
   ]
 
-  const isStep1Valid = activeReceiptCount > 0 && claimEntries.length > 0 && claimEntries.every(entry => entry.attachment)
+  const isStep1Valid =
+    activeReceiptCount > 0 &&
+    claimEntries.length > 0 &&
+    claimEntries.every((entry) => entry.attachment) &&
+    !hasDuplicates
   const isStep2Valid = formData.staffClaimType && claimEntries.every(entry => 
     entry.description && entry.currency && entry.amount && entry.serviceDate && 
     entry.claimantName && entry.merchantName &&
     (formData.staffClaimType !== "Employee Benefit" || entry.benefitType)
   )
+  const isStep3Valid = claimEntries.every((entry) => {
+    if (!entryRequiresOpticalProof(entry)) {
+      return true
+    }
+    return Boolean(entry.supportingAttachment)
+  })
 
   const handleNextStep = () => {
+    if (currentStep === 1 && hasDuplicates) {
+      return
+    }
+    if (currentStep === 3 && !isStep3Valid) {
+      return
+    }
     if (currentStep < 3) {
       setCurrentStep(currentStep + 1)
     }
@@ -1129,6 +1243,9 @@ export default function SubmitClaim() {
   }
 
   const handleStepClick = (stepNumber: number) => {
+    if (stepNumber === 4 && !isStep3Valid) {
+      return
+    }
     if (canNavigateToStep(stepNumber)) {
       setCurrentStep(stepNumber)
     }
@@ -1373,6 +1490,7 @@ export default function SubmitClaim() {
                     <div className="space-y-8">
                       {claimEntries.map((entry, index) => {
                         const entryStatus = ocrStatuses[index] || { state: "idle" }
+                        const duplicateStatus = duplicateStatuses[index]
                         const statusMessage =
                           entryStatus.message ||
                           (entryStatus.state === "success"
@@ -1504,13 +1622,27 @@ export default function SubmitClaim() {
                                 )}
                               </div>
                             )}
+                            {duplicateStatus?.isDuplicate && (
+                              <div className="mt-3 flex items-start gap-2 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-200">
+                                <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+                                <div className="space-y-1">
+                                  <p className="font-semibold">Possible duplicate receipt</p>
+                                  <p>{duplicateStatus.reason || "This looks identical to another claim entry."}</p>
+                                </div>
+                              </div>
+                            )}
                           </div>
                         )
                       })}
                     </div>
                   )}
 
-                  <div className="flex justify-end pt-4">
+                  <div className="flex items-center justify-between pt-4">
+                    {hasDuplicates && (
+                      <p className="text-xs text-red-600">
+                        Resolve duplicate receipts before continuing.
+                      </p>
+                    )}
                     <Button 
                       type="button" 
                       onClick={handleNextStep}
@@ -1628,9 +1760,7 @@ export default function SubmitClaim() {
                           required
                         />
                       </div>
-                      {formData.staffClaimType === "Employee Benefit" &&
-                        entry.benefitType === "Optical" &&
-                        (entry.isOpticalReceipt || entry.opticalVerification) && (
+                      {formData.staffClaimType === "Employee Benefit" && entry.benefitType === "Optical" && (
                         <div
                           className={cn(
                             "rounded-md border px-3 py-2 text-xs",
@@ -1648,14 +1778,16 @@ export default function SubmitClaim() {
                             <p className="font-medium">
                               {entry.opticalVerification?.verified
                                 ? "Verified optical receipt"
-                                : "Optical receipt needs manual verification"}
+                                : "Prescription evidence not detected"}
                             </p>
                           </div>
                           <p className="mt-1 text-[13px]">
                             {entry.opticalVerification?.note ||
                               (entry.opticalVerification?.verified
                                 ? "Detected prescription details for eyewear reimbursement."
-                                : "We could not detect prescription details. Upload the prescription page or enter it manually.")}
+                                : entry.isOpticalReceipt
+                                  ? "Upload the prescription page or ensure the receipt mentions prescription lenses."
+                                  : "Mark this as optical only if the receipt or invoice shows prescription eyewear or attach the prescription page.")}
                           </p>
                         </div>
                       )}
@@ -1693,6 +1825,17 @@ export default function SubmitClaim() {
                   {claimEntries.map((entry, index) => (
                     <div key={`supporting-${index}`} className="space-y-4 border-b border-border pb-6 last:border-b-0">
                       <h3 className="font-semibold">Supporting Documents for Claim {index + 1}</h3>
+                      {entryRequiresOpticalProof(entry) && (
+                        <div className="flex items-start gap-2 rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-xs text-amber-800 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-100">
+                          <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+                          <div className="space-y-1">
+                            <p className="font-semibold">Prescription evidence required</p>
+                            <p>
+                              Upload a prescription page or a receipt that clearly states prescription lenses for this optical claim.
+                            </p>
+                          </div>
+                        </div>
+                      )}
                       <div
                         className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-4 text-center transition-colors hover:border-coral-300 dark:hover:border-coral-600"
                         onDragOver={(event) => {
@@ -1702,15 +1845,16 @@ export default function SubmitClaim() {
                         }}
                         onDrop={(event) => handleAttachmentDrop(event, index, "supporting")}
                       >
-                        <input
-                          id={`claim-${index}-supporting-attachment`}
-                          type="file"
-                          className="hidden"
-                          onChange={(event) => {
-                            const file = event.target.files ? event.target.files[0] : null
-                            handleSupportingAttachmentChange(index, file)
-                            event.target.value = ""
-                          }}
+                          <input
+                            id={`claim-${index}-supporting-attachment`}
+                            type="file"
+                            className="hidden"
+                            required={entryRequiresOpticalProof(entry)}
+                            onChange={(event) => {
+                              const file = event.target.files ? event.target.files[0] : null
+                              handleSupportingAttachmentChange(index, file)
+                              event.target.value = ""
+                            }}
                           accept=".pdf,.jpg,.jpeg,.png"
                         />
                         <label htmlFor={`claim-${index}-supporting-attachment`} className="cursor-pointer block">
@@ -1766,10 +1910,17 @@ export default function SubmitClaim() {
                       <ArrowLeft className="mr-2 h-4 w-4" />
                       Back
                     </Button>
-                    <Button type="button" onClick={() => setCurrentStep(4)}>
+                    <div className="flex items-center gap-3">
+                      {!isStep3Valid && (
+                        <p className="text-xs text-red-600">
+                          Upload prescription proof for optical claims before continuing.
+                        </p>
+                      )}
+                      <Button type="button" onClick={() => isStep3Valid && setCurrentStep(4)} disabled={!isStep3Valid}>
                       Continue to Review
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
