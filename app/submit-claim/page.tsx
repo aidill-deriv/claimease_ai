@@ -243,9 +243,9 @@ type ClaimEntry = {
   amount: string
   attachment: File | null
   attachmentHash?: string | null
-  supportingAttachment: File | null
+  supportingAttachments: File[]
   attachmentPreviewUrl: string | null
-  supportingAttachmentPreviewUrl: string | null
+  supportingAttachmentPreviewUrls: (string | null)[]
   serviceDate: string
   claimantName: string
   merchantName: string
@@ -264,9 +264,9 @@ const createEmptyClaimEntry = (): ClaimEntry => ({
   amount: "",
   attachment: null,
   attachmentHash: null,
-  supportingAttachment: null,
+  supportingAttachments: [],
   attachmentPreviewUrl: null,
-  supportingAttachmentPreviewUrl: null,
+  supportingAttachmentPreviewUrls: [],
   serviceDate: "",
   claimantName: "",
   merchantName: "",
@@ -284,7 +284,7 @@ const revokePreviewUrl = (url?: string | null) => {
 const cleanupEntryPreviews = (entries: ClaimEntry[]) => {
   entries.forEach((entry) => {
     revokePreviewUrl(entry.attachmentPreviewUrl)
-    revokePreviewUrl(entry.supportingAttachmentPreviewUrl)
+    entry.supportingAttachmentPreviewUrls.forEach((url) => revokePreviewUrl(url || undefined))
   })
 }
 
@@ -715,7 +715,7 @@ export default function SubmitClaim() {
       if (activeReceiptCount < prev.length) {
         for (let i = activeReceiptCount; i < prev.length; i += 1) {
           revokePreviewUrl(prev[i].attachmentPreviewUrl)
-          revokePreviewUrl(prev[i].supportingAttachmentPreviewUrl)
+          prev[i].supportingAttachmentPreviewUrls.forEach((url) => revokePreviewUrl(url))
         }
         return prev.slice(0, activeReceiptCount)
       }
@@ -881,7 +881,7 @@ export default function SubmitClaim() {
     index: number,
     field: keyof Omit<
       ClaimEntry,
-      "attachment" | "supportingAttachment" | "opticalVerification" | "attachmentPreviewUrl" | "supportingAttachmentPreviewUrl"
+      "attachment" | "supportingAttachments" | "opticalVerification" | "attachmentPreviewUrl" | "supportingAttachmentPreviewUrls"
     >,
     value: string,
   ) => {
@@ -960,18 +960,45 @@ export default function SubmitClaim() {
     })
   }
 
-  const handleSupportingAttachmentChange = (index: number, file: File | null) => {
+  const addSupportingAttachments = (index: number, files: FileList | File[]) => {
+    const newFiles = Array.from(files || []).filter(Boolean)
+    if (!newFiles.length) return
+
     setClaimEntries((prev) => {
       const next = [...prev]
       const existing = next[index]
       if (!existing) {
         return prev
       }
-      if (existing.supportingAttachmentPreviewUrl) {
-        revokePreviewUrl(existing.supportingAttachmentPreviewUrl)
+      const previews = newFiles.map((file) => createFilePreviewUrl(file))
+      next[index] = {
+        ...existing,
+        supportingAttachments: [...existing.supportingAttachments, ...newFiles],
+        supportingAttachmentPreviewUrls: [...existing.supportingAttachmentPreviewUrls, ...previews],
       }
-      const previewUrl = createFilePreviewUrl(file)
-      next[index] = { ...existing, supportingAttachment: file, supportingAttachmentPreviewUrl: previewUrl }
+      return next
+    })
+  }
+
+  const removeSupportingAttachment = (entryIndex: number, attachmentIndex: number) => {
+    setClaimEntries((prev) => {
+      const next = [...prev]
+      const existing = next[entryIndex]
+      if (!existing) return prev
+
+      const previewToRemove = existing.supportingAttachmentPreviewUrls[attachmentIndex]
+      if (previewToRemove) {
+        revokePreviewUrl(previewToRemove)
+      }
+
+      const updatedFiles = existing.supportingAttachments.filter((_, idx) => idx !== attachmentIndex)
+      const updatedPreviews = existing.supportingAttachmentPreviewUrls.filter((_, idx) => idx !== attachmentIndex)
+
+      next[entryIndex] = {
+        ...existing,
+        supportingAttachments: updatedFiles,
+        supportingAttachmentPreviewUrls: updatedPreviews,
+      }
       return next
     })
   }
@@ -982,14 +1009,14 @@ export default function SubmitClaim() {
   ) => {
     event.preventDefault()
     event.stopPropagation()
-    const droppedFile = event.dataTransfer?.files?.[0]
-    if (!droppedFile) {
+    const droppedFiles = event.dataTransfer?.files
+    if (!droppedFiles || droppedFiles.length === 0) {
       return
     }
     if (type === "primary") {
-      handleClaimEntryFileChange(index, droppedFile)
+      handleClaimEntryFileChange(index, droppedFiles[0])
     } else {
-      handleSupportingAttachmentChange(index, droppedFile)
+      addSupportingAttachments(index, droppedFiles)
     }
   }
 
@@ -1055,7 +1082,7 @@ export default function SubmitClaim() {
       if (entry.attachment === null) {
         return true
       }
-      if (entryRequiresOpticalProof(entry) && !entry.supportingAttachment) {
+      if (entryRequiresOpticalProof(entry) && entry.supportingAttachments.length === 0) {
         return true
       }
       return false
@@ -1111,7 +1138,7 @@ export default function SubmitClaim() {
           currency: entry.currency,
           amount: parseFloat(entry.amount),
           attachment: entry.attachment,
-          supportingAttachment: entry.supportingAttachment,
+          supportingAttachments: entry.supportingAttachments,
           serviceDate: entry.serviceDate,
           claimantName: entry.claimantName,
           merchantName: entry.merchantName,
@@ -1213,7 +1240,7 @@ export default function SubmitClaim() {
     if (!entryRequiresOpticalProof(entry)) {
       return true
     }
-    return Boolean(entry.supportingAttachment)
+    return entry.supportingAttachments.length > 0
   })
 
   const handleNextStep = () => {
@@ -1845,59 +1872,64 @@ export default function SubmitClaim() {
                         }}
                         onDrop={(event) => handleAttachmentDrop(event, index, "supporting")}
                       >
-                          <input
-                            id={`claim-${index}-supporting-attachment`}
-                            type="file"
-                            className="hidden"
-                            required={entryRequiresOpticalProof(entry)}
-                            onChange={(event) => {
-                              const file = event.target.files ? event.target.files[0] : null
-                              handleSupportingAttachmentChange(index, file)
-                              event.target.value = ""
-                            }}
+                        <input
+                          id={`claim-${index}-supporting-attachment`}
+                          type="file"
+                          className="hidden"
+                          multiple
+                          required={entryRequiresOpticalProof(entry)}
+                          onChange={(event) => {
+                            if (event.target.files) {
+                              addSupportingAttachments(index, event.target.files)
+                            }
+                            event.target.value = ""
+                          }}
                           accept=".pdf,.jpg,.jpeg,.png"
                         />
-                        <label htmlFor={`claim-${index}-supporting-attachment`} className="cursor-pointer block">
-                          {entry.supportingAttachment ? (
-                            <div className="flex items-center justify-between gap-4 text-left">
-                              <div className="flex items-center gap-3">
-                                <div className="h-12 w-12 rounded-md border border-muted-foreground/20 bg-white dark:bg-slate-950 flex items-center justify-center overflow-hidden">
-                                  {entry.supportingAttachmentPreviewUrl ? (
-                                    <img
-                                      src={entry.supportingAttachmentPreviewUrl}
-                                      alt={`Supporting document preview for claim ${index + 1}`}
-                                      className="h-full w-full object-cover"
-                                    />
-                                  ) : (
-                                    <FileText className="h-5 w-5 text-muted-foreground" />
-                                  )}
+                        <label htmlFor={`claim-${index}-supporting-attachment`} className="cursor-pointer block space-y-3">
+                          <div className="space-y-2">
+                            <Upload className="h-8 w-8 mx-auto text-muted-foreground" />
+                            <p className="text-sm text-muted-foreground">
+                              Drag or click to add approvals, proposals, or extra receipts (you can attach multiple)
+                            </p>
+                          </div>
+                          {entry.supportingAttachments.length > 0 && (
+                            <div className="space-y-3 text-left">
+                              {entry.supportingAttachments.map((file, fileIdx) => (
+                                <div key={`${file.name}-${fileIdx}`} className="flex items-center justify-between gap-4">
+                                  <div className="flex items-center gap-3">
+                                    <div className="h-12 w-12 rounded-md border border-muted-foreground/20 bg-white dark:bg-slate-950 flex items-center justify-center overflow-hidden">
+                                      {entry.supportingAttachmentPreviewUrls[fileIdx] ? (
+                                        <img
+                                          src={entry.supportingAttachmentPreviewUrls[fileIdx] as string}
+                                          alt={`Supporting document preview ${fileIdx + 1}`}
+                                          className="h-full w-full object-cover"
+                                        />
+                                      ) : (
+                                        <FileText className="h-5 w-5 text-muted-foreground" />
+                                      )}
+                                    </div>
+                                    <div>
+                                      <p className="text-sm font-medium break-all">{file.name}</p>
+                                      <p className="text-xs text-muted-foreground">
+                                        {((file.size || 0) / 1024).toFixed(2)} KB
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <button
+                                    type="button"
+                                    onClick={(event) => {
+                                      event.preventDefault()
+                                      event.stopPropagation()
+                                      removeSupportingAttachment(index, fileIdx)
+                                    }}
+                                    className="inline-flex items-center gap-1 rounded-full border border-slate-200 dark:border-slate-700 px-3 py-1 text-xs text-slate-600 dark:text-slate-300 hover:border-coral-300 dark:hover:border-coral-600"
+                                  >
+                                    <XCircle className="h-3.5 w-3.5" />
+                                    Remove
+                                  </button>
                                 </div>
-                                <div>
-                                  <p className="text-sm font-medium break-all">{entry.supportingAttachment.name}</p>
-                                  <p className="text-xs text-muted-foreground">
-                                    {((entry.supportingAttachment.size || 0) / 1024).toFixed(2)} KB
-                                  </p>
-                                </div>
-                              </div>
-                              <button
-                                type="button"
-                                onClick={(event) => {
-                                  event.preventDefault()
-                                  event.stopPropagation()
-                                  handleSupportingAttachmentChange(index, null)
-                                }}
-                                className="inline-flex items-center gap-1 rounded-full border border-slate-200 dark:border-slate-700 px-3 py-1 text-xs text-slate-600 dark:text-slate-300 hover:border-coral-300 dark:hover:border-coral-600"
-                              >
-                                <XCircle className="h-3.5 w-3.5" />
-                                Remove
-                              </button>
-                            </div>
-                          ) : (
-                            <div className="space-y-2">
-                              <Upload className="h-8 w-8 mx-auto text-muted-foreground" />
-                              <p className="text-sm text-muted-foreground">
-                                Drag or click to add approvals, proposals, or extra receipts (optional)
-                              </p>
+                              ))}
                             </div>
                           )}
                         </label>
