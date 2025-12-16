@@ -1,4 +1,4 @@
-// File: /Users/aidillfitri/Documents/Work/Github projects/claim_web_app_project/app/page.tsx
+// File: /Users/aidillfitri/Documents/Work/Github projects/claimease_ai/app/page.tsx
 import * as entry from '../../../app/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

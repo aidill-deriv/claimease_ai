@@ -98,8 +98,7 @@ export default function Home() {
         <div className="text-center mb-12 animate-fade-in-up">
           <div className="flex items-center justify-center mb-6">
             <div className="relative">
-              <Sparkles className="h-14 w-14 text-coral-700 animate-coral-pulse" />
-              <div className="absolute inset-0 h-14 w-14 bg-coral-700 opacity-20 blur-xl rounded-full"></div>
+              <Sparkles className="h-14 w-14 text-coral-700 animate-coral-pulse-icon" />
             </div>
           </div>
           <h1 className="text-6xl font-bold mb-4">

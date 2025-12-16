@@ -21,6 +21,9 @@ import {
   Loader2,
   Sparkles,
   XCircle,
+  ArrowRight,
+  ArrowLeft,
+  Check,
 } from "lucide-react"
 import { submitClaimToSupabase } from "@/lib/supabase-claims"
 import { fetchDashboardData, type BalanceData } from "@/lib/supabase-dashboard"
@@ -319,6 +322,7 @@ export default function SubmitClaim() {
     redirectIfUnauthorized: () => router.push("/no-access"),
   })
   const userEmail = user?.email ?? ""
+  const [currentStep, setCurrentStep] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const [submitError, setSubmitError] = useState("")
@@ -1091,6 +1095,120 @@ export default function SubmitClaim() {
   const projectedRemainingBalance = hasBalanceData ? Math.max(balanceSnapshot.remaining - calculatedTotal, 0) : 0
   const canShowProjectedBalance = hasBalanceData && !claimExceedsBalance && calculatedTotal > 0
 
+  const steps = [
+    { number: 1, title: "Upload Receipt", description: "Upload main receipt for OCR scanning" },
+    { number: 2, title: "Claim Details", description: "Review and complete claim information" },
+    { number: 3, title: "Supporting Documents", description: "Add optional supporting documents" },
+  ]
+
+  const isStep1Valid = activeReceiptCount > 0 && claimEntries.length > 0 && claimEntries.every(entry => entry.attachment)
+  const isStep2Valid = formData.staffClaimType && claimEntries.every(entry => 
+    entry.description && entry.currency && entry.amount && entry.serviceDate && 
+    entry.claimantName && entry.merchantName &&
+    (formData.staffClaimType !== "Employee Benefit" || entry.benefitType)
+  )
+
+  const handleNextStep = () => {
+    if (currentStep < 3) {
+      setCurrentStep(currentStep + 1)
+    }
+  }
+
+  const handlePreviousStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1)
+    }
+  }
+
+  const canNavigateToStep = (stepNumber: number) => {
+    if (stepNumber === 1) return true
+    if (stepNumber === 2) return isStep1Valid
+    if (stepNumber === 3) return isStep1Valid && isStep2Valid
+    if (stepNumber === 4) return isStep1Valid && isStep2Valid
+    return false
+  }
+
+  const handleStepClick = (stepNumber: number) => {
+    if (canNavigateToStep(stepNumber)) {
+      setCurrentStep(stepNumber)
+    }
+  }
+
+  const renderStepIndicator = () => (
+    <div className="mb-8">
+      <div className="flex items-center justify-between">
+        {steps.map((step, index) => {
+          const isClickable = canNavigateToStep(step.number)
+          const isActive = currentStep === step.number
+          const isCompleted = currentStep > step.number
+          
+          return (
+            <div key={step.number} className="flex-1">
+              <div className="flex items-center">
+                <button
+                  type="button"
+                  onClick={() => handleStepClick(step.number)}
+                  disabled={!isClickable}
+                  className={cn(
+                    "flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold transition-colors",
+                    isCompleted
+                      ? "bg-green-500 text-white hover:bg-green-600"
+                      : isActive
+                        ? "bg-coral-500 text-white"
+                        : isClickable
+                          ? "bg-gray-200 text-gray-600 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 cursor-pointer"
+                          : "bg-gray-200 text-gray-400 cursor-not-allowed dark:bg-gray-700 dark:text-gray-500"
+                  )}
+                  title={isClickable ? `Go to ${step.title}` : `Complete previous steps to access ${step.title}`}
+                >
+                  {isCompleted ? (
+                    <Check className="h-6 w-6" />
+                  ) : (
+                    step.number
+                  )}
+                </button>
+                <div className="ml-4 min-w-0 flex-1">
+                  <button
+                    type="button"
+                    onClick={() => handleStepClick(step.number)}
+                    disabled={!isClickable}
+                    className={cn(
+                      "text-left w-full",
+                      isClickable ? "cursor-pointer" : "cursor-not-allowed"
+                    )}
+                    title={isClickable ? `Go to ${step.title}` : `Complete previous steps to access ${step.title}`}
+                  >
+                    <p className={cn(
+                      "text-sm font-medium",
+                      currentStep >= step.number ? "text-gray-900 dark:text-white" : "text-gray-500 dark:text-gray-400",
+                      isClickable && !isActive ? "hover:text-coral-600 dark:hover:text-coral-400" : ""
+                    )}>
+                      {step.title}
+                    </p>
+                    <p className={cn(
+                      "text-xs",
+                      currentStep >= step.number ? "text-gray-600 dark:text-gray-300" : "text-gray-400 dark:text-gray-500"
+                    )}>
+                      {step.description}
+                    </p>
+                  </button>
+                </div>
+              </div>
+              {index < steps.length - 1 && (
+                <div 
+                  className={cn(
+                    "mt-2 h-0.5 w-full",
+                    currentStep > step.number ? "bg-green-500" : "bg-gray-200 dark:bg-gray-700"
+                  )}
+                />
+              )}
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-coral-50 dark:from-slate-1100 dark:via-slate-1000 dark:to-slate-900 lg:pl-72">
       <Navigation />
@@ -1099,9 +1217,11 @@ export default function SubmitClaim() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Submit Claim</h1>
           <p className="text-muted-foreground">
-            Complete every section below to match the official staff claim form requirements
+            Follow the 3-step process to submit your claim with better user experience
           </p>
         </div>
+
+        {renderStepIndicator()}
 
         <Card className="mb-8">
           <CardHeader>
@@ -1172,28 +1292,498 @@ export default function SubmitClaim() {
               <div>
                 <CardTitle className="flex items-center gap-2 text-emerald-900 dark:text-emerald-100">
                   <ShieldCheck className="h-5 w-5" />
-                  Profile Verified
+                  Status Verified
                 </CardTitle>
               </div>
               <Badge variant="success">Verified</Badge>
             </CardHeader>
-            <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {verifiedProfileFields.map((field) => (
-                <div key={field.label}>
-                  <p className="text-xs uppercase text-muted-foreground tracking-wide">{field.label}</p>
-                  <p className="font-semibold text-foreground">{field.value}</p>
-                </div>
-              ))}
-            </CardContent>
           </Card>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Personal Information</CardTitle>
-              <CardDescription>All details must match Sage People records</CardDescription>
-            </CardHeader>
+          {/* Step 1: Upload Main Receipt */}
+          {currentStep === 1 && (
+            <>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Step 1: Upload Main Receipt for OCR</CardTitle>
+                  <CardDescription>Start by selecting claim type and uploading receipts</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-3">
+                    <Label>Staff Claim Type*</Label>
+                    <div role="tablist" className="grid gap-3 md:grid-cols-2">
+                      {staffClaimTypeTabs.map((option) => {
+                        const Icon = option.icon
+                        const active = formData.staffClaimType === option.value
+                        return (
+                          <button
+                            key={option.value}
+                            type="button"
+                            role="tab"
+                            aria-selected={active}
+                            onClick={() => handleClaimTypeChange(option.value)}
+                            className={cn(
+                              "flex items-start gap-3 rounded-2xl border px-4 py-3 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500",
+                              active
+                                ? "border-coral-500 bg-coral-50 text-coral-900 dark:border-coral-400 dark:bg-coral-900/25 dark:text-coral-50"
+                                : "border-slate-200 text-slate-700 hover:border-coral-200 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900/40 dark:text-slate-200 dark:hover:border-coral-400 dark:hover:bg-slate-900",
+                            )}
+                          >
+                            <div
+                              className={cn(
+                                "rounded-xl p-2",
+                                active
+                                  ? "bg-white text-coral-600 dark:bg-coral-800/40 dark:text-coral-50"
+                                  : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-200",
+                              )}
+                            >
+                              <Icon className="h-5 w-5" />
+                            </div>
+                            <div>
+                              <p className="font-semibold">{option.label}</p>
+                              <p className="text-xs text-muted-foreground">{option.description}</p>
+                            </div>
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="receiptCount">How many receipts are you claiming?* (Max 10)</Label>
+                    <select
+                      id="receiptCount"
+                      name="receiptCount"
+                      value={formData.receiptCount}
+                      onChange={handleReceiptCountChange}
+                      required
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    >
+                      <option value="">Select receipt count</option>
+                      {receiptCountOptions.map((option) => (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {activeReceiptCount > 0 && (
+                    <div className="space-y-8">
+                      {claimEntries.map((entry, index) => {
+                        const entryStatus = ocrStatuses[index] || { state: "idle" }
+                        const statusMessage =
+                          entryStatus.message ||
+                          (entryStatus.state === "success"
+                          ? "Values updated from the scanned receipt."
+                          : entryStatus.state === "processing"
+                              ? "Scanning receipt…"
+                              : entryStatus.state === "error"
+                                ? "Receipt scan failed. Update manually or try again."
+                                : entry.attachment
+                                  ? "Use AI scan if the details look incorrect."
+                                  : "Upload a receipt to auto-fill amount, currency, and description.")
+
+                        const statusColor =
+                          entryStatus.state === "error"
+                            ? "text-red-500"
+                            : entryStatus.state === "success"
+                              ? "text-emerald-500"
+                              : entryStatus.state === "processing"
+                                ? "text-amber-500"
+                                : "text-muted-foreground"
+
+                        const statusIcon =
+                          entryStatus.state === "processing" ? (
+                            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                          ) : entryStatus.state === "success" ? (
+                            <CheckCircle2 className="h-3.5 w-3.5" />
+                          ) : entryStatus.state === "error" ? (
+                            <AlertCircle className="h-3.5 w-3.5" />
+                          ) : (
+                            <Sparkles className="h-3.5 w-3.5" />
+                          )
+
+                        return (
+                          <div key={`claim-entry-${index}`} className="space-y-4 border-b border-border pb-6 last:border-b-0">
+                            <h3 className="font-semibold">Claim {index + 1} Attachment</h3>
+                            <div
+                              className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-4 text-center transition-colors hover:border-coral-300 dark:hover:border-coral-600"
+                              onDragOver={(event) => {
+                                event.preventDefault()
+                                event.stopPropagation()
+                                event.dataTransfer.dropEffect = "copy"
+                              }}
+                              onDrop={(event) => handleAttachmentDrop(event, index, "primary")}
+                            >
+                              <input
+                                id={`claim-${index}-attachment`}
+                                type="file"
+                                className="hidden"
+                                required
+                                onChange={(event) => {
+                                  const file = event.target.files ? event.target.files[0] : null
+                                  handleClaimEntryFileChange(index, file)
+                                  event.target.value = ""
+                                }}
+                                accept=".pdf,.jpg,.jpeg,.png"
+                              />
+                              <label htmlFor={`claim-${index}-attachment`} className="cursor-pointer block">
+                                {entry.attachment ? (
+                                  <div className="flex items-center justify-between gap-4 text-left">
+                                    <div className="flex items-center gap-3">
+                                      <div className="h-14 w-14 rounded-md border border-muted-foreground/20 bg-white dark:bg-slate-950 flex items-center justify-center overflow-hidden">
+                                        {entry.attachmentPreviewUrl ? (
+                                          <img
+                                            src={entry.attachmentPreviewUrl}
+                                            alt={`Receipt preview for claim ${index + 1}`}
+                                            className="h-full w-full object-cover"
+                                          />
+                                        ) : (
+                                          <FileText className="h-6 w-6 text-muted-foreground" />
+                                        )}
+                                      </div>
+                                      <div>
+                                        <p className="text-sm font-medium break-all">{entry.attachment.name}</p>
+                                        <p className="text-xs text-muted-foreground">
+                                          {((entry.attachment.size || 0) / 1024).toFixed(2)} KB
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <button
+                                      type="button"
+                                      onClick={(event) => {
+                                        event.preventDefault()
+                                        event.stopPropagation()
+                                        handleClaimEntryFileChange(index, null)
+                                      }}
+                                      className="inline-flex items-center gap-1 rounded-full border border-slate-200 dark:border-slate-700 px-3 py-1 text-xs text-slate-600 dark:text-slate-300 hover:border-coral-300 dark:hover:border-coral-600"
+                                    >
+                                      <XCircle className="h-3.5 w-3.5" />
+                                      Remove
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <div className="space-y-2">
+                                    <Upload className="h-8 w-8 mx-auto text-muted-foreground" />
+                                    <p className="text-sm text-muted-foreground">
+                                      Click or drag a receipt (PDF/JPG/PNG, max 5MB)
+                                    </p>
+                                  </div>
+                                )}
+                              </label>
+                            </div>
+                            {receiptOcrFeatureEnabled && (
+                              <div className="mt-3 space-y-2 text-left">
+                                <p className={cn("flex items-center gap-2 text-xs", statusColor)}>
+                                  {statusIcon}
+                                  <span>{statusMessage}</span>
+                                </p>
+                                {entry.attachment && entryStatus.state !== "processing" && (
+                                  <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    className="w-fit text-xs"
+                                    onClick={() =>
+                                      runReceiptOcr(index, entry.attachment as File, {
+                                        staffClaimType: formData.staffClaimType,
+                                        localCurrency: formData.localCurrency,
+                                        location: formData.location,
+                                        benefitType:
+                                          formData.staffClaimType === "Employee Benefit"
+                                            ? entry.benefitType || undefined
+                                            : undefined,
+                                      })
+                                    }
+                                  >
+                                    <Sparkles className="mr-2 h-3.5 w-3.5" />
+                                    Re-run receipt scan
+                                  </Button>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )}
+
+                  <div className="flex justify-end pt-4">
+                    <Button 
+                      type="button" 
+                      onClick={handleNextStep}
+                      disabled={!isStep1Valid}
+                    >
+                      Next: Claim Details
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </>
+          )}
+
+          {/* Step 2: Claim Details */}
+          {currentStep === 2 && (
+            <>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Step 2: Complete Claim Details</CardTitle>
+                  <CardDescription>Review and complete the auto-filled information</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-8">
+                  {claimEntries.map((entry, index) => (
+                    <div key={`claim-details-${index}`} className="space-y-4 border-b border-border pb-6 last:border-b-0">
+                      <h3 className="font-semibold">Claim {index + 1}</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor={`claim-${index}-description`}>Claim {index + 1} Description*</Label>
+                          <Input
+                            id={`claim-${index}-description`}
+                            value={entry.description}
+                            onChange={(event) => handleClaimEntryChange(index, "description", event.target.value)}
+                            required
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor={`claim-${index}-currency`}>Claim {index + 1} Currency*</Label>
+                          <select
+                            id={`claim-${index}-currency`}
+                            value={entry.currency}
+                            onChange={(event) => handleClaimEntryChange(index, "currency", event.target.value)}
+                            required
+                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                          >
+                            <option value="">Select currency</option>
+                            {currencyOptions.map((currency) => (
+                              <option key={currency} value={currency}>
+                                {currency}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor={`claim-${index}-date`}>Receipt Date*</Label>
+                          <Input
+                            id={`claim-${index}-date`}
+                            type="date"
+                            value={entry.serviceDate}
+                            onChange={(event) => handleClaimEntryChange(index, "serviceDate", event.target.value)}
+                            required
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor={`claim-${index}-claimant`}>Person / Patient Name*</Label>
+                          <Input
+                            id={`claim-${index}-claimant`}
+                            value={entry.claimantName}
+                            onChange={(event) => handleClaimEntryChange(index, "claimantName", event.target.value)}
+                            placeholder="Enter the staff or dependent name shown on receipt"
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor={`claim-${index}-merchant`}>Company / Vendor Name*</Label>
+                        <Input
+                          id={`claim-${index}-merchant`}
+                          value={entry.merchantName}
+                          onChange={(event) => handleClaimEntryChange(index, "merchantName", event.target.value)}
+                          placeholder="Clinic, hospital, airline, merchant, etc."
+                          required
+                        />
+                      </div>
+                      {formData.staffClaimType === "Employee Benefit" && (
+                        <div className="space-y-2">
+                          <Label htmlFor={`claim-${index}-benefitType`}>Benefit Type*</Label>
+                          <select
+                            id={`claim-${index}-benefitType`}
+                            value={entry.benefitType}
+                            onChange={(event) => handleClaimEntryChange(index, "benefitType", event.target.value)}
+                            required
+                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                          >
+                            <option value="">Select benefit type</option>
+                            {employeeBenefitTypeOptions.map((type) => (
+                              <option key={type} value={type}>
+                                {type}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+                      <div className="space-y-2">
+                        <Label htmlFor={`claim-${index}-amount`}>Claim {index + 1} Amount*</Label>
+                        <Input
+                          id={`claim-${index}-amount`}
+                          type="number"
+                          min="0"
+                          step="0.01"
+                          value={entry.amount}
+                          onChange={(event) => handleClaimEntryChange(index, "amount", event.target.value)}
+                          required
+                        />
+                      </div>
+                      {formData.staffClaimType === "Employee Benefit" &&
+                        entry.benefitType === "Optical" &&
+                        (entry.isOpticalReceipt || entry.opticalVerification) && (
+                        <div
+                          className={cn(
+                            "rounded-md border px-3 py-2 text-xs",
+                            entry.opticalVerification?.verified
+                              ? "border-emerald-300 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20 text-emerald-900 dark:text-emerald-100"
+                              : "border-amber-300 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20 text-amber-900 dark:text-amber-100",
+                          )}
+                        >
+                          <div className="flex items-center gap-2">
+                            {entry.opticalVerification?.verified ? (
+                              <ShieldCheck className="h-4 w-4" />
+                            ) : (
+                              <AlertCircle className="h-4 w-4" />
+                            )}
+                            <p className="font-medium">
+                              {entry.opticalVerification?.verified
+                                ? "Verified optical receipt"
+                                : "Optical receipt needs manual verification"}
+                            </p>
+                          </div>
+                          <p className="mt-1 text-[13px]">
+                            {entry.opticalVerification?.note ||
+                              (entry.opticalVerification?.verified
+                                ? "Detected prescription details for eyewear reimbursement."
+                                : "We could not detect prescription details. Upload the prescription page or enter it manually.")}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+
+                  <div className="flex justify-between pt-4">
+                    <Button type="button" variant="outline" onClick={handlePreviousStep}>
+                      <ArrowLeft className="mr-2 h-4 w-4" />
+                      Back
+                    </Button>
+                    <Button 
+                      type="button" 
+                      onClick={handleNextStep}
+                      disabled={!isStep2Valid}
+                    >
+                      Next: Supporting Documents
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </>
+          )}
+
+          {/* Step 3: Supporting Documents */}
+          {currentStep === 3 && (
+            <>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Step 3: Supporting Documents (Optional)</CardTitle>
+                  <CardDescription>Add any additional supporting documents</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-8">
+                  {claimEntries.map((entry, index) => (
+                    <div key={`supporting-${index}`} className="space-y-4 border-b border-border pb-6 last:border-b-0">
+                      <h3 className="font-semibold">Supporting Documents for Claim {index + 1}</h3>
+                      <div
+                        className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-4 text-center transition-colors hover:border-coral-300 dark:hover:border-coral-600"
+                        onDragOver={(event) => {
+                          event.preventDefault()
+                          event.stopPropagation()
+                          event.dataTransfer.dropEffect = "copy"
+                        }}
+                        onDrop={(event) => handleAttachmentDrop(event, index, "supporting")}
+                      >
+                        <input
+                          id={`claim-${index}-supporting-attachment`}
+                          type="file"
+                          className="hidden"
+                          onChange={(event) => {
+                            const file = event.target.files ? event.target.files[0] : null
+                            handleSupportingAttachmentChange(index, file)
+                            event.target.value = ""
+                          }}
+                          accept=".pdf,.jpg,.jpeg,.png"
+                        />
+                        <label htmlFor={`claim-${index}-supporting-attachment`} className="cursor-pointer block">
+                          {entry.supportingAttachment ? (
+                            <div className="flex items-center justify-between gap-4 text-left">
+                              <div className="flex items-center gap-3">
+                                <div className="h-12 w-12 rounded-md border border-muted-foreground/20 bg-white dark:bg-slate-950 flex items-center justify-center overflow-hidden">
+                                  {entry.supportingAttachmentPreviewUrl ? (
+                                    <img
+                                      src={entry.supportingAttachmentPreviewUrl}
+                                      alt={`Supporting document preview for claim ${index + 1}`}
+                                      className="h-full w-full object-cover"
+                                    />
+                                  ) : (
+                                    <FileText className="h-5 w-5 text-muted-foreground" />
+                                  )}
+                                </div>
+                                <div>
+                                  <p className="text-sm font-medium break-all">{entry.supportingAttachment.name}</p>
+                                  <p className="text-xs text-muted-foreground">
+                                    {((entry.supportingAttachment.size || 0) / 1024).toFixed(2)} KB
+                                  </p>
+                                </div>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={(event) => {
+                                  event.preventDefault()
+                                  event.stopPropagation()
+                                  handleSupportingAttachmentChange(index, null)
+                                }}
+                                className="inline-flex items-center gap-1 rounded-full border border-slate-200 dark:border-slate-700 px-3 py-1 text-xs text-slate-600 dark:text-slate-300 hover:border-coral-300 dark:hover:border-coral-600"
+                              >
+                                <XCircle className="h-3.5 w-3.5" />
+                                Remove
+                              </button>
+                            </div>
+                          ) : (
+                            <div className="space-y-2">
+                              <Upload className="h-8 w-8 mx-auto text-muted-foreground" />
+                              <p className="text-sm text-muted-foreground">
+                                Drag or click to add approvals, proposals, or extra receipts (optional)
+                              </p>
+                            </div>
+                          )}
+                        </label>
+                      </div>
+                    </div>
+                  ))}
+
+                  <div className="flex justify-between pt-4">
+                    <Button type="button" variant="outline" onClick={handlePreviousStep}>
+                      <ArrowLeft className="mr-2 h-4 w-4" />
+                      Back
+                    </Button>
+                    <Button type="button" onClick={() => setCurrentStep(4)}>
+                      Continue to Review
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </>
+          )}
+
+          {/* Step 4: Review and Personal Info */}
+          {currentStep === 4 && (
+            <>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Personal Information</CardTitle>
+                  <CardDescription>All details must match Sage People records</CardDescription>
+                </CardHeader>
           <CardContent className="space-y-4">
             {isLoadingProfile && (
               <p className="text-xs text-muted-foreground">Auto-filling your profile from HR records...</p>
@@ -1370,449 +1960,8 @@ export default function SubmitClaim() {
               )}
             </CardContent>
           </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Claim Configuration</CardTitle>
-              <CardDescription>Select claim type and number of entries</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-3">
-                <Label>Staff Claim Type*</Label>
-                <p className="text-xs text-muted-foreground">
-                  Choose the category that best matches the receipts you are submitting.
-                </p>
-                <p className="text-xs text-amber-600 dark:text-amber-300">
-                  Each submission supports one claim type only. Switching types clears the receipt count and claim entries so you can re-enter matching receipts.
-                </p>
-                <input type="hidden" name="staffClaimType" value={formData.staffClaimType} />
-                <div role="tablist" className="grid gap-3 md:grid-cols-2">
-                  {staffClaimTypeTabs.map((option) => {
-                    const Icon = option.icon
-                    const active = formData.staffClaimType === option.value
-                    return (
-                      <button
-                        key={option.value}
-                        type="button"
-                        role="tab"
-                        aria-selected={active}
-                        onClick={() => handleClaimTypeChange(option.value)}
-                        className={cn(
-                          "flex items-start gap-3 rounded-2xl border px-4 py-3 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-500",
-                          active
-                            ? "border-coral-500 bg-coral-50 text-coral-900 dark:border-coral-400 dark:bg-coral-900/25 dark:text-coral-50"
-                            : "border-slate-200 text-slate-700 hover:border-coral-200 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900/40 dark:text-slate-200 dark:hover:border-coral-400 dark:hover:bg-slate-900",
-                        )}
-                      >
-                        <div
-                          className={cn(
-                            "rounded-xl p-2",
-                            active
-                              ? "bg-white text-coral-600 dark:bg-coral-800/40 dark:text-coral-50"
-                              : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-200",
-                          )}
-                        >
-                          <Icon className="h-5 w-5" />
-                        </div>
-                        <div>
-                          <p className="font-semibold">{option.label}</p>
-                          <p className="text-xs text-muted-foreground">{option.description}</p>
-                        </div>
-                      </button>
-                    )
-                  })}
-                </div>
-                {!formData.staffClaimType && (
-                  <p className="text-xs text-red-500">Select a claim type to continue.</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="receiptCount">How many receipts are you claiming?* (Max 10)</Label>
-                <select
-                  id="receiptCount"
-                  name="receiptCount"
-                  value={formData.receiptCount}
-                  onChange={handleReceiptCountChange}
-                  required
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                >
-                  <option value="">Select receipt count</option>
-                  {receiptCountOptions.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-                <p className="text-xs text-muted-foreground">
-                  Selecting a number will expand the form to show the required claim entry blocks.
-                </p>
-              </div>
-
-            </CardContent>
-          </Card>
-
-          {activeReceiptCount > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Claim Entry Section</CardTitle>
-                <CardDescription>Complete each entry with currency, amount, and attachment</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-8">
-                {claimEntries.map((entry, index) => {
-                  const entryStatus = ocrStatuses[index] || { state: "idle" }
-                  const statusMessage =
-                    entryStatus.message ||
-                    (entryStatus.state === "success"
-                    ? "Values updated from the scanned receipt."
-                    : entryStatus.state === "processing"
-                        ? "Scanning receipt…"
-                        : entryStatus.state === "error"
-                          ? "Receipt scan failed. Update manually or try again."
-                          : entry.attachment
-                            ? "Use AI scan if the details look incorrect."
-                            : "Upload a receipt to auto-fill amount, currency, and description.")
-
-                  const statusColor =
-                    entryStatus.state === "error"
-                      ? "text-red-500"
-                      : entryStatus.state === "success"
-                        ? "text-emerald-500"
-                        : entryStatus.state === "processing"
-                          ? "text-amber-500"
-                          : "text-muted-foreground"
-
-                  const statusIcon =
-                    entryStatus.state === "processing" ? (
-                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                    ) : entryStatus.state === "success" ? (
-                      <CheckCircle2 className="h-3.5 w-3.5" />
-                    ) : entryStatus.state === "error" ? (
-                      <AlertCircle className="h-3.5 w-3.5" />
-                    ) : (
-                      <Sparkles className="h-3.5 w-3.5" />
-                    )
-
-                  return (
-                    <div key={`claim-entry-${index}`} className="space-y-4 border-b border-border pb-6 last:border-b-0">
-                      <h3 className="font-semibold">Claim {index + 1}</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor={`claim-${index}-description`}>Claim {index + 1} Description*</Label>
-                          <Input
-                            id={`claim-${index}-description`}
-                            value={entry.description}
-                            onChange={(event) => handleClaimEntryChange(index, "description", event.target.value)}
-                            required
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor={`claim-${index}-currency`}>Claim {index + 1} Currency*</Label>
-                          <select
-                            id={`claim-${index}-currency`}
-                            value={entry.currency}
-                            onChange={(event) => handleClaimEntryChange(index, "currency", event.target.value)}
-                            required
-                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                          >
-                            <option value="">Select currency</option>
-                            {currencyOptions.map((currency) => (
-                              <option key={currency} value={currency}>
-                                {currency}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor={`claim-${index}-date`}>Receipt Date*</Label>
-                          <Input
-                            id={`claim-${index}-date`}
-                            type="date"
-                            value={entry.serviceDate}
-                            onChange={(event) => handleClaimEntryChange(index, "serviceDate", event.target.value)}
-                            required
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor={`claim-${index}-claimant`}>Person / Patient Name*</Label>
-                          <Input
-                            id={`claim-${index}-claimant`}
-                            value={entry.claimantName}
-                            onChange={(event) => handleClaimEntryChange(index, "claimantName", event.target.value)}
-                            placeholder="Enter the staff or dependent name shown on receipt"
-                            required
-                          />
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor={`claim-${index}-merchant`}>Company / Vendor Name*</Label>
-                        <Input
-                          id={`claim-${index}-merchant`}
-                          value={entry.merchantName}
-                          onChange={(event) => handleClaimEntryChange(index, "merchantName", event.target.value)}
-                          placeholder="Clinic, hospital, airline, merchant, etc."
-                          required
-                        />
-                        <p className="text-xs text-muted-foreground">
-                          We automatically append this name to your claim description for easier review.
-                        </p>
-                      </div>
-                      {formData.staffClaimType === "Employee Benefit" && (
-                        <div className="space-y-2">
-                          <Label htmlFor={`claim-${index}-benefitType`}>Benefit Type*</Label>
-                          <select
-                            id={`claim-${index}-benefitType`}
-                            value={entry.benefitType}
-                            onChange={(event) => handleClaimEntryChange(index, "benefitType", event.target.value)}
-                            required
-                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                          >
-                            <option value="">Select benefit type</option>
-                            {employeeBenefitTypeOptions.map((type) => (
-                              <option key={type} value={type}>
-                                {type}
-                              </option>
-                            ))}
-                          </select>
-                          <p className="text-xs text-muted-foreground">
-                            We use this to auto-validate optical vs. dental vs. health screening claims.
-                          </p>
-                        </div>
-                      )}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor={`claim-${index}-amount`}>Claim {index + 1} Amount*</Label>
-                          <Input
-                            id={`claim-${index}-amount`}
-                            type="number"
-                            min="0"
-                            step="0.01"
-                            value={entry.amount}
-                            onChange={(event) => handleClaimEntryChange(index, "amount", event.target.value)}
-                            required
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor={`claim-${index}-attachment`}>
-                            Claim {index + 1} Attachment (Invoice, approval and related document)*
-                          </Label>
-                          <div
-                            className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-4 text-center transition-colors hover:border-coral-300 dark:hover:border-coral-600"
-                            onDragOver={(event) => {
-                              event.preventDefault()
-                              event.stopPropagation()
-                              event.dataTransfer.dropEffect = "copy"
-                            }}
-                            onDrop={(event) => handleAttachmentDrop(event, index, "primary")}
-                          >
-                            <input
-                              id={`claim-${index}-attachment`}
-                              type="file"
-                              className="hidden"
-                              required
-                              onChange={(event) => {
-                                const file = event.target.files ? event.target.files[0] : null
-                                handleClaimEntryFileChange(index, file)
-                                event.target.value = ""
-                              }}
-                              accept=".pdf,.jpg,.jpeg,.png"
-                            />
-                            <label htmlFor={`claim-${index}-attachment`} className="cursor-pointer block">
-                              {entry.attachment ? (
-                                <div className="flex items-center justify-between gap-4 text-left">
-                                  <div className="flex items-center gap-3">
-                                    <div className="h-14 w-14 rounded-md border border-muted-foreground/20 bg-white dark:bg-slate-950 flex items-center justify-center overflow-hidden">
-                                      {entry.attachmentPreviewUrl ? (
-                                        // eslint-disable-next-line @next/next/no-img-element
-                                        <img
-                                          src={entry.attachmentPreviewUrl}
-                                          alt={`Receipt preview for claim ${index + 1}`}
-                                          className="h-full w-full object-cover"
-                                        />
-                                      ) : (
-                                        <FileText className="h-6 w-6 text-muted-foreground" />
-                                      )}
-                                    </div>
-                                    <div>
-                                      <p className="text-sm font-medium break-all">{entry.attachment.name}</p>
-                                      <p className="text-xs text-muted-foreground">
-                                        {((entry.attachment.size || 0) / 1024).toFixed(2)} KB
-                                      </p>
-                                    </div>
-                                  </div>
-                                  <button
-                                    type="button"
-                                    onClick={(event) => {
-                                      event.preventDefault()
-                                      event.stopPropagation()
-                                      handleClaimEntryFileChange(index, null)
-                                    }}
-                                    className="inline-flex items-center gap-1 rounded-full border border-slate-200 dark:border-slate-700 px-3 py-1 text-xs text-slate-600 dark:text-slate-300 hover:border-coral-300 dark:hover:border-coral-600"
-                                  >
-                                    <XCircle className="h-3.5 w-3.5" />
-                                    Remove
-                                  </button>
-                                </div>
-                              ) : (
-                                <div className="space-y-2">
-                                  <Upload className="h-8 w-8 mx-auto text-muted-foreground" />
-                                  <p className="text-sm text-muted-foreground">
-                                    Click or drag a receipt (PDF/JPG/PNG, max 5MB)
-                                  </p>
-                                </div>
-                              )}
-                            </label>
-                          </div>
-                          {receiptOcrFeatureEnabled && (
-                            <div className="mt-3 space-y-2 text-left">
-                              <p className={cn("flex items-center gap-2 text-xs", statusColor)}>
-                                {statusIcon}
-                                <span>{statusMessage}</span>
-                              </p>
-                              {entry.attachment && entryStatus.state !== "processing" && (
-                                <Button
-                                  type="button"
-                                  variant="outline"
-                                  size="sm"
-                                  className="w-fit text-xs"
-                                  onClick={() =>
-                                    runReceiptOcr(index, entry.attachment as File, {
-                                      staffClaimType: formData.staffClaimType,
-                                      localCurrency: formData.localCurrency,
-                                      location: formData.location,
-                                      benefitType:
-                                        formData.staffClaimType === "Employee Benefit"
-                                          ? entry.benefitType || undefined
-                                          : undefined,
-                                    })
-                                  }
-                                >
-                                  <>
-                                    <Sparkles className="mr-2 h-3.5 w-3.5" />
-                                    Re-run receipt scan
-                                  </>
-                                </Button>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                        <div className="space-y-2 md:col-span-2">
-                          <Label htmlFor={`claim-${index}-supporting-attachment`}>
-                            Supporting documents / additional receipts (Optional)
-                          </Label>
-                          <div
-                            className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-4 text-center transition-colors hover:border-coral-300 dark:hover:border-coral-600"
-                            onDragOver={(event) => {
-                              event.preventDefault()
-                              event.stopPropagation()
-                              event.dataTransfer.dropEffect = "copy"
-                            }}
-                            onDrop={(event) => handleAttachmentDrop(event, index, "supporting")}
-                          >
-                            <input
-                              id={`claim-${index}-supporting-attachment`}
-                              type="file"
-                              className="hidden"
-                              onChange={(event) => {
-                                const file = event.target.files ? event.target.files[0] : null
-                                handleSupportingAttachmentChange(index, file)
-                                event.target.value = ""
-                              }}
-                              accept=".pdf,.jpg,.jpeg,.png"
-                            />
-                            <label htmlFor={`claim-${index}-supporting-attachment`} className="cursor-pointer block">
-                              {entry.supportingAttachment ? (
-                                <div className="flex items-center justify-between gap-4 text-left">
-                                  <div className="flex items-center gap-3">
-                                    <div className="h-12 w-12 rounded-md border border-muted-foreground/20 bg-white dark:bg-slate-950 flex items-center justify-center overflow-hidden">
-                                      {entry.supportingAttachmentPreviewUrl ? (
-                                        // eslint-disable-next-line @next/next/no-img-element
-                                        <img
-                                          src={entry.supportingAttachmentPreviewUrl}
-                                          alt={`Supporting document preview for claim ${index + 1}`}
-                                          className="h-full w-full object-cover"
-                                        />
-                                      ) : (
-                                        <FileText className="h-5 w-5 text-muted-foreground" />
-                                      )}
-                                    </div>
-                                    <div>
-                                      <p className="text-sm font-medium break-all">{entry.supportingAttachment.name}</p>
-                                      <p className="text-xs text-muted-foreground">
-                                        {((entry.supportingAttachment.size || 0) / 1024).toFixed(2)} KB
-                                      </p>
-                                    </div>
-                                  </div>
-                                  <button
-                                    type="button"
-                                    onClick={(event) => {
-                                      event.preventDefault()
-                                      event.stopPropagation()
-                                      handleSupportingAttachmentChange(index, null)
-                                    }}
-                                    className="inline-flex items-center gap-1 rounded-full border border-slate-200 dark:border-slate-700 px-3 py-1 text-xs text-slate-600 dark:text-slate-300 hover:border-coral-300 dark:hover:border-coral-600"
-                                  >
-                                    <XCircle className="h-3.5 w-3.5" />
-                                    Remove
-                                  </button>
-                                </div>
-                              ) : (
-                                <div className="space-y-2">
-                                  <Upload className="h-8 w-8 mx-auto text-muted-foreground" />
-                                  <p className="text-sm text-muted-foreground">
-                                    Drag or click to add approvals, proposals, or extra receipts (optional)
-                                  </p>
-                                </div>
-                              )}
-                            </label>
-                          </div>
-                          <p className="text-xs text-muted-foreground">
-                            Attach any extra documents Finance may need, such as approvals or proposals. Leave blank if not
-                            applicable.
-                          </p>
-                        </div>
-                      </div>
-                      {formData.staffClaimType === "Employee Benefit" &&
-                        entry.benefitType === "Optical" &&
-                        (entry.isOpticalReceipt || entry.opticalVerification) && (
-                        <div
-                          className={cn(
-                            "rounded-md border px-3 py-2 text-xs",
-                            entry.opticalVerification?.verified
-                              ? "border-emerald-300 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20 text-emerald-900 dark:text-emerald-100"
-                              : "border-amber-300 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20 text-amber-900 dark:text-amber-100",
-                          )}
-                        >
-                          <div className="flex items-center gap-2">
-                            {entry.opticalVerification?.verified ? (
-                              <ShieldCheck className="h-4 w-4" />
-                            ) : (
-                              <AlertCircle className="h-4 w-4" />
-                            )}
-                            <p className="font-medium">
-                              {entry.opticalVerification?.verified
-                                ? "Verified optical receipt"
-                                : "Optical receipt needs manual verification"}
-                            </p>
-                          </div>
-                          <p className="mt-1 text-[13px]">
-                            {entry.opticalVerification?.note ||
-                              (entry.opticalVerification?.verified
-                                ? "Detected prescription details for eyewear reimbursement."
-                                : "We could not detect prescription details. Upload the prescription page or enter it manually.")}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  )
-                })}
-              </CardContent>
-            </Card>
-          )}
-
-          <Card>
+              
+              <Card>
             <CardHeader>
               <CardTitle>Summary & Submission</CardTitle>
               <CardDescription>Confirm totals and supporting information</CardDescription>
@@ -1926,26 +2075,34 @@ export default function SubmitClaim() {
                 </p>
               </div>
 
-              <div className="flex flex-col gap-3 md:flex-row">
-                <Button type="submit" disabled={!isFormValid || isSubmitting} className="flex-1">
-                  {isSubmitting ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                      Submitting...
-                    </>
-                  ) : (
-                    <>
-                      <FileText className="h-4 w-4 mr-2" />
-                      Submit Claim
-                    </>
-                  )}
+              <div className="flex justify-between pt-4">
+                <Button type="button" variant="outline" onClick={handlePreviousStep}>
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Back
                 </Button>
-                <Button type="button" variant="outline" onClick={() => router.push("/dashboard")}>
-                  Cancel
-                </Button>
+                <div className="flex gap-3">
+                  <Button type="button" variant="outline" onClick={() => router.push("/dashboard")}>
+                    Cancel
+                  </Button>
+                  <Button type="submit" disabled={!isFormValid || isSubmitting}>
+                    {isSubmitting ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                        Submitting...
+                      </>
+                    ) : (
+                      <>
+                        <FileText className="h-4 w-4 mr-2" />
+                        Submit Claim
+                      </>
+                    )}
+                  </Button>
+                </div>
               </div>
             </CardContent>
           </Card>
+            </>
+          )}
         </form>
 
         <Card className="mt-6">

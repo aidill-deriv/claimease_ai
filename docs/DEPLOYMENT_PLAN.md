@@ -21,7 +21,7 @@ ClaimEase uses the same Supabase backend for both environments. We promote code 
 2. In Render:
    - “New + Web Service” → connect the repo.
    - Set **Build Command** `pip3 install -r config/requirements.txt`.
-   - Set **Start Command** `python3 -m uvicorn src.api:app --host 0.0.0.0 --port 8001`.
+   - Set **Start Command** `sh -c 'python3 -m uvicorn src.api:app --host 0.0.0.0 --port ${PORT:-8001}'`.
    - Choose Python 3.11 and Free tier.
 3. Add environment variables (Render → Settings → Environment):
 

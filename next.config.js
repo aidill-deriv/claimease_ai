@@ -19,6 +19,13 @@ const nextConfig = {
   async rewrites() {
     return proxiedApiRoutes
   },
+  webpack: (config, { dev }) => {
+    // Disable webpack cache in development to prevent cache errors
+    if (dev) {
+      config.cache = false
+    }
+    return config
+  },
 }
 
 module.exports = nextConfig
