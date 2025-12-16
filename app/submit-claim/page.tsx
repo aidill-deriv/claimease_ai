@@ -295,8 +295,6 @@ type FormState = {
   regentEmail: string
   location: string
   hiringCompany: string
-  bankAccountNumber: string
-  bankName: string
   staffClaimType: string
   receiptCount: string
   clinicName: string
@@ -360,8 +358,6 @@ export default function SubmitClaim() {
     regentEmail: "",
     location: "",
     hiringCompany: "",
-    bankAccountNumber: "",
-    bankName: "",
     staffClaimType: "",
     receiptCount: "",
     clinicName: "",
@@ -655,6 +651,7 @@ export default function SubmitClaim() {
             email?: string | null
             location?: string | null
             company?: string | null
+            hiringCompany?: string | null
           }
         }
 
@@ -666,7 +663,7 @@ export default function SubmitClaim() {
           department: profile.department ?? prev.department,
           regentEmail: profile.email ?? prev.regentEmail,
           location: profile.location ?? prev.location,
-          hiringCompany: profile.company ?? prev.hiringCompany,
+          hiringCompany: profile.hiringCompany ?? profile.company ?? prev.hiringCompany,
         }))
         setIsProfileVerified(Boolean(profile.fullName || profile.employeeId || profile.department))
       } catch (err) {
@@ -1034,6 +1031,13 @@ export default function SubmitClaim() {
     return locationOptions
   }, [formData.location])
 
+  const hiringCompanySelectOptions = useMemo(() => {
+    if (formData.hiringCompany && !hiringCompanyOptions.includes(formData.hiringCompany)) {
+      return [...hiringCompanyOptions, formData.hiringCompany]
+    }
+    return hiringCompanyOptions
+  }, [formData.hiringCompany])
+
   const isRegentEmailValid = formData.regentEmail.endsWith("@regentmarkets.com")
 
   const isFormValid = useMemo(() => {
@@ -1054,10 +1058,6 @@ export default function SubmitClaim() {
     }
 
     if (!isRegentEmailValid) {
-      return false
-    }
-
-    if (formData.hiringCompany && (!formData.bankAccountNumber || !formData.bankName)) {
       return false
     }
 
@@ -1128,8 +1128,6 @@ export default function SubmitClaim() {
           department: formData.department,
           location: formData.location,
           hiringCompany: formData.hiringCompany,
-          bankAccountNumber: formData.bankAccountNumber || undefined,
-          bankName: formData.bankName || undefined,
         },
         clinicName: formData.clinicName || undefined,
         headcount: formData.headcount || undefined,
@@ -1161,8 +1159,6 @@ export default function SubmitClaim() {
         regentEmail: userEmail,
         location: "",
         hiringCompany: "",
-        bankAccountNumber: "",
-        bankName: "",
         staffClaimType: "",
         receiptCount: "",
         clinicName: "",
@@ -1502,7 +1498,11 @@ export default function SubmitClaim() {
                       value={formData.receiptCount}
                       onChange={handleReceiptCountChange}
                       required
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                      disabled={!formData.staffClaimType}
+                      className={cn(
+                        "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                        !formData.staffClaimType ? "bg-muted text-muted-foreground cursor-not-allowed" : "",
+                      )}
                     >
                       <option value="">Select receipt count</option>
                       {receiptCountOptions.map((option) => (
@@ -1511,6 +1511,9 @@ export default function SubmitClaim() {
                         </option>
                       ))}
                     </select>
+                    {!formData.staffClaimType && (
+                      <p className="text-xs text-muted-foreground">Choose a staff claim type first to set receipt count.</p>
+                    )}
                   </div>
 
                   {activeReceiptCount > 0 && (
@@ -2108,7 +2111,7 @@ export default function SubmitClaim() {
                   }`}
                 >
                     <option value="">Select hiring company</option>
-                    {hiringCompanyOptions.map((company) => (
+                    {hiringCompanySelectOptions.map((company) => (
                       <option key={company} value={company}>
                         {company}
                       </option>
@@ -2116,31 +2119,6 @@ export default function SubmitClaim() {
                   </select>
                 </div>
               </div>
-
-              {formData.hiringCompany && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="bankAccountNumber">Bank Account Number*</Label>
-                    <Input
-                      id="bankAccountNumber"
-                      name="bankAccountNumber"
-                      value={formData.bankAccountNumber}
-                      onChange={handleFormStateChange}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="bankName">Bank Name*</Label>
-                    <Input
-                      id="bankName"
-                      name="bankName"
-                      value={formData.bankName}
-                      onChange={handleFormStateChange}
-                      required
-                    />
-                  </div>
-                </div>
-              )}
             </CardContent>
           </Card>
               

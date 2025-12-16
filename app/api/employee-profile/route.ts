@@ -66,7 +66,8 @@ export async function POST(request: Request) {
       department: data.department || data.department_name || null,
       email: data.email || email,
       location: data.office_location || data.location || data.country || null,
-      company: data.company || data.hiring_company || data.company_name || null,
+      company: data.company || data.company_name || data.hiring_company || null,
+      hiringCompany: data.hiring_company || data.company || data.company_name || null,
     }
 
     return NextResponse.json({ data: normalized })
