@@ -233,7 +233,7 @@ const staffClaimTypeTabs = [
 
 const receiptCountOptions = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
 
-const currencyOptions = ["MYR", "USD", "EUR", "GBP", "SGD", "AED", "AUD", "JPY", "IDR", "Other"]
+const currencyOptions = ["AED", "EUR", "GBP", "MYR", "SGD", "USD"]
 
 const employeeBenefitTypeOptions = ["Optical", "Dental", "Health Screening"] as const
 
