@@ -21,20 +21,10 @@
       "static/chunks/main-app.js",
       "static/chunks/app/chat/page.js"
     ],
-    "/admin/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/admin/page.js"
-    ],
     "/submit-claim/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/submit-claim/page.js"
-    ],
-    "/no-access/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/no-access/page.js"
     ]
   }
 }
