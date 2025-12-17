@@ -14,8 +14,6 @@ type WorkDetailsPayload = {
   department: string
   location: string
   hiringCompany: string
-  bankAccountNumber?: string
-  bankName?: string
 }
 
 export interface ClaimEntryPayload {
@@ -29,6 +27,9 @@ export interface ClaimEntryPayload {
   merchantName?: string | null
   isOpticalReceipt?: boolean
   benefitType?: string | null
+  convertedAmountLocal?: number | null
+  localCurrency?: string | null
+  fxRateUsed?: number | null
   opticalVerification?: {
     verified: boolean
     hasPrescriptionDetails?: boolean
@@ -47,6 +48,13 @@ export interface SupabaseClaimPayload {
   clinicName?: string
   headcount?: string
   claimEntries: ClaimEntryPayload[]
+  fxSnapshot?: {
+    base: string
+    rates: Record<string, number>
+    fetchedAt: string
+    provider: string
+    source?: string
+  } | null
 }
 
 export interface SupabaseClaimResult {
@@ -122,6 +130,9 @@ export const submitClaimToSupabase = async (
       receipt_path: attachmentPaths[index],
       supporting_receipt_path: supportingAttachmentPaths[index][0] || null,
       supporting_receipt_paths: supportingAttachmentPaths[index],
+      converted_amount_local: entry.convertedAmountLocal ?? null,
+      local_currency: entry.localCurrency || payload.localCurrency || null,
+      fx_rate_used: entry.fxRateUsed ?? null,
     }))
 
     const metadata = {
@@ -131,6 +142,7 @@ export const submitClaimToSupabase = async (
       headcount: payload.headcount || null,
       receiptCount: payload.receiptCount,
       localCurrency: payload.localCurrency,
+      fxSnapshot: payload.fxSnapshot || null,
       claimEntries: claimEntrySummary,
       primaryReceiptPaths: attachmentPaths,
       supportingReceiptPaths: supportingAttachmentPaths,

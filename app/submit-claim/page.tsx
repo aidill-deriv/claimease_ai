@@ -24,6 +24,7 @@ import {
   ArrowRight,
   ArrowLeft,
   Check,
+  Send,
 } from "lucide-react"
 import { submitClaimToSupabase } from "@/lib/supabase-claims"
 import { fetchDashboardData, type BalanceData } from "@/lib/supabase-dashboard"
@@ -332,6 +333,26 @@ type DuplicateStatus = {
   matches: number[]
 }
 
+type FxRates = {
+  base: string
+  rates: Record<string, number>
+  fetchedAt: string
+  provider: string
+  source: "live" | "cache" | "fallback"
+}
+
+type FxState =
+  | { status: "idle" | "loading"; data?: FxRates; error?: string }
+  | { status: "success"; data: FxRates; error?: string }
+  | { status: "error"; data?: FxRates; error: string }
+
+type ConversionResult = {
+  converted: number | null
+  rate: number | null // rate of local -> entry currency (as returned)
+  inverseRate: number | null // rate of entry currency -> local
+  hasRate: boolean
+}
+
 const receiptOcrFeatureEnabled = true
 
 export default function SubmitClaim() {
@@ -350,6 +371,7 @@ export default function SubmitClaim() {
   const [claimEntries, setClaimEntries] = useState<ClaimEntry[]>([])
   const [ocrStatuses, setOcrStatuses] = useState<Record<number, ReceiptOcrState>>({})
   const [duplicateStatuses, setDuplicateStatuses] = useState<Record<number, DuplicateStatus>>({})
+  const [fxState, setFxState] = useState<FxState>({ status: "idle" })
   const claimEntriesRef = useRef<ClaimEntry[]>([])
   const [formData, setFormData] = useState<FormState>({
     fullName: "",
@@ -652,6 +674,8 @@ export default function SubmitClaim() {
             location?: string | null
             company?: string | null
             hiringCompany?: string | null
+            localCurrency?: string | null
+            country?: string | null
           }
         }
 
@@ -664,6 +688,7 @@ export default function SubmitClaim() {
           regentEmail: profile.email ?? prev.regentEmail,
           location: profile.location ?? prev.location,
           hiringCompany: profile.hiringCompany ?? profile.company ?? prev.hiringCompany,
+          localCurrency: profile.localCurrency ?? prev.localCurrency,
         }))
         setIsProfileVerified(Boolean(profile.fullName || profile.employeeId || profile.department))
       } catch (err) {
@@ -779,20 +804,130 @@ export default function SubmitClaim() {
     setDuplicateStatuses(nextStatuses)
   }, [claimEntries])
 
+  useEffect(() => {
+    const base = formData.localCurrency?.trim()
+    if (!base) {
+      return
+    }
+
+    const requiresRates = claimEntries.some(
+      (entry) => entry.currency && entry.currency !== base && entry.amount && !Number.isNaN(parseFloat(entry.amount)),
+    )
+
+    if (!requiresRates) {
+      return
+    }
+
+    let isCancelled = false
+    const fetchRates = async () => {
+      setFxState((prev) => ({ ...prev, status: "loading", error: undefined }))
+      try {
+        const response = await fetch("/api/fx-rates", {
+          method: "POST",
+          headers: getAuthHeaders({ "Content-Type": "application/json" }),
+          body: JSON.stringify({ base }),
+        })
+        const payload = (await response.json().catch(() => null)) as { error?: string } & FxRates
+
+        if (!response.ok || payload.error) {
+          throw new Error(payload.error || "Failed to load FX rates.")
+        }
+
+        if (!isCancelled) {
+          setFxState({ status: "success", data: payload })
+        }
+      } catch (error) {
+        console.error("FX rates fetch failed", error)
+        if (!isCancelled) {
+          setFxState((prev) => {
+            const fallback = prev.data
+            return {
+              status: fallback ? "success" : "error",
+              data: fallback,
+              error: error instanceof Error ? error.message : "Failed to load FX rates.",
+            }
+          })
+        }
+      }
+    }
+
+    void fetchRates()
+
+    return () => {
+      isCancelled = true
+    }
+  }, [formData.localCurrency, claimEntries])
+
+  const conversionResults: ConversionResult[] = useMemo(() => {
+    const base = formData.localCurrency?.trim()
+    return claimEntries.map((entry) => {
+      const amount = parseFloat(entry.amount)
+      if (!base || Number.isNaN(amount) || !entry.currency) {
+        return { converted: null, rate: null, inverseRate: null, hasRate: false }
+      }
+      if (entry.currency === base) {
+        return { converted: amount, rate: 1, inverseRate: 1, hasRate: true }
+      }
+      const rate = fxState.data?.rates?.[entry.currency] || null
+      if (!rate || rate <= 0) {
+        return { converted: null, rate: null, inverseRate: null, hasRate: false }
+      }
+      const inverseRate = 1 / rate
+      return { converted: amount * inverseRate, rate, inverseRate, hasRate: true }
+    })
+  }, [claimEntries, formData.localCurrency, fxState.data])
+
   const calculatedTotal = useMemo(() => {
-    return claimEntries.reduce((sum, entry) => {
-      const parsedAmount = parseFloat(entry.amount)
-      if (Number.isNaN(parsedAmount)) {
+    if (!formData.localCurrency) {
+      return 0
+    }
+    return conversionResults.reduce((sum, result) => {
+      if (!result.hasRate || result.converted === null || Number.isNaN(result.converted)) {
         return sum
       }
-      return sum + parsedAmount
+      return sum + result.converted
     }, 0)
-  }, [claimEntries])
+  }, [conversionResults, formData.localCurrency])
 
   const hasDuplicates = useMemo(
     () => Object.values(duplicateStatuses).some((status) => status?.isDuplicate),
     [duplicateStatuses],
   )
+
+  const hasMissingConversion = useMemo(() => {
+    if (!formData.localCurrency) {
+      return true
+    }
+    return conversionResults.some((result, idx) => {
+      const entry = claimEntries[idx]
+      if (!entry.currency || !entry.amount) return true
+      if (entry.currency === formData.localCurrency) return false
+      return !result.hasRate
+    })
+  }, [conversionResults, claimEntries, formData.localCurrency])
+
+  const step2Validation = useMemo(() => {
+    if (!formData.staffClaimType) {
+      return { valid: false, reason: "Select a Staff Claim Type." }
+    }
+    if (activeReceiptCount === 0 || claimEntries.length === 0) {
+      return { valid: false, reason: "Add at least one claim entry." }
+    }
+    for (let i = 0; i < claimEntries.length; i += 1) {
+      const entry = claimEntries[i]
+      if (!entry.description) return { valid: false, reason: `Claim ${i + 1} description is required.` }
+      if (!entry.currency) return { valid: false, reason: `Claim ${i + 1} currency is required.` }
+      if (!entry.amount) return { valid: false, reason: `Claim ${i + 1} amount is required.` }
+      if (!entry.serviceDate) return { valid: false, reason: `Claim ${i + 1} receipt date is required.` }
+      if (!entry.claimantName) return { valid: false, reason: `Claim ${i + 1} person/patient name is required.` }
+      if (!entry.merchantName) return { valid: false, reason: `Claim ${i + 1} merchant is required.` }
+      if (formData.staffClaimType === "Employee Benefit" && !entry.benefitType) {
+        return { valid: false, reason: `Claim ${i + 1} benefit type is required.` }
+      }
+    }
+    return { valid: true, reason: "" }
+  }, [formData.staffClaimType, activeReceiptCount, claimEntries])
+  const isStep2Valid = step2Validation.valid
 
   const lockPersonalFields = isProfileVerified && !profileError
   const lockedFieldClass = lockPersonalFields ? "bg-muted/60 text-muted-foreground cursor-not-allowed" : ""
@@ -1038,6 +1173,13 @@ export default function SubmitClaim() {
     return hiringCompanyOptions
   }, [formData.hiringCompany])
 
+  const localCurrencyOptions = useMemo(() => {
+    if (formData.localCurrency && !currencyOptions.includes(formData.localCurrency)) {
+      return [...currencyOptions, formData.localCurrency]
+    }
+    return currencyOptions
+  }, [formData.localCurrency])
+
   const isRegentEmailValid = formData.regentEmail.endsWith("@regentmarkets.com")
 
   const isFormValid = useMemo(() => {
@@ -1092,12 +1234,16 @@ export default function SubmitClaim() {
       return false
     }
 
-    if (calculatedTotal <= 0) {
+    if (!formData.localCurrency || calculatedTotal <= 0) {
+      return false
+    }
+
+    if (hasMissingConversion) {
       return false
     }
 
     return true
-  }, [formData, claimEntries, activeReceiptCount, calculatedTotal, isRegentEmailValid])
+  }, [formData, claimEntries, activeReceiptCount, calculatedTotal, isRegentEmailValid, hasMissingConversion])
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
@@ -1131,7 +1277,7 @@ export default function SubmitClaim() {
         },
         clinicName: formData.clinicName || undefined,
         headcount: formData.headcount || undefined,
-        claimEntries: claimEntries.map((entry) => ({
+        claimEntries: claimEntries.map((entry, idx) => ({
           description: entry.description,
           currency: entry.currency,
           amount: parseFloat(entry.amount),
@@ -1143,14 +1289,29 @@ export default function SubmitClaim() {
           isOpticalReceipt: entry.isOpticalReceipt,
           benefitType: entry.benefitType || undefined,
           opticalVerification: entry.opticalVerification,
+          convertedAmountLocal: conversionResults[idx]?.converted ?? null,
+          localCurrency: formData.localCurrency,
+          fxRateUsed:
+            entry.currency === formData.localCurrency
+              ? 1
+              : conversionResults[idx]?.inverseRate || null,
         })),
+        fxSnapshot:
+          fxState.data && formData.localCurrency
+            ? {
+                base: fxState.data.base,
+                rates: fxState.data.rates,
+                fetchedAt: fxState.data.fetchedAt,
+                provider: fxState.data.provider,
+                source: fxState.data.source,
+              }
+            : null,
       })
 
-      if (!result.success) {
+      const allowDemoFallback = !result.success && result.error?.toLowerCase().includes("bucket not found")
+      if (!result.success && !allowDemoFallback) {
         throw new Error(result.error || "Failed to submit claim.")
       }
-
-      setSubmitSuccess(true)
 
       setFormData({
         fullName: "",
@@ -1173,9 +1334,10 @@ export default function SubmitClaim() {
       })
       setOcrStatuses({})
 
+      setSubmitSuccess(true)
       setTimeout(() => {
-        setSubmitSuccess(false)
-      }, 4000)
+        router.push("/dashboard")
+      }, 1500)
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : "Failed to submit claim. Please try again.")
     } finally {
@@ -1227,11 +1389,6 @@ export default function SubmitClaim() {
     claimEntries.length > 0 &&
     claimEntries.every((entry) => entry.attachment) &&
     !hasDuplicates
-  const isStep2Valid = formData.staffClaimType && claimEntries.every(entry => 
-    entry.description && entry.currency && entry.amount && entry.serviceDate && 
-    entry.claimantName && entry.merchantName &&
-    (formData.staffClaimType !== "Employee Benefit" || entry.benefitType)
-  )
   const isStep3Valid = claimEntries.every((entry) => {
     if (!entryRequiresOpticalProof(entry)) {
       return true
@@ -1351,6 +1508,17 @@ export default function SubmitClaim() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-coral-50 dark:from-slate-1100 dark:via-slate-1000 dark:to-slate-900 lg:pl-72">
+      {submitSuccess && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="relative w-full max-w-sm rounded-2xl bg-white p-6 text-center shadow-2xl dark:bg-slate-900">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-900/60 dark:text-emerald-100 animate-pulse">
+              <Check className="h-10 w-10" />
+            </div>
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Your Claim Submission has been sent.</h3>
+            <p className="mt-2 text-sm text-muted-foreground">Redirecting you to the Dashboard…</p>
+          </div>
+        </div>
+      )}
       <Navigation />
 
       <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -1395,22 +1563,6 @@ export default function SubmitClaim() {
             </div>
           </CardContent>
         </Card>
-
-        {submitSuccess && (
-          <Card className="mb-6 border-green-500 bg-green-50 dark:bg-green-950">
-            <CardContent className="pt-6">
-              <div className="flex items-center space-x-3">
-                <CheckCircle2 className="h-6 w-6 text-green-600 dark:text-green-400" />
-                <div>
-                  <p className="font-medium text-green-900 dark:text-green-100">Claim submitted successfully!</p>
-                  <p className="text-sm text-green-700 dark:text-green-300">
-                    Your claim has been received and is being processed.
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
 
         {submitError && (
           <Card className="mb-6 border-red-500 bg-red-50 dark:bg-red-950">
@@ -1789,6 +1941,29 @@ export default function SubmitClaim() {
                           onChange={(event) => handleClaimEntryChange(index, "amount", event.target.value)}
                           required
                         />
+                        {formData.localCurrency && (
+                          <p className="text-xs text-muted-foreground flex items-center gap-1">
+                            {entry.currency === formData.localCurrency ? (
+                              <span>
+                                Converted: {entry.amount || "0.00"} {formData.localCurrency} (same as local currency)
+                              </span>
+                            ) : conversionResults[index]?.hasRate ? (
+                              <span>
+                                Converted:{" "}
+                                {conversionResults[index]?.converted?.toFixed(2) || "0.00"} {formData.localCurrency}{" "}
+                                {conversionResults[index]?.inverseRate
+                                  ? `(1 ${entry.currency} = ${conversionResults[index]?.inverseRate?.toFixed(
+                                      4,
+                                    )} ${formData.localCurrency})`
+                                  : ""}
+                              </span>
+                            ) : (
+                              <span className="text-red-600">
+                                FX rate missing for {entry.currency}. We’ll fetch rates when available.
+                              </span>
+                            )}
+                          </p>
+                        )}
                       </div>
                       {formData.staffClaimType === "Employee Benefit" && entry.benefitType === "Optical" && (
                         <div
@@ -1824,22 +1999,23 @@ export default function SubmitClaim() {
                     </div>
                   ))}
 
-                  <div className="flex justify-between pt-4">
-                    <Button type="button" variant="outline" onClick={handlePreviousStep}>
-                      <ArrowLeft className="mr-2 h-4 w-4" />
-                      Back
-                    </Button>
-                    <Button 
-                      type="button" 
-                      onClick={handleNextStep}
-                      disabled={!isStep2Valid}
-                    >
+                <div className="flex justify-between pt-4">
+                  <Button type="button" variant="outline" onClick={handlePreviousStep}>
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Back
+                  </Button>
+                  <div className="flex items-center gap-3">
+                    {!isStep2Valid && step2Validation.reason && (
+                      <p className="text-xs text-red-600">{step2Validation.reason}</p>
+                    )}
+                    <Button type="button" onClick={handleNextStep} disabled={!isStep2Valid}>
                       Next: Supporting Documents
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </CardContent>
+            </Card>
             </>
           )}
 
@@ -2199,16 +2375,6 @@ export default function SubmitClaim() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="headcount">Headcount (Applicable for team building/lunch)</Label>
-                  <Input
-                    id="headcount"
-                    name="headcount"
-                    value={formData.headcount}
-                    onChange={handleFormStateChange}
-                    placeholder="Enter headcount if applicable"
-                  />
-                </div>
-                <div className="space-y-2">
                   <Label htmlFor="localCurrency">Local Currency*</Label>
                   <select
                     id="localCurrency"
@@ -2219,17 +2385,60 @@ export default function SubmitClaim() {
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                   >
                     <option value="">Select local currency</option>
-                    {currencyOptions.map((currency) => (
+                    {localCurrencyOptions.map((currency) => (
                       <option key={currency} value={currency}>
                         {currency}
                       </option>
                     ))}
-                  </select>
-                </div>
+                </select>
               </div>
+            </div>
+
+              {formData.localCurrency && claimEntries.length > 0 && (
+                <div className="space-y-3 rounded-lg border border-slate-200 bg-white p-3 text-sm dark:border-slate-800 dark:bg-slate-950">
+                  <p className="font-semibold text-slate-900 dark:text-slate-100">Claim amounts (converted)</p>
+                  <div className="space-y-2">
+                    {claimEntries.map((entry, index) => {
+                      const converted = conversionResults[index]?.converted
+                      const hasRate = conversionResults[index]?.hasRate
+                      return (
+                        <div key={`conversion-${index}`} className="flex flex-col gap-1">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-muted-foreground">Claim {index + 1}</span>
+                            {!hasRate && (
+                              <span className="text-xs text-red-600">Rate missing for {entry.currency}</span>
+                            )}
+                          </div>
+                          <div className="text-sm">
+                            {entry.amount || "0.00"} {entry.currency || "—"}{" "}
+                            {hasRate && converted !== null
+                              ? `→ ${converted?.toFixed(2)} ${formData.localCurrency}`
+                              : ""}
+                          </div>
+                          {conversionResults[index]?.inverseRate && (
+                            <p className="text-xs text-muted-foreground">
+                              1 {entry.currency} = {conversionResults[index]?.inverseRate?.toFixed(4)}{" "}
+                              {formData.localCurrency}
+                            </p>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                  {fxState.data?.fetchedAt && (
+                    <p className="text-xs text-muted-foreground">
+                      Rates as of {fxState.data.fetchedAt} ({fxState.data.provider}
+                      {fxState.data.source ? `, ${fxState.data.source}` : ""})
+                    </p>
+                  )}
+                  {fxState.error && <p className="text-xs text-red-600">{fxState.error}</p>}
+                </div>
+              )}
 
               <div className="space-y-2">
-                <Label htmlFor="totalAmount">Total Amount*</Label>
+                <Label htmlFor="totalAmount">
+                  Total Amount* {formData.localCurrency ? `(in ${formData.localCurrency})` : ""}
+                </Label>
                 <Input id="totalAmount" name="totalAmount" value={calculatedTotal.toFixed(2)} readOnly placeholder="0.00" />
                 <p className="text-xs text-muted-foreground">
                   Automatically calculated based on all claim entry amounts. Ensure it matches your supporting documents.
@@ -2253,7 +2462,7 @@ export default function SubmitClaim() {
                       </>
                     ) : (
                       <>
-                        <FileText className="h-4 w-4 mr-2" />
+                        <Send className="h-4 w-4 mr-2" />
                         Submit Claim
                       </>
                     )}

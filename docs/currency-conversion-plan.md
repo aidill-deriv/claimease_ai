@@ -44,3 +44,10 @@
 - Do we need to whitelist currencies, or allow ad-hoc three-letter codes if XE returns them?
 - Acceptable TTL? Default 12h unless specified.
 - Should we add a manual override for rates (e.g., finance-provided static map) when XE is unreachable?
+
+## XE Integration Option
+- Endpoint: Configure `FX_RATES_URL` to XE’s latest/convert endpoint and set `FX_RATES_PROVIDER=xe`.
+- Auth: Add `XE_API_KEY` (and secret if required) and pass via headers or basic auth per XE docs.
+- Parsing: Map XE response to `{ base, rates, fetchedAt, provider: "xe" }`. Confirm rate direction (base → target) and adjust inversion logic if needed.
+- Cost: XE requires a paid plan; choose a tier that covers expected daily calls.
+- Fallback: Keep the existing static map and cache behavior so the app still works if XE is unreachable.

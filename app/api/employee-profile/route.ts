@@ -43,6 +43,7 @@ export async function POST(request: Request) {
     const supabase = getSupabaseServiceClient()
 
     const profileTable = process.env.SUPABASE_EMPLOYEE_PROFILE_TABLE || "employee_email"
+    const mappingTable = process.env.SUPABASE_CLAIM_MAPPING_TABLE || "claim_mapping_template"
 
     const { data, error } = await supabase
       .from(profileTable)
@@ -60,6 +61,24 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "No employee profile found for that email." }, { status: 404 })
     }
 
+    const country = data.country || data.location || data.office_location || null
+    let mappedCurrency: string | null = null
+
+    if (country) {
+      const { data: mapping, error: mappingError } = await supabase
+        .from(mappingTable)
+        .select("reimbursement_currency_a, country_a")
+        .ilike("country_a", String(country))
+        .limit(1)
+        .maybeSingle<{ reimbursement_currency_a: string | null }>()
+
+      if (mappingError) {
+        console.error("Claim mapping lookup failed:", mappingError)
+      } else if (mapping?.reimbursement_currency_a) {
+        mappedCurrency = mapping.reimbursement_currency_a
+      }
+    }
+
     const normalized = {
       fullName: data.employee_name || data.name || data.full_name || null,
       employeeId: data.employee_id || data.employeeId || null,
@@ -68,6 +87,8 @@ export async function POST(request: Request) {
       location: data.office_location || data.location || data.country || null,
       company: data.company || data.company_name || data.hiring_company || null,
       hiringCompany: data.hiring_company || data.company || data.company_name || null,
+      country: country || null,
+      localCurrency: mappedCurrency,
     }
 
     return NextResponse.json({ data: normalized })
