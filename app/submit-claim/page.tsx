@@ -1825,12 +1825,13 @@ export default function SubmitClaim() {
                         Resolve duplicate receipts before continuing.
                       </p>
                     )}
-                    <Button 
-                      type="button" 
+                    <Button
+                      type="button"
                       onClick={handleNextStep}
                       disabled={!isStep1Valid}
+                      className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm"
                     >
-                      Next: Claim Details
+                      Continue
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </div>
@@ -2008,8 +2009,13 @@ export default function SubmitClaim() {
                     {!isStep2Valid && step2Validation.reason && (
                       <p className="text-xs text-red-600">{step2Validation.reason}</p>
                     )}
-                    <Button type="button" onClick={handleNextStep} disabled={!isStep2Valid}>
-                      Next: Supporting Documents
+                    <Button
+                      type="button"
+                      onClick={handleNextStep}
+                      disabled={!isStep2Valid}
+                      className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm"
+                    >
+                      Continue
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </div>
@@ -2127,10 +2133,15 @@ export default function SubmitClaim() {
                           Upload prescription proof for optical claims before continuing.
                         </p>
                       )}
-                      <Button type="button" onClick={() => isStep3Valid && setCurrentStep(4)} disabled={!isStep3Valid}>
-                      Continue to Review
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
+                      <Button
+                        type="button"
+                        onClick={() => isStep3Valid && setCurrentStep(4)}
+                        disabled={!isStep3Valid}
+                        className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm"
+                      >
+                        Review
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
                     </div>
                   </div>
                 </CardContent>
@@ -2395,43 +2406,60 @@ export default function SubmitClaim() {
             </div>
 
               {formData.localCurrency && claimEntries.length > 0 && (
-                <div className="space-y-3 rounded-lg border border-slate-200 bg-white p-3 text-sm dark:border-slate-800 dark:bg-slate-950">
-                  <p className="font-semibold text-slate-900 dark:text-slate-100">Claim amounts (converted)</p>
-                  <div className="space-y-2">
+                <div className="space-y-3 rounded-2xl border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-emerald-50 p-4 text-sm shadow-sm dark:border-emerald-900/60 dark:from-slate-950 dark:via-slate-950 dark:to-emerald-950/30">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-semibold text-slate-900 dark:text-emerald-50">Claim amounts (converted)</p>
+                      <p className="text-xs text-muted-foreground">
+                        Showing totals in {formData.localCurrency}. Rates auto-refresh when needed.
+                      </p>
+                    </div>
+                    <div className="rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-semibold text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-100">
+                      {formData.localCurrency}
+                    </div>
+                  </div>
+
+                  <div className="divide-y divide-slate-200 dark:divide-emerald-900/40 rounded-xl border border-slate-100 bg-white shadow-xs dark:border-emerald-900/60 dark:bg-slate-950/70">
                     {claimEntries.map((entry, index) => {
                       const converted = conversionResults[index]?.converted
                       const hasRate = conversionResults[index]?.hasRate
+                      const inverse = conversionResults[index]?.inverseRate
                       return (
-                        <div key={`conversion-${index}`} className="flex flex-col gap-1">
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs text-muted-foreground">Claim {index + 1}</span>
-                            {!hasRate && (
-                              <span className="text-xs text-red-600">Rate missing for {entry.currency}</span>
+                        <div key={`conversion-${index}`} className="grid grid-cols-1 gap-2 px-4 py-3 sm:grid-cols-3 sm:items-center">
+                          <div className="text-xs font-semibold text-slate-700 dark:text-emerald-50">Claim {index + 1}</div>
+                          <div className="text-sm text-slate-900 dark:text-white">
+                            {entry.amount || "0.00"} {entry.currency || "—"}{" "}
+                            {hasRate && converted !== null ? (
+                              <span className="text-emerald-700 dark:text-emerald-200">
+                                → {converted?.toFixed(2)} {formData.localCurrency}
+                              </span>
+                            ) : null}
+                          </div>
+                          <div className="text-xs text-muted-foreground sm:text-right">
+                            {hasRate && inverse ? (
+                              <span>
+                                1 {entry.currency} = {inverse?.toFixed(4)} {formData.localCurrency}
+                              </span>
+                            ) : (
+                              <span className="text-red-600">Rate missing for {entry.currency}</span>
                             )}
                           </div>
-                          <div className="text-sm">
-                            {entry.amount || "0.00"} {entry.currency || "—"}{" "}
-                            {hasRate && converted !== null
-                              ? `→ ${converted?.toFixed(2)} ${formData.localCurrency}`
-                              : ""}
-                          </div>
-                          {conversionResults[index]?.inverseRate && (
-                            <p className="text-xs text-muted-foreground">
-                              1 {entry.currency} = {conversionResults[index]?.inverseRate?.toFixed(4)}{" "}
-                              {formData.localCurrency}
-                            </p>
-                          )}
                         </div>
                       )
                     })}
                   </div>
-                  {fxState.data?.fetchedAt && (
-                    <p className="text-xs text-muted-foreground">
-                      Rates as of {fxState.data.fetchedAt} ({fxState.data.provider}
-                      {fxState.data.source ? `, ${fxState.data.source}` : ""})
-                    </p>
-                  )}
-                  {fxState.error && <p className="text-xs text-red-600">{fxState.error}</p>}
+
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    {fxState.data?.fetchedAt ? (
+                      <span>
+                        Rates as of {fxState.data.fetchedAt} ({fxState.data.provider}
+                        {fxState.data.source ? `, ${fxState.data.source}` : ""})
+                      </span>
+                    ) : (
+                      <span>Rates will load when a different currency is detected.</span>
+                    )}
+                    {fxState.error && <span className="text-red-600">{fxState.error}</span>}
+                  </div>
                 </div>
               )}
 
