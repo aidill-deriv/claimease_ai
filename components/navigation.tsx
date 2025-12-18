@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Home, MessageSquare, FileText, LogOut, Moon, Sun, Shield } from "lucide-react"
+import { Home, MessageSquare, Send, LogOut, Moon, Sun, Shield } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useEffect, useMemo, useState } from "react"
 import { useSession } from "@/hooks/useSession"
@@ -41,7 +41,7 @@ export function Navigation() {
     const items = [
       { name: "Dashboard", path: "/dashboard", icon: Home },
       { name: "AI Chat", path: "/chat", icon: MessageSquare },
-      { name: "Submit Claim", path: "/submit-claim", icon: FileText },
+      { name: "Submit Claim", path: "/submit-claim", icon: Send },
     ]
     if (userRole === "admin" || userRole === "superadmin") {
       items.push({ name: "Admin Console", path: "/admin", icon: Shield })
@@ -157,7 +157,7 @@ export function Navigation() {
           onClick={() => router.push("/submit-claim")}
           className="cursor-pointer hover:bg-coral-50 dark:hover:bg-coral-950 hover:text-coral-700 dark:hover:text-coral-400 transition-colors duration-200"
         >
-          <FileText className="mr-2 h-4 w-4" />
+          <Send className="mr-2 h-4 w-4" />
           <span>Submit Claim</span>
         </DropdownMenuItem>
         {userRole !== "viewer" && (
@@ -275,7 +275,7 @@ export function Navigation() {
                     onClick={() => router.push("/submit-claim")}
                     className="cursor-pointer hover:bg-coral-50 dark:hover:bg-coral-950 hover:text-coral-700 dark:hover:text-coral-400 transition-colors duration-200"
                   >
-                    <FileText className="mr-2 h-4 w-4" />
+                    <Send className="mr-2 h-4 w-4" />
                     <span>Submit Claim</span>
                   </DropdownMenuItem>
                   {userRole !== "viewer" && (

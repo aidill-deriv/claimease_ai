@@ -5,7 +5,18 @@ import { useRouter } from "next/navigation"
 import { Navigation } from "@/components/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { DollarSign, TrendingUp, TrendingDown, Clock, MessageSquare, FileText } from "lucide-react"
+import {
+  DollarSign,
+  TrendingUp,
+  TrendingDown,
+  Clock,
+  MessageSquare,
+  FileText,
+  SmilePlus,
+  Glasses,
+  Stethoscope,
+  type LucideIcon,
+} from "lucide-react"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts"
 
 export default function Dashboard() {
@@ -63,6 +74,25 @@ export default function Dashboard() {
       default:
         return "text-gray-600 bg-gray-50 dark:bg-gray-950 dark:text-gray-400"
     }
+  }
+
+  const getClaimIcon = (category?: string): LucideIcon => {
+    const normalized = category?.toLowerCase() || ""
+    if (normalized.includes("dental") || normalized.includes("tooth") || normalized.includes("dentist")) {
+      return SmilePlus
+    }
+    if (normalized.includes("optic") || normalized.includes("vision") || normalized.includes("eye")) {
+      return Glasses
+    }
+    if (
+      normalized.includes("health") ||
+      normalized.includes("medical") ||
+      normalized.includes("clinic") ||
+      normalized.includes("wellness")
+    ) {
+      return Stethoscope
+    }
+    return FileText
   }
 
   if (isLoading) {
@@ -199,31 +229,34 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {recentClaims.map((claim) => (
-                <div
-                  key={claim.id}
-                  className="flex items-center justify-between p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
-                >
-                  <div className="flex items-center space-x-4">
-                    <div className="p-2 rounded-full bg-primary/10">
-                      <FileText className="h-5 w-5 text-primary" />
+              {recentClaims.map((claim) => {
+                const ClaimIcon = getClaimIcon(claim.category)
+                return (
+                  <div
+                    key={claim.id}
+                    className="flex items-center justify-between p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <div className="p-2 rounded-full bg-primary/10">
+                        <ClaimIcon className="h-5 w-5 text-primary" />
+                      </div>
+                      <div>
+                        <p className="font-medium">{claim.id}</p>
+                        <p className="text-sm text-muted-foreground">{claim.category}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-medium">{claim.id}</p>
-                      <p className="text-sm text-muted-foreground">{claim.category}</p>
+                    <div className="flex items-center space-x-4">
+                      <div className="text-right">
+                        <p className="font-medium">${claim.amount}</p>
+                        <p className="text-sm text-muted-foreground">{claim.date}</p>
+                      </div>
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(claim.status)}`}>
+                        {claim.status}
+                      </span>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-4">
-                    <div className="text-right">
-                      <p className="font-medium">${claim.amount}</p>
-                      <p className="text-sm text-muted-foreground">{claim.date}</p>
-                    </div>
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(claim.status)}`}>
-                      {claim.status}
-                    </span>
-                  </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </CardContent>
         </Card>

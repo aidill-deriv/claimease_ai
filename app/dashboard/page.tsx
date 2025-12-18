@@ -5,7 +5,18 @@ import { useRouter } from "next/navigation"
 import { Navigation } from "@/components/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { DollarSign, MessageSquare, FileText, ArrowUpRight, TrendingUp, TrendingDown } from "lucide-react"
+import {
+  DollarSign,
+  MessageSquare,
+  FileText,
+  ArrowUpRight,
+  TrendingUp,
+  TrendingDown,
+  Glasses,
+  SmilePlus,
+  Stethoscope,
+  type LucideIcon,
+} from "lucide-react"
 import { useSession } from "@/hooks/useSession"
 import { fetchDashboardData, type BalanceData, type RecentClaim } from "@/lib/supabase-dashboard"
 
@@ -111,6 +122,25 @@ export default function Dashboard() {
     }
     return Math.min(100, (used / total) * 100)
   }, [balanceData?.total, balanceData?.used])
+
+  const getClaimIcon = (category?: string): LucideIcon => {
+    const normalized = category?.toLowerCase() || ""
+    if (normalized.includes("dental") || normalized.includes("tooth") || normalized.includes("dentist")) {
+      return SmilePlus
+    }
+    if (normalized.includes("optic") || normalized.includes("vision") || normalized.includes("eye")) {
+      return Glasses
+    }
+    if (
+      normalized.includes("health") ||
+      normalized.includes("medical") ||
+      normalized.includes("clinic") ||
+      normalized.includes("wellness")
+    ) {
+      return Stethoscope
+    }
+    return FileText
+  }
 
   if (state.status === "loading" || isLoading || (!hasLoadedData && !dataError)) {
     return (
@@ -305,6 +335,7 @@ export default function Dashboard() {
                         claim.category && claim.category !== claimTitle ? claim.category : undefined
                       const claimReference = claim.reference?.trim()
                       const claimDescription = claim.description?.trim()
+                      const ClaimIcon = getClaimIcon(claim.category)
                       return (
                         <div
                           key={`${year}-${claim.id || index}`}
@@ -312,7 +343,7 @@ export default function Dashboard() {
                         >
                           <div className="flex items-center space-x-4">
                             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-coral-50 to-coral-100 dark:from-coral-950 dark:to-coral-900 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                              <FileText className="h-6 w-6 text-coral-700 dark:text-coral-400" />
+                              <ClaimIcon className="h-6 w-6 text-coral-700 dark:text-coral-400" />
                             </div>
                             <div>
                               <p className="font-semibold text-slate-900 dark:text-white">{claimTitle}</p>

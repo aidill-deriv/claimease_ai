@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Moon, Sun, Sparkles, LayoutDashboard, MessageSquare, FileText, LogOut } from "lucide-react"
+import { Moon, Sun, Sparkles, LayoutDashboard, MessageSquare, Send, LogOut } from "lucide-react"
 import { useTheme } from "next-themes"
 
 export function Navigation() {
@@ -46,7 +46,7 @@ export function Navigation() {
   const navItems = [
     { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
     { name: "Chat", path: "/chat", icon: MessageSquare },
-    { name: "Submit Claim", path: "/submit-claim", icon: FileText },
+    { name: "Submit Claim", path: "/submit-claim", icon: Send },
   ]
 
   if (!mounted) return null
@@ -124,7 +124,7 @@ export function Navigation() {
                   <span>Chat</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push("/submit-claim")}>
-                  <FileText className="mr-2 h-4 w-4" />
+                  <Send className="mr-2 h-4 w-4" />
                   <span>Submit Claim</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
