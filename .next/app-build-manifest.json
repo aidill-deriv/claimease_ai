@@ -1,9 +1,9 @@
 {
   "pages": {
-    "/page": [
+    "/travel/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
+      "static/chunks/app/travel/page.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -16,30 +16,20 @@
       "static/chunks/main-app.js",
       "static/chunks/app/dashboard/page.js"
     ],
-    "/submit-claim/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/submit-claim/page.js"
-    ],
     "/chat/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/chat/page.js"
     ],
-    "/admin/page": [
+    "/submit-claim/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/admin/page.js"
+      "static/chunks/app/submit-claim/page.js"
     ],
-    "/admin/impersonate/page": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/admin/impersonate/page.js"
-    ],
-    "/no-access/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/no-access/page.js"
+      "static/chunks/app/page.js"
     ]
   }
 }

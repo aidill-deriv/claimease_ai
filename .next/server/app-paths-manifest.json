@@ -1,15 +1,11 @@
 {
-  "/page": "app/page.js",
+  "/travel/page": "app/travel/page.js",
   "/dashboard/page": "app/dashboard/page.js",
-  "/submit-claim/page": "app/submit-claim/page.js",
   "/chat/page": "app/chat/page.js",
-  "/admin/impersonate/page": "app/admin/impersonate/page.js",
-  "/api/dashboard-data/route": "app/api/dashboard-data/route.js",
-  "/no-access/page": "app/no-access/page.js",
+  "/page": "app/page.js",
+  "/submit-claim/page": "app/submit-claim/page.js",
   "/api/auth/session/route": "app/api/auth/session/route.js",
-  "/api/employee-profile/route": "app/api/employee-profile/route.js",
   "/api/auth/login/route": "app/api/auth/login/route.js",
-  "/admin/page": "app/admin/page.js",
-  "/api/admin/allowed-users/route": "app/api/admin/allowed-users/route.js",
-  "/api/admin/impersonate/route": "app/api/admin/impersonate/route.js"
+  "/api/travel-dashboard/route": "app/api/travel-dashboard/route.js",
+  "/api/dashboard-data/route": "app/api/dashboard-data/route.js"
 }

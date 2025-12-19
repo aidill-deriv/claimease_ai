@@ -86,6 +86,7 @@ export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [showSkeleton, setShowSkeleton] = useState(true)
   const [threadId, setThreadId] = useState<string>("")
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const [isHydrated, setIsHydrated] = useState(false)
@@ -124,6 +125,7 @@ export default function Chat() {
             timestamp: new Date(msg.timestamp),
           })),
         )
+        setShowSkeleton(false)
         if (userFirstName) {
           const alreadyAddressed = parsed.some(
             (msg) => msg.role === "assistant" && messageContainsFirstName(msg.content, userFirstName),
@@ -138,6 +140,7 @@ export default function Chat() {
     } else {
       setMessages([buildDefaultWelcomeMessage(userFirstName)])
       setHasAddressedUser(Boolean(userFirstName))
+      setShowSkeleton(false)
     }
 
     if (storedThread) {
@@ -183,6 +186,37 @@ export default function Chat() {
     scrollToBottom()
   }, [messages])
 
+  const ChatSkeleton = () => (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-coral-50 dark:from-slate-1100 dark:via-slate-1000 dark:to-slate-900 lg:pl-72">
+      <Navigation />
+      <div className="container mx-auto px-4 py-8 space-y-6">
+        <div className="flex items-center gap-3 animate-pulse">
+          <div className="w-10 h-10 rounded-2xl bg-slate-200 dark:bg-slate-800" />
+          <div className="space-y-2">
+            <div className="h-5 w-48 rounded bg-slate-200 dark:bg-slate-800" />
+            <div className="h-3 w-64 rounded bg-slate-100 dark:bg-slate-900" />
+          </div>
+        </div>
+        <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-1000/80 p-6 space-y-4 animate-pulse">
+          <div className="h-4 w-32 rounded bg-slate-200 dark:bg-slate-800" />
+          <div className="space-y-3">
+            {[...Array(3)].map((_, idx) => (
+              <div key={idx} className="flex gap-3">
+                <div className="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-800" />
+                <div className="space-y-2 flex-1">
+                  <div className="h-3 w-1/2 rounded bg-slate-200 dark:bg-slate-800" />
+                  <div className="h-3 w-3/4 rounded bg-slate-100 dark:bg-slate-900" />
+                  <div className="h-3 w-2/5 rounded bg-slate-100 dark:bg-slate-900" />
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="h-12 rounded-xl bg-slate-100 dark:bg-slate-900" />
+        </div>
+      </div>
+    </div>
+  )
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }
@@ -195,19 +229,7 @@ export default function Chat() {
   ]
 
   if (state.status === "loading") {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-coral-50 dark:from-slate-1100 dark:via-slate-1000 dark:to-slate-900">
-        <div className="text-center space-y-4">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-coral shadow-lg">
-            <div className="w-10 h-10 border-4 border-white/70 border-t-transparent rounded-full animate-spin" />
-          </div>
-          <div>
-            <p className="text-lg font-semibold text-slate-900 dark:text-white">Preparing your AI assistant</p>
-            <p className="text-sm text-slate-600 dark:text-slate-400">Please wait a moment.</p>
-          </div>
-        </div>
-      </div>
-    )
+    return <ChatSkeleton />
   }
 
   if (state.status === "unauthorized") {
@@ -272,6 +294,7 @@ export default function Chat() {
     setMessages(updatedMessages)
     setInput("")
     setIsLoading(true)
+    setShowSkeleton(false)
 
     try {
       const contextMessages = updatedMessages.slice(-MAX_CONTEXT_MESSAGES).map((message) => ({

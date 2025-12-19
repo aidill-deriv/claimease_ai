@@ -235,15 +235,15 @@ export default function Dashboard() {
                   <div
                     key={claim.id}
                     className="flex items-center justify-between p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
-                  >
-                    <div className="flex items-center space-x-4">
-                      <div className="p-2 rounded-full bg-primary/10">
-                        <ClaimIcon className="h-5 w-5 text-primary" />
-                      </div>
-                      <div>
-                        <p className="font-medium">{claim.id}</p>
-                        <p className="text-sm text-muted-foreground">{claim.category}</p>
-                      </div>
+                      >
+                        <div className="flex items-center space-x-4">
+                          <div className="p-2 rounded-full bg-primary/10">
+                        <ClaimIcon className="h-5 w-5 text-primary dark:text-white" />
+                          </div>
+                          <div>
+                            <p className="font-medium">{claim.id}</p>
+                            <p className="text-sm text-muted-foreground">{claim.category}</p>
+                          </div>
                     </div>
                     <div className="flex items-center space-x-4">
                       <div className="text-right">

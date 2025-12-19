@@ -143,15 +143,68 @@ export default function Dashboard() {
   }
 
   if (state.status === "loading" || isLoading || (!hasLoadedData && !dataError)) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-coral-50 dark:from-slate-1100 dark:via-slate-1000 dark:to-slate-900">
-        <div className="text-center space-y-4">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-coral shadow-lg">
-            <div className="w-10 h-10 border-4 border-white/70 border-t-transparent rounded-full animate-spin" />
+    const SkeletonCard = () => (
+      <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 animate-pulse">
+        <div className="flex items-center justify-between mb-4">
+          <div className="h-3 w-24 rounded bg-slate-200 dark:bg-slate-800" />
+          <div className="h-10 w-10 rounded-xl bg-slate-200 dark:bg-slate-800" />
+        </div>
+        <div className="h-8 w-32 rounded bg-slate-200 dark:bg-slate-800" />
+        <div className="h-3 w-40 rounded bg-slate-100 dark:bg-slate-900 mt-2" />
+      </div>
+    )
+
+    const SkeletonList = () => (
+      <div className="space-y-3">
+        {[...Array(3)].map((_, idx) => (
+          <div
+            key={idx}
+            className="flex items-center justify-between p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 animate-pulse"
+          >
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 rounded-xl bg-slate-200 dark:bg-slate-800" />
+              <div className="space-y-2">
+                <div className="h-4 w-32 rounded bg-slate-200 dark:bg-slate-800" />
+                <div className="h-3 w-48 rounded bg-slate-100 dark:bg-slate-900" />
+                <div className="h-3 w-24 rounded bg-slate-100 dark:bg-slate-900" />
+              </div>
+            </div>
+            <div className="flex items-center space-x-4">
+              <div className="space-y-2 text-right">
+                <div className="h-4 w-24 rounded bg-slate-200 dark:bg-slate-800 ml-auto" />
+                <div className="h-3 w-20 rounded bg-slate-100 dark:bg-slate-900 ml-auto" />
+              </div>
+              <div className="h-6 w-16 rounded bg-slate-200 dark:bg-slate-800" />
+            </div>
           </div>
-          <div>
-            <p className="text-lg font-semibold text-slate-900 dark:text-white">Loading your dashboard…</p>
-            <p className="text-sm text-slate-600 dark:text-slate-400">Preparing your ClaimEase experience.</p>
+        ))}
+      </div>
+    )
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-coral-50 dark:from-slate-1100 dark:via-slate-1000 dark:to-slate-900 lg:pl-72">
+        <Navigation />
+        <div className="container mx-auto px-4 py-8 space-y-8">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-slate-200 dark:bg-slate-800 animate-pulse" />
+            <div className="space-y-2">
+              <div className="h-5 w-48 rounded bg-slate-200 dark:bg-slate-800 animate-pulse" />
+              <div className="h-3 w-64 rounded bg-slate-100 dark:bg-slate-900 animate-pulse" />
+            </div>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-3">
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 animate-pulse">
+            <div className="flex items-center justify-between mb-4">
+              <div className="h-4 w-36 rounded bg-slate-200 dark:bg-slate-800" />
+              <div className="h-8 w-28 rounded bg-slate-200 dark:bg-slate-800" />
+            </div>
+            <SkeletonList />
           </div>
         </div>
       </div>
@@ -343,7 +396,7 @@ export default function Dashboard() {
                         >
                           <div className="flex items-center space-x-4">
                             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-coral-50 to-coral-100 dark:from-coral-950 dark:to-coral-900 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                              <ClaimIcon className="h-6 w-6 text-coral-700 dark:text-coral-400" />
+                              <ClaimIcon className="h-6 w-6 text-coral-700 dark:text-white" />
                             </div>
                             <div>
                               <p className="font-semibold text-slate-900 dark:text-white">{claimTitle}</p>

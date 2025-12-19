@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Moon, Sun, Sparkles, LayoutDashboard, MessageSquare, Send, LogOut } from "lucide-react"
+import { Moon, Sun, Sparkles, LayoutDashboard, MessageSquare, Send, LogOut, Plane } from "lucide-react"
 import { useTheme } from "next-themes"
 
 export function Navigation() {
@@ -46,6 +46,7 @@ export function Navigation() {
   const navItems = [
     { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
     { name: "Chat", path: "/chat", icon: MessageSquare },
+    { name: "Travel Claims", path: "/travel", icon: Plane },
     { name: "Submit Claim", path: "/submit-claim", icon: Send },
   ]
 

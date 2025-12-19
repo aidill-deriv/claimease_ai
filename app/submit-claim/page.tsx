@@ -368,6 +368,7 @@ export default function SubmitClaim() {
   const [isLoadingProfile, setIsLoadingProfile] = useState(false)
   const [profileError, setProfileError] = useState("")
   const [isProfileVerified, setIsProfileVerified] = useState(false)
+  const [showSkeleton, setShowSkeleton] = useState(true)
   const [claimEntries, setClaimEntries] = useState<ClaimEntry[]>([])
   const [ocrStatuses, setOcrStatuses] = useState<Record<number, ReceiptOcrState>>({})
   const [duplicateStatuses, setDuplicateStatuses] = useState<Record<number, DuplicateStatus>>({})
@@ -1346,16 +1347,76 @@ export default function SubmitClaim() {
   }
 
   if (state.status === "loading") {
+    const SkeletonCard = () => (
+      <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 animate-pulse">
+        <div className="flex items-center justify-between mb-4">
+          <div className="h-3 w-24 rounded bg-slate-200 dark:bg-slate-800" />
+          <div className="h-8 w-8 rounded-xl bg-slate-200 dark:bg-slate-800" />
+        </div>
+        <div className="space-y-2">
+          <div className="h-4 w-2/3 rounded bg-slate-200 dark:bg-slate-800" />
+          <div className="h-3 w-1/2 rounded bg-slate-100 dark:bg-slate-900" />
+        </div>
+      </div>
+    )
+
+    const SkeletonList = () => (
+      <div className="space-y-3">
+        {[...Array(2)].map((_, idx) => (
+          <div
+            key={idx}
+            className="flex items-start gap-3 p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 animate-pulse"
+          >
+            <div className="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-800" />
+            <div className="space-y-2 flex-1">
+              <div className="h-3 w-1/2 rounded bg-slate-200 dark:bg-slate-800" />
+              <div className="h-3 w-3/4 rounded bg-slate-100 dark:bg-slate-900" />
+              <div className="h-3 w-2/5 rounded bg-slate-100 dark:bg-slate-900" />
+            </div>
+          </div>
+        ))}
+      </div>
+    )
+
+    const SkeletonForm = () => (
+      <div className="space-y-6">
+        {[...Array(2)].map((_, idx) => (
+          <div
+            key={idx}
+            className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 animate-pulse"
+          >
+            <div className="h-4 w-32 rounded bg-slate-200 dark:bg-slate-800 mb-4" />
+            <div className="grid gap-4 md:grid-cols-2">
+              {[...Array(4)].map((__, jdx) => (
+                <div key={jdx} className="space-y-2">
+                  <div className="h-3 w-24 rounded bg-slate-200 dark:bg-slate-800" />
+                  <div className="h-10 w-full rounded-lg bg-slate-100 dark:bg-slate-900" />
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    )
+
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-coral-50 dark:from-slate-1100 dark:via-slate-1000 dark:to-slate-900">
-        <div className="text-center space-y-4">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-coral shadow-lg">
-            <div className="w-10 h-10 border-4 border-white/70 border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-coral-50 dark:from-slate-1100 dark:via-slate-1000 dark:to-slate-900 lg:pl-72">
+        <Navigation />
+        <div className="container mx-auto px-4 py-8 space-y-8">
+          <div className="flex items-center gap-3 animate-pulse">
+            <div className="w-10 h-10 rounded-2xl bg-slate-200 dark:bg-slate-800" />
+            <div className="space-y-2">
+              <div className="h-5 w-48 rounded bg-slate-200 dark:bg-slate-800" />
+              <div className="h-3 w-64 rounded bg-slate-100 dark:bg-slate-900" />
+            </div>
           </div>
-          <div>
-            <p className="text-lg font-semibold text-slate-900 dark:text-white">Loading ClaimEase</p>
-            <p className="text-sm text-slate-600 dark:text-slate-400">Please wait a moment…</p>
+          <div className="grid gap-6 md:grid-cols-3">
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
           </div>
+          <SkeletonForm />
+          <SkeletonList />
         </div>
       </div>
     )

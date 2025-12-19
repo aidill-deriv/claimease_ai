@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Home, MessageSquare, Send, LogOut, Moon, Sun, Shield } from "lucide-react"
+import { Home, MessageSquare, Send, LogOut, Moon, Sun, Shield, Plane } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useEffect, useMemo, useState } from "react"
 import { useSession } from "@/hooks/useSession"
@@ -39,7 +39,8 @@ export function Navigation() {
 
   const navItems = useMemo(() => {
     const items = [
-      { name: "Dashboard", path: "/dashboard", icon: Home },
+      { name: "Employee Benefits", path: "/dashboard", icon: Home },
+      { name: "Travel Claims", path: "/travel", icon: Plane },
       { name: "AI Chat", path: "/chat", icon: MessageSquare },
       { name: "Submit Claim", path: "/submit-claim", icon: Send },
     ]
@@ -152,6 +153,13 @@ export function Navigation() {
         >
           <MessageSquare className="mr-2 h-4 w-4" />
           <span>AI Chat</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => router.push("/travel")}
+          className="cursor-pointer hover:bg-coral-50 dark:hover:bg-coral-950 hover:text-coral-700 dark:hover:text-coral-400 transition-colors duration-200"
+        >
+          <Plane className="mr-2 h-4 w-4" />
+          <span>Travel Claims</span>
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => router.push("/submit-claim")}
@@ -270,6 +278,13 @@ export function Navigation() {
                   >
                     <MessageSquare className="mr-2 h-4 w-4" />
                     <span>AI Chat</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => router.push("/travel")}
+                    className="cursor-pointer hover:bg-coral-50 dark:hover:bg-coral-950 hover:text-coral-700 dark:hover:text-coral-400 transition-colors duration-200"
+                  >
+                    <Plane className="mr-2 h-4 w-4" />
+                    <span>Travel Claims</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => router.push("/submit-claim")}
