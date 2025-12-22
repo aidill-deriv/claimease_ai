@@ -6,6 +6,7 @@ AI-assisted employee benefits experience with a modern Next.js frontend, Python 
 
 ## Highlights
 - 📊 **Employee dashboard** – live balance, recent claims, processing stats, and benefit eligibility pulled from Supabase.
+- ✈️ **Travel claims** – dedicated travel dashboard with year filter, category pie chart, and status-aligned claim list.
 - 🤖 **AI claim assistant** – chat UI backed by the LangChain agent in `src/ai_agent.py`.
 - 🧾 **Smart claim submission** – receipt upload, OCR toggle, and contextual autofill from `employee_email`.
 - 🛡️ **Role-based admin console** – manage allowed users plus superadmin-only impersonation to investigate any employee email without needing their password.
@@ -33,15 +34,17 @@ src/                     # FastAPI backend + AI agent
 config/                  # Python requirements + .env template
 supabase_schema/         # Reference docs for Supabase tables
 docs/                    # How-tos (Cloudflare tunnel, deployment, etc.)
+react_app/               # Legacy mock frontend (not used by the current Next.js app)
 ```
 
 ---
 
 ## Prerequisites
 - Python **3.9+**
-- Node.js **18+**
+- Node.js **18+** (Node 20 recommended to satisfy Supabase SDK engine warnings)
 - Supabase project with the `employee_email`, `claim_summary`, and `claim_analysis` tables populated
 - `CLAIMEASE_SESSION_SECRET`, Supabase service-role key, and anon key values
+- Python deps: install via `pip install -r config/requirements.txt` (canonical list; AI/KB extras aligned in `requirements_ai.txt` / `requirements_kb.txt`)
 
 ---
 
@@ -50,7 +53,7 @@ docs/                    # How-tos (Cloudflare tunnel, deployment, etc.)
 1. **Clone & install dependencies**
    ```bash
    git clone <repo-url>
-   cd claim_web_app_project
+   cd claimease_ai
    python3 -m venv venv
    source venv/bin/activate            # Windows: venv\Scripts\activate
    pip install -r config/requirements.txt
@@ -109,6 +112,22 @@ Detailed notes live in `docs/1-cloudflare-tunnel-notes.md`.
 - `/admin/impersonate` – **superadmin only**. Enter any email found in `employee_email` to instantly swap your session to that account (viewer access). Your previous session is replaced; log out to revert to your own account.
 
 Backend validation lives in `app/api/admin/impersonate/route.ts` and mints a synthetic viewer session if the email is missing from `claim_allowed_users` but present in Supabase.
+
+---
+
+## Travel Claims
+- Page: `/travel` (also linked in the left nav as “Travel Claims”)
+- Data: `claim_analysis` filtered to `claim_type = 'Travel Reimbursement'` and `state != 'Complete'`
+- Category mapping: `supabase_schema/travel_category.md` (class_id → display_category)
+- Features: year dropdown (current/all years), category pie chart, status-aligned badges, and loading skeletons
+
+## Submit Claim
+- Flow: multi-step form (Upload Receipt → Claim Details → Supporting Documents) with multiple claim entries.
+- AI/OCR: receipt upload to `/api/receipt-ocr` (optional) auto-fills description, amount, currency, service date, merchant, claimant name, and optical hints.
+- Duplicate check: receipt hash sent to `/api/receipt-duplicate-check` to flag potential duplicates.
+- Balance awareness: pulls Supabase balance via `fetchDashboardData`; warns on overage.
+- FX support: fetches FX rates and shows converted amounts for mismatched currencies.
+- UI states: skeletons on initial load, inline statuses for OCR/duplicates/submission, status-aligned badges consistent with the dashboard.
 
 ---
 

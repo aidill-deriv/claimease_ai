@@ -1,9 +1,9 @@
-# Knowledge Base Dependencies
+# Knowledge Base Dependencies (aligned with config/requirements.txt)
 chromadb==0.5.23
 pypdf==5.1.0
 sentence-transformers==3.3.1
 
-# Already installed (from requirements_ai.txt)
+# Already installed (from requirements.txt / requirements_ai.txt)
 # langchain
 # langchain-openai
 # python-dotenv

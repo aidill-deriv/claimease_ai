@@ -1,19 +1,23 @@
-# Core dependencies
+# Core runtime
 python-dotenv==1.0.1
 fastapi==0.115.0
 uvicorn[standard]==0.30.6
 slack-sdk==3.27.2
 requests==2.32.3
+pydantic==2.7.4
+pandas==2.2.3
 
-# AI/ML dependencies (pin versions for LangChain API compatibility)
-langchain==0.2.16
-langchain-community==0.2.16
-langchain-openai==0.1.24
-openai==1.51.0
-sentence-transformers==2.7.0
+# AI/LLM (aligned across project)
+langchain==0.3.13
+langchain-community==0.3.13
+langchain-openai==0.2.14
+openai==1.58.1
+sentence-transformers==3.3.1
+rich==13.9.4
 
-# Database
-chromadb==0.5.5
+# Data / KB
+chromadb==0.5.23
+pypdf==5.1.0
 
 # Testing
 pytest==8.3.2
