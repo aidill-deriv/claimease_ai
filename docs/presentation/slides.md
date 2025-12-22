@@ -39,7 +39,7 @@ Transforming the Employee Experience at Deriv
 📋 CURRENT STATE: Manual Claims Process
 
 The Employee Experience:
-📝 Fill out paper forms or PDFs
+📝 Manually filling out forms
 ⏱️ 15-20 minutes per claim submission
 📧 Email forms back and forth
 ❓ Call HR for policy questions
@@ -65,7 +65,7 @@ The Business Impact:
 🚀 OUR SOLUTION: AI-Powered Transformation
 
 "Imagine submitting a claim in under 3 minutes 
-with your phone camera, getting instant answers 
+with your phone, getting instant answers 
 about your benefits, and tracking your balance 
 in real-time."
 
@@ -79,9 +79,7 @@ Core Innovation:
 ```
 
 **Visual Elements:**
-- Before/After transformation visual
-- Mobile phone mockup showing app interface
-- AI brain or sparkle icons
+
 - Positive color scheme (coral/emerald)
 
 ---
@@ -90,8 +88,8 @@ Core Innovation:
 ```
 📱 3-MINUTE CLAIM SUBMISSION JOURNEY
 
-1. 📸 SNAP & SCAN (30 seconds)
-   → Take photo of receipt with phone
+1. UPLOAD & SCAN (30 seconds)
+   → Upload the photo or PDFs of receipt with laptop/phone
    → AI instantly extracts amount, date, merchant
 
 2. ✏️ REVIEW & CONFIRM (90 seconds)
@@ -156,7 +154,7 @@ Benefits:
 • Employees understand their benefit utilization
 • Better planning for healthcare expenses  
 • Reduced queries to HR about balance status
-• Increased engagement with benefits program
+
 
 TRANSPARENCY BUILDS TRUST
 ```
@@ -174,19 +172,17 @@ TRANSPARENCY BUILDS TRUST
 📈 EFFICIENCY GAINS THAT MATTER
 
 Process Improvements:
-⚡ 75% FASTER claim submissions (15 min → 4 min)
+⚡ 70% FASTER claim submissions (10 min → 3 min)
 📉 90% REDUCTION in form errors
 🕐 24/7 AVAILABILITY vs office hours only  
 💬 INSTANT RESPONSES vs waiting for HR emails
 
 Cost Savings:
 🏢 80% reduction in manual data entry
-👥 HR time savings: 15+ hours per week
-💰 Processing cost reduction: 60% lower per claim
+👥 HR & Claim Team time savings: 15+ hours per week
 📊 Improved accuracy: Fewer costly mistakes
 
-ANNUAL SAVINGS: $75,000
-ROI TIMELINE: 7 MONTHS
+
 ```
 
 **Visual Elements:**
@@ -216,7 +212,6 @@ not against me." - Pilot User Feedback
 
 **Visual Elements:**
 - Employee testimonial quote
-- Happy employee using mobile app
 - Benefits icons in clean grid
 - Positive, uplifting color scheme
 
@@ -239,7 +234,6 @@ Privacy by Design:
 • Role-based access control
 • GDPR and SOC2 compliant
 
-YOUR DATA IS SAFE WITH US
 ```
 
 **Visual Elements:**
