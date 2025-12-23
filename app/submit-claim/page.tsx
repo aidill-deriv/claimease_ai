@@ -842,9 +842,16 @@ export default function SubmitClaim() {
         if (!isCancelled) {
           setFxState((prev) => {
             const fallback = prev.data
+            if (fallback) {
+              return {
+                status: "success" as const,
+                data: fallback,
+                error: error instanceof Error ? error.message : "Failed to load FX rates.",
+              }
+            }
             return {
-              status: fallback ? "success" : "error",
-              data: fallback,
+              status: "error" as const,
+              data: undefined,
               error: error instanceof Error ? error.message : "Failed to load FX rates.",
             }
           })
