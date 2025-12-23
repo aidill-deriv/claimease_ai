@@ -43,7 +43,7 @@ __pycache__/
 .hypothesis/
 
 # ============================================
-# Node.js Development
+# Node.js Development (Frontend - Not needed for backend Docker)
 # ============================================
 node_modules/
 npm-debug.log*
@@ -52,6 +52,19 @@ yarn-error.log*
 .next/
 out/
 .vercel/
+app/
+components/
+hooks/
+lib/
+public/
+types/
+*.config.js
+*.config.ts
+tsconfig.json
+package.json
+package-lock.json
+tailwind.config.ts
+postcss.config.js
 
 # ============================================
 # Databases (Local Only)
