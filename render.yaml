@@ -56,7 +56,7 @@ services:
     region: oregon  # Same region as backend for better latency
     plan: free      # Free tier (512MB RAM)
     buildCommand: |
-      npm install
+      npm ci
       npm run build
     startCommand: npm start
     
