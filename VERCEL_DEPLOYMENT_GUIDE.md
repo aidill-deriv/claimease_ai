@@ -50,7 +50,7 @@ Before you start:
 
 ### **Step 3: Configure Environment Variables** (3 minutes)
 
-On the import screen, click **"Environment Variables"** and add these:
+On the import screen, you'll see an **"Environment Variables"** section. Add these **manually** (don't worry about vercel.json - Vercel auto-detects Next.js!):
 
 #### **Required Environment Variables:**
 
@@ -107,17 +107,12 @@ After frontend deploys, update your backend to allow requests:
 
 We've added these files to your project:
 
-### **1. `vercel.json`**
-- Vercel-specific configuration
-- Environment variable mappings
-- Build settings (though auto-detection usually works!)
-
-### **2. `.vercelignore`**
+### **1. `.vercelignore`**
 - Excludes backend files from frontend deployment
 - Excludes documentation, tests, etc.
 - Keeps deployment size small
 
-### **3. Updated `src/api.py`**
+### **2. Updated `src/api.py`**
 - Added smart CORS configuration
 - Automatically allows Vercel preview deployments
 - Environment-based origins
