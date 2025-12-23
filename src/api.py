@@ -4,6 +4,7 @@ FastAPI server for ClaimBot API.
 Handles REST API endpoints for the AI agent.
 """
 import os
+import time
 from typing import Dict, Any
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request, HTTPException
