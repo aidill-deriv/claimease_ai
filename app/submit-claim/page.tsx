@@ -773,7 +773,7 @@ export default function SubmitClaim() {
       const reasons = new Set<string>()
 
       claimEntries.forEach((other, otherIndex) => {
-        if (otherIndex === index || !other.attachment) {
+        if (otherIndex === index || !other.attachment || !entry.attachment) {
           return
         }
 
