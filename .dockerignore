@@ -1,0 +1,163 @@
+# ============================================
+# ClaimEase AI - Docker Ignore Rules
+# For Render, Railway, and Docker deployments
+# ============================================
+
+# ============================================
+# CRITICAL: Secrets & Environment
+# ============================================
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+secrets/
+credentials/
+config/.env
+
+# ============================================
+# Version Control
+# ============================================
+.git/
+.gitignore
+.gitattributes
+.github/
+
+# ============================================
+# Python Development
+# ============================================
+venv/
+env/
+ENV/
+.venv/
+virtualenv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.pytest_cache/
+.coverage
+.tox/
+.hypothesis/
+
+# ============================================
+# Node.js Development
+# ============================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.next/
+out/
+.vercel/
+
+# ============================================
+# Databases (Local Only)
+# ============================================
+*.db
+*.sqlite
+*.sqlite3
+chroma_db/
+*/chroma_db/
+knowledge_base/chroma_db/
+cli/chroma_db/
+database/
+*.db.backup
+
+# ============================================
+# Deprecated/Removed Folders
+# ============================================
+react_app/
+streamlit_app/
+slack/
+
+# ============================================
+# Logs & Temporary Files
+# ============================================
+logs/
+*.log
+log/
+*.tmp
+*.temp
+*.bak
+.cache/
+tmp/
+temp/
+
+# ============================================
+# IDE & Editor Files
+# ============================================
+.idea/
+.vscode/
+*.code-workspace
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# ============================================
+# Documentation (Reduce Build Size)
+# ============================================
+docs/presentation/
+docs/REMOVAL_AUDIT_*.md
+CLEANUP_SUMMARY.md
+*.md
+!README.md
+!QUICKSTART.md
+
+# ============================================
+# Development Tools
+# ============================================
+.cursor/
+ngrok
+ngrok.exe
+.cloudflare_tunnel_info
+cloudflare_tunnel_config.yml
+
+# ============================================
+# Build Artifacts
+# ============================================
+dist/
+build/
+*.egg
+*.whl
+
+# ============================================
+# Jupyter Notebooks
+# ============================================
+.ipynb_checkpoints/
+*.ipynb
+
+# ============================================
+# Git & Repository Files
+# ============================================
+.gitkeep
+git-commands.md
+setup-git.sh
+
+# ============================================
+# Test Files (Optional - Remove for Production)
+# ============================================
+tests/
+test-output/
+test_results/
+
+# ============================================
+# Keep These (Override ignores)
+# ============================================
+# Ensure these critical files are included:
+!knowledge_base/pdf_files/*.pdf
+!knowledge_base/md_files/*.md
+!knowledge_base/exports/*.sql
+!config/requirements*.txt
+!src/**/*.py
+!app/**/*
+!components/**/*
+!lib/**/*
+!public/**/*
+!hooks/**/*
+

@@ -1,0 +1,29 @@
+# ============================================
+# Render Slug Ignore (Optional)
+# ============================================
+# Additional files to exclude from Render deployment
+# (Supplement to .dockerignore)
+
+# Documentation
+docs/presentation/
+docs/REMOVAL_AUDIT_*.md
+CLEANUP_SUMMARY.md
+*.md
+!README.md
+!QUICKSTART.md
+
+# Development Files
+.cursor/
+.vscode/
+.idea/
+*.code-workspace
+
+# Test Files
+tests/
+
+# Git Files
+.gitignore
+.gitattributes
+git-commands.md
+setup-git.sh
+
