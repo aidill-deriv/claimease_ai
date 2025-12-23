@@ -37,10 +37,24 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Add CORS middleware to allow requests from React app
+# Add CORS middleware to allow requests from frontend
+# Environment-based CORS configuration
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
+ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Local development
+    "http://localhost:3001",  # Alternative local port
+    FRONTEND_URL,  # Environment-specific frontend URL
+]
+
+# Add Vercel preview/production domains if in production
+if os.getenv("VERCEL_URL"):
+    ALLOWED_ORIGINS.append(f"https://{os.getenv('VERCEL_URL')}")
+
+# Also allow any *.vercel.app domains in production
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins (including ngrok)
+    allow_origins=ALLOWED_ORIGINS,
+    allow_origin_regex=r"https://.*\.vercel\.app",  # Allow all Vercel preview deployments
     allow_credentials=True,
     allow_methods=["*"],  # Allow all methods (GET, POST, OPTIONS, etc.)
     allow_headers=["*"],  # Allow all headers

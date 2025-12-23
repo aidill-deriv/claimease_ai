@@ -1,0 +1,65 @@
+# Vercel Ignore File
+# Files and folders to exclude from Vercel deployment
+
+# Python Backend
+src/
+config/requirements*.txt
+runtime.txt
+start_server.sh
+
+# Tests
+tests/
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Local Development
+.env
+.env.local
+venv/
+__pycache__/
+
+# Logs
+logs/
+*.log
+
+# IDE
+.vscode/
+.idea/
+.cursor/
+
+# Git
+.git/
+.gitignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database files
+database/
+*.db
+*.sqlite3
+
+# ChromaDB
+chroma_db/
+
+# Knowledge Base (not needed for frontend)
+knowledge_base/
+
+# CLI tools
+cli/
+
+# Deployment configs for other platforms
+render.yaml
+.dockerignore
+.slugignore
+RENDER_*.md
+DEPLOYMENT_*.md
+URGENT_*.md
+
+# Old react app folder (if it still exists)
+react_app/
+

@@ -1,0 +1,18 @@
+{
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "outputDirectory": ".next",
+  "env": {
+    "NEXT_PUBLIC_SUPABASE_URL": "@supabase_url",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@supabase_anon_key",
+    "SUPABASE_SERVICE_ROLE_KEY": "@supabase_service_role_key",
+    "NEXT_PUBLIC_API_URL": "@backend_api_url",
+    "NEXT_PUBLIC_SUPABASE_SUMMARY_TABLE": "claim_summary",
+    "NEXT_PUBLIC_SUPABASE_ANALYSIS_TABLE": "claim_analysis",
+    "NEXT_PUBLIC_SUPABASE_CLAIMS_TABLE": "claims",
+    "NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET": "claim_receipts"
+  }
+}
+

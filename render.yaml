@@ -1,8 +1,8 @@
 # ============================================
 # ClaimEase AI - Render Deployment Config
 # ============================================
+# Backend deployment only (Frontend deployed on Vercel)
 # This file defines the deployment configuration for Render.com
-# Supports both Backend (Python/FastAPI) and Frontend (Next.js)
 
 services:
   # ============================================
@@ -43,61 +43,34 @@ services:
       # FastAPI Environment
       - key: FASTAPI_ENV
         value: production
+      
+      # Frontend URL for CORS (set to your Vercel URL after deployment)
+      - key: FRONTEND_URL
+        sync: false  # Set manually in Render dashboard to your Vercel URL
     
     # Auto-deploy on push to main branch
     autoDeploy: true
 
-  # ============================================
-  # Frontend Service (Next.js)
-  # ============================================
-  - type: web
-    name: claimease-frontend
-    env: node
-    region: oregon  # Same region as backend for better latency
-    plan: free      # Free tier (512MB RAM)
-    buildCommand: |
-      npm install --include=dev
-      npm run build
-    startCommand: npm start
-    
-    # Environment Variables
-    envVars:
-      - key: NODE_VERSION
-        value: "18.19.0"
-      
-      # Backend API URL (Update after backend is deployed)
-      - key: NEXT_PUBLIC_API_URL
-        value: https://claimease-backend.onrender.com
-      
-      # Supabase Configuration (Add these in Render Dashboard)
-      - key: NEXT_PUBLIC_SUPABASE_URL
-        sync: false  # Set manually in Render dashboard
-      
-      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
-        sync: false  # Set manually in Render dashboard
-      
-      - key: SUPABASE_SERVICE_ROLE_KEY
-        sync: false  # Set manually in Render dashboard
-      
-      # Supabase Table Names
-      - key: NEXT_PUBLIC_SUPABASE_SUMMARY_TABLE
-        value: claim_summary
-      
-      - key: NEXT_PUBLIC_SUPABASE_ANALYSIS_TABLE
-        value: claim_analysis
-      
-      - key: NEXT_PUBLIC_SUPABASE_CLAIMS_TABLE
-        value: claims
-      
-      - key: NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET
-        value: claim_receipts
-      
-      # Next.js Configuration
-      - key: NODE_ENV
-        value: production
-    
-    # Auto-deploy on push to main branch
-    autoDeploy: true
+# ============================================
+# Frontend Service - DEPLOYED ON VERCEL
+# ============================================
+# The frontend (Next.js) is deployed on Vercel for:
+# - Better Next.js integration
+# - Faster deployments
+# - No cold starts
+# - Global CDN
+#
+# To deploy frontend:
+# 1. Go to vercel.com
+# 2. Import this GitHub repository
+# 3. Vercel auto-detects Next.js
+# 4. Add environment variables (see vercel.json)
+# 5. Deploy!
+#
+# After deploying on Vercel:
+# - Copy your Vercel URL
+# - Add it to FRONTEND_URL env var above
+# - Backend CORS will allow requests from Vercel
 
 # ============================================
 # Notes for Deployment:
