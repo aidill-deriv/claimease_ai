@@ -65,21 +65,11 @@ ClaimEase consists of:
 
 ### Tier 1: UAT/Staging Environment
 
-**Purpose**: Testing, demos, internal use
-
-**Budget**: ~$0-25/month (free tiers + minimal paid)
-
-**Platforms**: Vercel (frontend) + Railway/Render (backend)
+**Purpose**: Testing, demos, internal use**Budget**: ~$0-25/month (free tiers + minimal paid)**Platforms**: Vercel (frontend) + Railway/Render (backend)
 
 ### Tier 2: Production Environment  
 
-**Purpose**: Live production use, high availability
-
-**Budget**: ~$50-100/month (always-on, auto-scaling)
-
-**Platforms**: Google Cloud Run or Railway Pro (both services)
-
----
+**Purpose**: Live production use, high availability**Budget**: ~$50-100/month (always-on, auto-scaling)**Platforms**: Google Cloud Run or Railway Pro (both services)---
 
 ## Phase 1: UAT Deployment
 
@@ -98,21 +88,24 @@ ClaimEase consists of:
 2. Connect GitHub repo to Vercel (vercel.com → New Project)
 3. Configure build settings:
 
-                                                                                                                                                                                                                                                                                                                                                                                                - Framework Preset: Next.js
-                                                                                                                                                                                                                                                                                                                                                                                                - Root Directory: `/` (root)
-                                                                                                                                                                                                                                                                                                                                                                                                - Build Command: `npm run build`
-                                                                                                                                                                                                                                                                                                                                                                                                - Output Directory: `.next`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                - Framework Preset: Next.js
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                - Root Directory: `/` (root)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                - Build Command: `npm run build`
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                - Output Directory: `.next`
 
 4. Set environment variables in Vercel dashboard:
+   ```javascript
+            NEXT_PUBLIC_API_URL=https://your-backend-url.railway.app
+            NEXT_PUBLIC_SUPABASE_URL=<your-supabase-url>
+            NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon-key>
+            CLAIMEASE_SESSION_SECRET=<generate-random-secret>
+            NEXT_PUBLIC_SUPABASE_SUMMARY_TABLE=claim_summary
+            NEXT_PUBLIC_SUPABASE_ANALYSIS_TABLE=claim_analysis
+            NEXT_PUBLIC_SUPABASE_EMPLOYEE_TABLE=employee_email
    ```
-   NEXT_PUBLIC_API_URL=https://your-backend-url.railway.app
-   NEXT_PUBLIC_SUPABASE_URL=<your-supabase-url>
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon-key>
-   CLAIMEASE_SESSION_SECRET=<generate-random-secret>
-   NEXT_PUBLIC_SUPABASE_SUMMARY_TABLE=claim_summary
-   NEXT_PUBLIC_SUPABASE_ANALYSIS_TABLE=claim_analysis
-   NEXT_PUBLIC_SUPABASE_EMPLOYEE_TABLE=employee_email
-   ```
+
+
+
 
 5. Deploy - Vercel auto-deploys on git push
 
@@ -131,81 +124,88 @@ ClaimEase consists of:
 
 1. Create `Dockerfile` in project root:
    ```dockerfile
-   FROM python:3.11-slim
-   
-   WORKDIR /app
-   
-   # Install system dependencies
-   RUN apt-get update && apt-get install -y \
-       gcc \
-       && rm -rf /var/lib/apt/lists/*
-   
-   # Copy requirements and install Python dependencies
-   COPY config/requirements.txt config/requirements_ai.txt config/requirements_kb.txt ./
-   RUN pip install --no-cache-dir -r requirements.txt && \
-       pip install --no-cache-dir -r requirements_ai.txt && \
-       pip install --no-cache-dir -r requirements_kb.txt
-   
-   # Copy application code
-   COPY src/ ./src/
-   COPY knowledge_base/ ./knowledge_base/
-   COPY config/ ./config/
-   
-   # Set environment
-   ENV PYTHONPATH=/app
-   ENV PORT=8001
-   
-   # Expose port
-   EXPOSE 8001
-   
-   # Health check
-   HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-     CMD python -c "import requests; requests.get('http://localhost:8001/health')"
-   
-   # Run FastAPI
-   CMD ["python3", "-m", "uvicorn", "src.api:app", "--host", "0.0.0.0", "--port", "8001"]
+            FROM python:3.11-slim
+            
+            WORKDIR /app
+            
+            # Install system dependencies
+            RUN apt-get update && apt-get install -y \
+                gcc \
+                && rm -rf /var/lib/apt/lists/*
+            
+            # Copy requirements and install Python dependencies
+            COPY config/requirements.txt config/requirements_ai.txt config/requirements_kb.txt ./
+            RUN pip install --no-cache-dir -r requirements.txt && \
+                pip install --no-cache-dir -r requirements_ai.txt && \
+                pip install --no-cache-dir -r requirements_kb.txt
+            
+            # Copy application code
+            COPY src/ ./src/
+            COPY knowledge_base/ ./knowledge_base/
+            COPY config/ ./config/
+            
+            # Set environment
+            ENV PYTHONPATH=/app
+            ENV PORT=8001
+            
+            # Expose port
+            EXPOSE 8001
+            
+            # Health check
+            HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+              CMD python -c "import requests; requests.get('http://localhost:8001/health')"
+            
+            # Run FastAPI
+            CMD ["python3", "-m", "uvicorn", "src.api:app", "--host", "0.0.0.0", "--port", "8001"]
    ```
 
+
+
+
 2. Create `.dockerignore`:
+   ```javascript
+            node_modules
+            .next
+            .git
+            chroma_db
+            logs
+            __pycache__
+            *.pyc
+            .env
+            .env.local
+            venv
    ```
-   node_modules
-   .next
-   .git
-   chroma_db
-   logs
-   __pycache__
-   *.pyc
-   .env
-   .env.local
-   venv
-   ```
+
+
+
 
 3. Deploy to Railway:
 
-                                                                                                                                                                                                                                                                                                                                                                                                - Sign up at railway.app
-                                                                                                                                                                                                                                                                                                                                                                                                - New Project → Deploy from GitHub repo
-                                                                                                                                                                                                                                                                                                                                                                                                - Railway auto-detects Dockerfile
-                                                                                                                                                                                                                                                                                                                                                                                                - Set environment variables:
-     ```
-     OPENAI_API_KEY=<your-key>
-     SUPABASE_URL=<your-url>
-     SUPABASE_SERVICE_ROLE_KEY=<service-key>
-     SUPABASE_ANON_KEY=<anon-key>
-     CLAIMEASE_SESSION_SECRET=<same-as-frontend>
-     KNOWLEDGE_BASE_SOURCE=supabase
-     DISABLE_KNOWLEDGE_BASE=0
-     GEMINI_API_KEY=<optional>
-     GEMINI_RECEIPT_MODEL=gemini-2.5-flash
-     PORT=8001
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                - Sign up at railway.app
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                - New Project → Deploy from GitHub repo
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                - Railway auto-detects Dockerfile
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                - Set environment variables:
+     ```javascript
+                    OPENAI_API_KEY=<your-key>
+                    SUPABASE_URL=<your-url>
+                    SUPABASE_SERVICE_ROLE_KEY=<service-key>
+                    SUPABASE_ANON_KEY=<anon-key>
+                    CLAIMEASE_SESSION_SECRET=<same-as-frontend>
+                    KNOWLEDGE_BASE_SOURCE=supabase
+                    DISABLE_KNOWLEDGE_BASE=0
+                    GEMINI_API_KEY=<optional>
+                    GEMINI_RECEIPT_MODEL=gemini-2.5-flash
+                    PORT=8001
      ```
 
-                                                                                                                                                                                                                                                                                                                                                                                                - Railway provides HTTPS URL automatically
+
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                - Railway provides HTTPS URL automatically
 
 4. Update Vercel `NEXT_PUBLIC_API_URL` to Railway backend URL
 
-**Cost**: Free tier ($5 credit) covers UAT usage
-
-**Alternative**: Render.com (free tier sleeps after 15min inactivity)
+**Cost**: Free tier ($5 credit) covers UAT usage**Alternative**: Render.com (free tier sleeps after 15min inactivity)
 
 ### 1.3 Knowledge Base Configuration
 
@@ -297,6 +297,8 @@ const nextConfig = {
 }
 ```
 
+
+
 #### 2A.2 Deploy Backend Service
 
 ```bash
@@ -340,6 +342,8 @@ gcloud run services update $BACKEND_SERVICE \
   --set-secrets "OPENAI_API_KEY=claimease-openai-key:latest,SUPABASE_URL=claimease-supabase-url:latest,SUPABASE_SERVICE_ROLE_KEY=claimease-supabase-role-key:latest,CLAIMEASE_SESSION_SECRET=claimease-session-secret:latest"
 ```
 
+
+
 #### 2A.3 Deploy Frontend Service
 
 ```bash
@@ -362,6 +366,8 @@ gcloud run deploy $FRONTEND_SERVICE \
   --set-env-vars "NEXT_PUBLIC_API_URL=$BACKEND_URL,NEXT_PUBLIC_SUPABASE_URL=<url>,NEXT_PUBLIC_SUPABASE_ANON_KEY=<key>"
 ```
 
+
+
 #### 2A.4 Custom Domain Setup
 
 ```bash
@@ -373,6 +379,8 @@ gcloud run domain-mappings create \
 
 # Follow DNS instructions provided
 ```
+
+
 
 ### Option B: Railway Pro (Simpler Alternative)
 
@@ -458,6 +466,8 @@ app.add_middleware(
 )
 ```
 
+
+
 ### 3.3 Monitoring & Logging
 
 **Cloud Run**:
@@ -496,22 +506,24 @@ name: Deploy to Production
 on:
   push:
     tags:
-                                                                                                                                                                                                                                                   - 'v*'
+                                                                                                                                                                                                                                                                                                                                    - 'v*'
 
 jobs:
   deploy-backend:
     runs-on: ubuntu-latest
     steps:
-                                                                                                                                                                                                                                                   - uses: actions/checkout@v3
-                                                                                                                                                                                                                                                   - name: Setup GCP Auth
+                                                                                                                                                                                                                                                                                                                                    - uses: actions/checkout@v3
+                                                                                                                                                                                                                                                                                                                                    - name: Setup GCP Auth
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
-                                                                                                                                                                                                                                                   - name: Build and Deploy
+                                                                                                                                                                                                                                                                                                                                    - name: Build and Deploy
         run: |
           gcloud builds submit --tag gcr.io/$PROJECT_ID/claimease-backend
           gcloud run deploy claimease-api --image gcr.io/$PROJECT_ID/claimease-backend --region asia-southeast1
 ```
+
+
 
 ### 4.2 Vercel Auto-Deploy
 
@@ -631,6 +643,3 @@ jobs:
 
 1. **Start with UAT**: Deploy to Vercel + Railway (free tier)
 2. **Test thoroughly**: Run through all user flows
-3. **Set up production**: Once UAT is stable, deploy to Cloud Run
-4. **Monitor**: Set up logging and alerting
-5. **Iterate**: Use UAT for testing, production for stable releases

@@ -40,9 +40,7 @@ The existing database has **read-only data tables** imported from Sage People:
 - `employee_email` - Employee lookup table
 - `allowed_users` - Authentication/roles
 
-The current submission flow in [`lib/supabase-claims.ts`](lib/supabase-claims.ts) saves to a basic `claims` table with limited structure. This needs to be replaced with a proper normalized schema.
-
----
+The current submission flow in [`lib/supabase-claims.ts`](lib/supabase-claims.ts) saves to a basic `claims` table with limited structure. This needs to be replaced with a proper normalized schema.---
 
 ## Proposed Database Schema
 
@@ -145,31 +143,7 @@ stateDiagram-v2
     paid --> [*]
 ```
 
-**Status Values:**
-
-| Status | Description |
-
-|--------|-------------|
-
-| `draft` | Saved but not submitted |
-
-| `submitted` | Submitted for review |
-
-| `under_review` | Assigned to reviewer |
-
-| `needs_info` | Returned for additional info |
-
-| `approved` | Approved by reviewer |
-
-| `rejected` | Rejected by reviewer |
-
-| `processing` | Being processed for payment |
-
-| `paid` | Payment completed |
-
-| `cancelled` | Cancelled by user |
-
----
+**Status Values:**| Status | Description ||--------|-------------|| `draft` | Saved but not submitted || `submitted` | Submitted for review || `under_review` | Assigned to reviewer || `needs_info` | Returned for additional info || `approved` | Approved by reviewer || `rejected` | Rejected by reviewer || `processing` | Being processed for payment || `paid` | Payment completed || `cancelled` | Cancelled by user |---
 
 ## CRUD Operations Design
 
@@ -204,25 +178,25 @@ stateDiagram-v2
 
 1. **Indexing Strategy**
 
-   - Index on `status` for queue filtering
-   - Index on `submitter_email` for employee lookups
-   - Index on `assigned_reviewer` for workload distribution
-   - Composite index on `(status, submitted_at)` for sorted queues
+- Index on `status` for queue filtering
+- Index on `submitter_email` for employee lookups
+- Index on `assigned_reviewer` for workload distribution
+- Composite index on `(status, submitted_at)` for sorted queues
 
 2. **Partitioning** (future)
 
-   - Consider partitioning by `year` or `status` if table grows large
+- Consider partitioning by `year` or `status` if table grows large
 
 3. **Row Level Security (RLS)**
 
-   - Employees see only their own submissions
-   - Reviewers (admin/superadmin) see all submissions
-   - Audit logs are append-only
+- Employees see only their own submissions
+- Reviewers (admin/superadmin) see all submissions
+- Audit logs are append-only
 
 4. **Storage Optimization**
 
-   - Attachments in Supabase Storage, not in DB
-   - JSONB for flexible metadata (personal_info, work_details)
+- Attachments in Supabase Storage, not in DB
+- JSONB for flexible metadata (personal_info, work_details)
 
 ---
 
@@ -247,14 +221,3 @@ stateDiagram-v2
 
 1. Build reviewer queue page (filter by status)
 2. Build claim detail view with status actions
-3. Add status change forms with notes
-4. Implement attachment viewer
-
----
-
-## Key Files to Modify
-
-- [`lib/supabase-claims.ts`](lib/supabase-claims.ts) - Update submission logic
-- [`supabase_schema/`](supabase_schema/) - Add new SQL migration files
-- New: `app/claims-management/page.tsx` - Reviewer interface
-- New: `lib/supabase-claim-management.ts` - CRUD operations
