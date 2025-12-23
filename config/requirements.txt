@@ -3,8 +3,12 @@ python-dotenv==1.0.1
 fastapi==0.115.0
 uvicorn[standard]==0.30.6
 requests==2.32.3
-pydantic==2.7.4
+pydantic==2.9.2
+pydantic-core==2.23.4
 pandas==2.2.3
+
+# Supabase
+supabase==2.10.0
 
 # AI/LLM (aligned across project)
 langchain==0.3.13
@@ -14,9 +18,8 @@ openai==1.58.1
 sentence-transformers==3.3.1
 rich==13.9.4
 
-# Data / KB
-chromadb==0.5.23
+# Data / KB (ChromaDB removed - using Supabase instead)
 pypdf==5.1.0
 
-# Testing
-pytest==8.3.2
+# Testing (optional - can remove for production)
+# pytest==8.3.2
